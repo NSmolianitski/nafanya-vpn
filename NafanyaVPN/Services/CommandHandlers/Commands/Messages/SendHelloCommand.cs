@@ -1,8 +1,9 @@
 ﻿using NafanyaVPN.Services.Abstractions;
+using Telegram.Bot.Types;
 
 namespace NafanyaVPN.Services.CommandHandlers.Commands.Messages;
 
-public class SendHelloCommand : ICommand<Telegram.Bot.Types.Message>
+public class SendHelloCommand : ICommand<Message>
 {
     private readonly IReplyService _replyService;
 
@@ -11,8 +12,9 @@ public class SendHelloCommand : ICommand<Telegram.Bot.Types.Message>
         _replyService = replyService;
     }
 
-    public async Task Execute(Telegram.Bot.Types.Message message)
+    public async Task Execute(Message message)
     {
+        
         await _replyService.SendHelloAsync(message.Chat.Id);
     }
 }
