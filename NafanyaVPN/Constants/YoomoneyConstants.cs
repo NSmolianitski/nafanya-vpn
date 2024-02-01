@@ -8,4 +8,5 @@ public static class YoomoneyConstants
     public const string AccessToken = "AccessToken";
     public const string Wallet = "Wallet";
     public const string Secret = "Secret";
+    public const string NafanyaIp = "NafanyaIP";
 }

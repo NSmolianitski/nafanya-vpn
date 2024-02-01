@@ -1,4 +1,5 @@
 ﻿using NafanyaVPN.Services.Abstractions;
+using NafanyaVPN.Utils;
 
 namespace NafanyaVPN.Services.CommandHandlers.Commands.UserInput;
 
@@ -20,10 +21,9 @@ public class CheckCustomPaymentSumCommand : ICommand<UserInputDto>
 
     public async Task Execute(UserInputDto data)
     {
-        // TODO: check sum conversion
-        if (!decimal.TryParse(data.Payload, out var paymentSum))
+        if (!TryParseCustomSum(data.Payload, out var paymentSum, out var errorMessage))
         {
-            await _replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, $"Введённая сумма некорректна: {data.Payload}");
+            await _replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, $"{errorMessage}: {data.Payload}");
             return;
         }
 
@@ -31,7 +31,37 @@ public class CheckCustomPaymentSumCommand : ICommand<UserInputDto>
         user.TelegramState = string.Empty;
         await _userService.UpdateAsync(user);
 
-        await _paymentService.SendPaymentForm(paymentSum, data.User.Id);
-        await _replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, $"{paymentSum}");
+        var paymentLabel = StringUtils.GetUniqueLabel();
+        var quickpay = _paymentService.GetPaymentForm(paymentSum, paymentLabel);
+        await _replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, 
+            $"Совершите оплату по ссылке: {quickpay.LinkPayment}");
+        
+        var paymentResult = await _paymentService.ListenForPayment(paymentLabel);
+        Console.WriteLine(paymentResult);
+        
+        await _replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, $"{paymentResult}");
+    }
+
+    private bool TryParseCustomSum(string sumInput, out decimal paymentSum, out string errorMessage)
+    {
+        paymentSum = 0;
+        
+        // TODO: check sum conversion
+        var isDecimal = decimal.TryParse(sumInput, out var parsedSum);
+        if (!isDecimal)
+        {
+            errorMessage = "Введённая сумма не является числом, либо число слишком большое";
+            return false;
+        }
+
+        if (parsedSum < 2)
+        {
+            errorMessage = "Минимальное значение для суммы - 2 рубля";
+            return false;
+        }
+
+        paymentSum = parsedSum;
+        errorMessage = string.Empty;
+        return true;
     }
 }

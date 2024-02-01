@@ -1,5 +1,6 @@
 ﻿using NafanyaVPN.Services.Abstractions;
 using NafanyaVPN.Services.CommandHandlers.Commands.Messages;
+using NafanyaVPN.Utils;
 
 namespace NafanyaVPN.Services.CommandHandlers.Commands.Callbacks;
 
@@ -22,8 +23,13 @@ public class PaymentSumCommand : ICommand<CallbackQueryDto>
     public async Task Execute(CallbackQueryDto data)
     {
         var paymentSum = decimal.Parse(data.Payload);
-        await _paymentService.SendPaymentForm(paymentSum, data.User.Id);
+        var paymentLabel = StringUtils.GetUniqueLabel();
+        var quickpay = _paymentService.GetPaymentForm(paymentSum, paymentLabel);
+        await _replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, 
+            $"Совершите оплату по ссылке: {quickpay.LinkPayment}");
         
-        await _replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, $"{paymentSum}");
+        var paymentResult = await _paymentService.ListenForPayment(paymentLabel);
+        
+        await _replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, $"{paymentResult}");
     }
 }

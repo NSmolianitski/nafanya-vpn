@@ -1,4 +1,5 @@
-﻿using NafanyaVPN.Constants;
+﻿using System.Net;
+using NafanyaVPN.Constants;
 using NafanyaVPN.Services.Abstractions;
 using yoomoney_api.account;
 using yoomoney_api.notification;
@@ -12,6 +13,8 @@ public class YoomoneyService : IPaymentService
     private readonly Account _accountInfo;
     private readonly string _wallet;
     private readonly string _secret;
+    private readonly string _serverAddress;
+    private readonly int _serverPort;
     
     public YoomoneyService(IConfiguration configuration)
     {
@@ -22,7 +25,10 @@ public class YoomoneyService : IPaymentService
         
         _wallet = configuration[$"{YoomoneyConstants.Yoomoney}:{YoomoneyConstants.Wallet}"]!;
         _secret = configuration[$"{YoomoneyConstants.Yoomoney}:{YoomoneyConstants.Secret}"]!;
-        
+
+        _serverAddress = configuration[$"{YoomoneyConstants.Yoomoney}:{YoomoneyConstants.NafanyaIp}"]!;
+        _serverPort = 5000;
+
         // _authorize = new Authorize(clientId: clientId, redirectUri: redirectUri, 
         //     scope: new [] 
         //     {
@@ -32,30 +38,21 @@ public class YoomoneyService : IPaymentService
         //         "incoming-transfers",
         //         "payment-p2p",
         //     });
-        
+
         // _client = new Client(accessToken);
         // _accountInfo = _client.GetAccountInfo(accessToken);
         // _accountInfo.Print();
     }
 
-    public async Task SendPaymentForm(decimal sum, long userId)
+    public Quickpay GetPaymentForm(decimal sum, string paymentLabel)
     {
-        var label = GetUniqueLabel();
-        var quickpay = GetQuickpayForm(sum, label);
-        Console.WriteLine(quickpay.LinkPayment);
-        
-        var paymentListenerToYooMoney = new PaymentListenerToYooMoney(label, DateTime.Today, _secret);
-        var resultPayment = await paymentListenerToYooMoney.Listen("http://127.0.0.1:4040",5000);
-        Console.WriteLine(resultPayment);
+        return new Quickpay(_wallet, "shop", sum, paymentLabel, PaymentType.BankCard);
     }
 
-    private Quickpay GetQuickpayForm(decimal sum, string label)
+    public async Task<string> ListenForPayment(string paymentLabel)
     {
-        return new Quickpay(_wallet, "shop", sum, label, PaymentType.BankCard);
-    }
-    
-    private string GetUniqueLabel()
-    {
-        return Guid.NewGuid().ToString();
+        var paymentListenerToYooMoney = new PaymentListenerToYooMoney(paymentLabel, DateTime.Today, _secret);
+        var paymentResult = await paymentListenerToYooMoney.Listen(_serverAddress, _serverPort);
+        return paymentResult;
     }
 }

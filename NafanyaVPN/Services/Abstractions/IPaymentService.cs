@@ -1,6 +1,9 @@
-﻿namespace NafanyaVPN.Services.Abstractions;
+﻿using yoomoney_api.quickpay;
+
+namespace NafanyaVPN.Services.Abstractions;
 
 public interface IPaymentService
 {
-    Task SendPaymentForm(decimal sum, long userId);
+    Quickpay GetPaymentForm(decimal sum, string paymentLabel);
+    Task<string> ListenForPayment(string paymentLabel);
 }

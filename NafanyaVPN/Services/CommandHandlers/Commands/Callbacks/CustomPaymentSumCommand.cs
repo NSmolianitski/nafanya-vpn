@@ -23,6 +23,6 @@ public class CustomPaymentSumCommand : ICommand<CallbackQueryDto>
         user.TelegramState = TelegramUserStateConstants.CustomPaymentSum;
         await _userService.UpdateAsync(user);
         
-        await _replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, "Введите сумму вручную");
+        await _replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, "Введите сумму вручную (минимум 2 рубля)");
     }
 }

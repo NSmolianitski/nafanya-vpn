@@ -17,7 +17,7 @@ using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using User = NafanyaVPN.Models.User;
 
-var appBuilder = Host.CreateApplicationBuilder();
+var appBuilder = WebApplication.CreateBuilder();
 
 var settingFilePath = appBuilder.Environment.IsDevelopment()
     ? AppSettingsPathConstants.Development
