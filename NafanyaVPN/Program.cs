@@ -1,3 +1,5 @@
+using System.Globalization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NafanyaVPN;
 using NafanyaVPN.Constants;
@@ -17,7 +19,19 @@ using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using User = NafanyaVPN.Models.User;
 
-var appBuilder = WebApplication.CreateBuilder();
+var appBuilder = WebApplication.CreateBuilder(args);
+appBuilder.Services.AddControllers();
+
+var cultureInfo = new CultureInfo("ru-RU")
+{
+    NumberFormat =
+    {
+        NumberDecimalSeparator = ".",
+        NumberGroupSeparator = ","
+    }
+};
+CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
 var settingFilePath = appBuilder.Environment.IsDevelopment()
     ? AppSettingsPathConstants.Development
@@ -74,5 +88,10 @@ appBuilder.Services.AddHostedService<BotInitTask>();
 appBuilder.Services.AddHostedService<SubscriptionExtendTask>();
 
 var app = appBuilder.Build();
+
+// app.UseHttpsRedirection();
+app.UseRouting();
+
+app.MapControllers();
 
 await app.RunAsync();

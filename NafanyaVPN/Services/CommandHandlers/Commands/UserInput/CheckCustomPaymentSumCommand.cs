@@ -34,7 +34,7 @@ public class CheckCustomPaymentSumCommand : ICommand<UserInputDto>
         var paymentLabel = StringUtils.GetUniqueLabel();
         var quickpay = _paymentService.GetPaymentForm(paymentSum, paymentLabel);
         await _replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, 
-            $"Совершите оплату по ссылке: {quickpay.LinkPayment}");
+            $"Ваша ссылка для оплаты: {quickpay.LinkPayment}");
         
         var paymentResult = await _paymentService.ListenForPayment(paymentLabel);
         Console.WriteLine(paymentResult);

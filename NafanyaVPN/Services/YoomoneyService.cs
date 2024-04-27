@@ -1,5 +1,4 @@
-﻿using System.Net;
-using NafanyaVPN.Constants;
+﻿using NafanyaVPN.Constants;
 using NafanyaVPN.Services.Abstractions;
 using yoomoney_api.account;
 using yoomoney_api.notification;
@@ -27,7 +26,7 @@ public class YoomoneyService : IPaymentService
         _secret = configuration[$"{YoomoneyConstants.Yoomoney}:{YoomoneyConstants.Secret}"]!;
 
         _serverAddress = configuration[$"{YoomoneyConstants.Yoomoney}:{YoomoneyConstants.NafanyaIp}"]!;
-        _serverPort = 5000;
+        _serverPort = 5200;
 
         // _authorize = new Authorize(clientId: clientId, redirectUri: redirectUri, 
         //     scope: new [] 
@@ -46,7 +45,7 @@ public class YoomoneyService : IPaymentService
 
     public Quickpay GetPaymentForm(decimal sum, string paymentLabel)
     {
-        return new Quickpay(_wallet, "shop", sum, paymentLabel, PaymentType.BankCard);
+        return new Quickpay(_wallet, "shop", sum, paymentLabel, PaymentMethod.BankCard);
     }
 
     public async Task<string> ListenForPayment(string paymentLabel)
