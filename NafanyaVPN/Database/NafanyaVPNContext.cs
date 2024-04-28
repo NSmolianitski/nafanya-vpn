@@ -1,6 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NafanyaVPN.Constants;
-using NafanyaVPN.Models;
+using NafanyaVPN.Entities.MoneyOperations;
+using NafanyaVPN.Entities.Outline;
+using NafanyaVPN.Entities.Subscription;
+using NafanyaVPN.Entities.Users;
+using Type = NafanyaVPN.Entities.MoneyOperations.Type;
 
 namespace NafanyaVPN.Database;
 
@@ -28,8 +31,8 @@ public class NafanyaVPNContext : DbContext
 
         modelBuilder.Entity<MoneyOperationType>()
             .HasData( 
-                new { Id = 1, Type = Enums.MoneyOperationType.Deposit },
-                new { Id = 2, Type = Enums.MoneyOperationType.Withdrawal }
+                new { Id = 1, Type = Type.Deposit },
+                new { Id = 2, Type = Type.Withdrawal }
             );
         
         var defaultSubscription = new Subscription
