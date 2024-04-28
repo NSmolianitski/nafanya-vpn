@@ -3,14 +3,9 @@ using NafanyaVPN.Utils;
 
 namespace NafanyaVPN.Services;
 
-public class SubscriptionDateTimeService : ISubscriptionDateTimeService
+public class SubscriptionDateTimeService(ILogger<SubscriptionDateTimeService> logger) : ISubscriptionDateTimeService
 {
-    private readonly ILogger<SubscriptionDateTimeService> _logger;
-
-    public SubscriptionDateTimeService(ILogger<SubscriptionDateTimeService> logger)
-    {
-        _logger = logger;
-    }
+    private readonly ILogger<SubscriptionDateTimeService> _logger = logger;
 
     public bool IsSubscriptionActive(DateTime subscriptionEndTime)
     {

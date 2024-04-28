@@ -5,26 +5,22 @@ using Telegram.Bot.Types;
 
 namespace NafanyaVPN.Services.CommandHandlers;
 
-public class MessageCommandHandlerService : ICommandHandlerService<Message>
+public class MessageCommandHandlerService(
+    SendAccountDataCommand sendAccountDataCommand,
+    SendPaymentSumChooseCommand sendPaymentSumChooseCommand,
+    SendOutlineKeyCommand sendOutlineKeyCommand,
+    SendInstructionCommand sendInstructionCommand,
+    SendHelloCommand sendHelloCommand)
+    : ICommandHandlerService<Message>
 {
-    private readonly Dictionary<string, ICommand<Message>> _commands;
-
-    public MessageCommandHandlerService(
-        SendAccountDataCommand sendAccountDataCommand,
-        SendPaymentSumChooseCommand sendPaymentSumChooseCommand,
-        SendOutlineKeyCommand sendOutlineKeyCommand,
-        SendInstructionCommand sendInstructionCommand,
-        SendHelloCommand sendHelloCommand)
+    private readonly Dictionary<string, ICommand<Message>> _commands = new()
     {
-        _commands = new Dictionary<string, ICommand<Message>>
-        {
-            { MainKeyboardConstants.Account, sendAccountDataCommand },
-            { MainKeyboardConstants.Donate, sendPaymentSumChooseCommand },
-            { MainKeyboardConstants.GetKey, sendOutlineKeyCommand },
-            { MainKeyboardConstants.Instruction, sendInstructionCommand },
-            { MainKeyboardConstants.Hello, sendHelloCommand },
-        };
-    }
+        { MainKeyboardConstants.Account, sendAccountDataCommand },
+        { MainKeyboardConstants.Donate, sendPaymentSumChooseCommand },
+        { MainKeyboardConstants.GetKey, sendOutlineKeyCommand },
+        { MainKeyboardConstants.Instruction, sendInstructionCommand },
+        { MainKeyboardConstants.Hello, sendHelloCommand },
+    };
 
     public async Task HandleCommand(Message data)
     {

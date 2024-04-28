@@ -6,27 +6,14 @@ using Telegram.Bot.Types;
 
 namespace NafanyaVPN.Services;
 
-public class MessageReceiveService : IUpdateHandler
+public class MessageReceiveService(
+    ICommandHandlerService<Message> messageCommandHandlerService,
+    ICommandHandlerService<CallbackQueryDto> callbackQueryCommandHandlerService,
+    ITelegramStateService telegramStateService,
+    ILogger<MessageReceiveService> logger,
+    IUserRegistrationService userRegistrationService)
+    : IUpdateHandler
 {
-    private readonly ICommandHandlerService<Message> _messageCommandHandlerService;
-    private readonly ICommandHandlerService<CallbackQueryDto> _callbackQueryCommandHandlerService;
-    private readonly IUserRegistrationService _userRegistrationService;
-    private readonly ITelegramStateService _telegramStateService;
-    private readonly ILogger<MessageReceiveService> _logger;
-
-    public MessageReceiveService(
-        ICommandHandlerService<Message> messageCommandHandlerService, 
-        ICommandHandlerService<CallbackQueryDto> callbackQueryCommandHandlerService, 
-        ITelegramStateService telegramStateService, 
-        ILogger<MessageReceiveService> logger, IUserRegistrationService userRegistrationService)
-    {
-        _messageCommandHandlerService = messageCommandHandlerService;
-        _callbackQueryCommandHandlerService = callbackQueryCommandHandlerService;
-        _userRegistrationService = userRegistrationService;
-        _telegramStateService = telegramStateService;
-        _logger = logger;
-    }
-
     public async Task HandleUpdateAsync(ITelegramBotClient _, Update update, CancellationToken cancellationToken)
     {
         var handler = update switch
@@ -48,14 +35,14 @@ public class MessageReceiveService : IUpdateHandler
     private async Task OnMessageReceived(Message message, CancellationToken cancellationToken)
     {
         var telegramUserId = message.From!.Id;
-        var isUserRegistered = await _userRegistrationService.IsRegistered(telegramUserId);
+        var isUserRegistered = await userRegistrationService.IsRegistered(telegramUserId);
         if (!isUserRegistered)
-            await _userRegistrationService.RegisterUser(telegramUserId, message.From.Username!);
+            await userRegistrationService.RegisterUser(telegramUserId, message.From.Username!);
 
-        if (await _telegramStateService.UserHasState(telegramUserId))
-            await _telegramStateService.HandleStateAsync(message);
+        if (await telegramStateService.UserHasState(telegramUserId))
+            await telegramStateService.HandleStateAsync(message);
         else
-            await _messageCommandHandlerService.HandleCommand(message);
+            await messageCommandHandlerService.HandleCommand(message);
     }
 
     private async Task OnCallbackQueryReceived(CallbackQuery callbackQuery, CancellationToken cancellationToken)
@@ -73,6 +60,6 @@ public class MessageReceiveService : IUpdateHandler
             data = splitQuery[1];
         }
         var dto = new CallbackQueryDto(query, data, callbackQuery.Message!, callbackQuery.From);
-        await _callbackQueryCommandHandlerService.HandleCommand(dto);
+        await callbackQueryCommandHandlerService.HandleCommand(dto);
     }
 }

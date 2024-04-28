@@ -3,38 +3,31 @@ using NafanyaVPN.Models;
 
 namespace NafanyaVPN.Database.Repositories;
 
-public class OutlineKeyRepository : IBaseRepository<OutlineKey>
+public class OutlineKeyRepository(NafanyaVPNContext db) : IBaseRepository<OutlineKey>
 {
-    private readonly NafanyaVPNContext _db;
-
-    public OutlineKeyRepository(NafanyaVPNContext db)
-    {
-        _db = db;
-    }
-    
     public async Task<OutlineKey> CreateAsync(OutlineKey model)
     {
-        var outlineKey = await _db.OutlineKeys.AddAsync(model);
-        await _db.SaveChangesAsync();
+        var outlineKey = await db.OutlineKeys.AddAsync(model);
+        await db.SaveChangesAsync();
         return outlineKey.Entity;
     }
 
     public IQueryable<OutlineKey> GetAll()
     {
-        return _db.OutlineKeys;
+        return db.OutlineKeys;
     }
 
     public async Task<bool> DeleteAsync(OutlineKey model)
     {
-        _db.OutlineKeys.Remove(model);
-        await _db.SaveChangesAsync();
+        db.OutlineKeys.Remove(model);
+        await db.SaveChangesAsync();
         return true;
     }
 
     public async Task<OutlineKey> UpdateAsync(OutlineKey model)
     {
-        _db.OutlineKeys.Update(model);
-        await _db.SaveChangesAsync();
+        db.OutlineKeys.Update(model);
+        await db.SaveChangesAsync();
         return model;
     }
     
@@ -42,8 +35,8 @@ public class OutlineKeyRepository : IBaseRepository<OutlineKey>
     {
         foreach (var model in models)
         {
-            _db.OutlineKeys.Update(model);
+            db.OutlineKeys.Update(model);
         }
-        await _db.SaveChangesAsync();
+        await db.SaveChangesAsync();
     }
 }

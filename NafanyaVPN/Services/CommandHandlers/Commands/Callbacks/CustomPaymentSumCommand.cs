@@ -3,26 +3,20 @@ using NafanyaVPN.Services.Abstractions;
 
 namespace NafanyaVPN.Services.CommandHandlers.Commands.Callbacks;
 
-public class CustomPaymentSumCommand : ICommand<CallbackQueryDto>
+public class CustomPaymentSumCommand(
+    IUserService userService,
+    IReplyService replyService,
+    ILogger<CustomPaymentSumCommand> logger)
+    : ICommand<CallbackQueryDto>
 {
-    private readonly IUserService _userService;
-    private readonly IReplyService _replyService;
-    private readonly ILogger<CustomPaymentSumCommand> _logger;
-
-    public CustomPaymentSumCommand(IUserService userService, IReplyService replyService, 
-        ILogger<CustomPaymentSumCommand> logger)
-    {
-        _userService = userService;
-        _replyService = replyService;
-        _logger = logger;
-    }
+    private readonly ILogger<CustomPaymentSumCommand> _logger = logger;
 
     public async Task Execute(CallbackQueryDto data)
     {
-        var user = await _userService.GetAsync(data.User.Id);
+        var user = await userService.GetAsync(data.User.Id);
         user.TelegramState = TelegramUserStateConstants.CustomPaymentSum;
-        await _userService.UpdateAsync(user);
+        await userService.UpdateAsync(user);
         
-        await _replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, "Введите сумму вручную (минимум 2 рубля)");
+        await replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, "Введите сумму вручную (минимум 2 рубля)");
     }
 }

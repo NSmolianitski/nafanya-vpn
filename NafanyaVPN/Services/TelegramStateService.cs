@@ -7,29 +7,23 @@ using Telegram.Bot.Types;
 
 namespace NafanyaVPN.Services;
 
-public class TelegramStateService : ITelegramStateService
+public class TelegramStateService(IUserService userService, CheckCustomPaymentSumCommand checkCustomPaymentSumCommand)
+    : ITelegramStateService
 {
-    private readonly IUserService _userService;
-    private readonly Dictionary<string, ICommand<UserInputDto>> _commands;
-
-    public TelegramStateService(IUserService userService, CheckCustomPaymentSumCommand checkCustomPaymentSumCommand)
+    private readonly Dictionary<string, ICommand<UserInputDto>> _commands = new()
     {
-        _userService = userService;
-        _commands = new Dictionary<string, ICommand<UserInputDto>>
-        {
-            { TelegramUserStateConstants.CustomPaymentSum, checkCustomPaymentSumCommand },
-        };
-    }
+        { TelegramUserStateConstants.CustomPaymentSum, checkCustomPaymentSumCommand },
+    };
 
     public async Task<bool> UserHasState(long telegramUserId)
     {
-        var user = await _userService.GetAsync(telegramUserId);
+        var user = await userService.GetAsync(telegramUserId);
         return !string.IsNullOrWhiteSpace(user.TelegramState);
     }
 
     public async Task HandleStateAsync(Message message)
     {
-        var user = await _userService.GetAsync(message.From!.Id);
+        var user = await userService.GetAsync(message.From!.Id);
         
         if (!_commands.TryGetValue(user.TelegramState, out var command))
             throw new NoSuchCommandException(user.TelegramState);

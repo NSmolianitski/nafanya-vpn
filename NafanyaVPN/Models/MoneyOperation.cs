@@ -3,6 +3,7 @@
 public class MoneyOperation
 {
     public int Id { get; set; }
+    public Guid Label { get; set; }
     public DateTime DateTime { get; set; }
     public virtual User User { get; set; }
     public decimal Sum { get; set; }

@@ -5,20 +5,16 @@ using NafanyaVPN.Services.CommandHandlers.Commands.Callbacks;
 
 namespace NafanyaVPN.Services.CommandHandlers;
 
-public class CallbackCommandHandlerService : ICommandHandlerService<CallbackQueryDto>
+public class CallbackCommandHandlerService(
+    PaymentSumCommand paymentSumCommand,
+    CustomPaymentSumCommand customPaymentSumCommand)
+    : ICommandHandlerService<CallbackQueryDto>
 {
-    private readonly Dictionary<string, ICommand<CallbackQueryDto>> _commands;
-
-    public CallbackCommandHandlerService(
-        PaymentSumCommand paymentSumCommand,
-        CustomPaymentSumCommand customPaymentSumCommand)
+    private readonly Dictionary<string, ICommand<CallbackQueryDto>> _commands = new()
     {
-        _commands = new Dictionary<string, ICommand<CallbackQueryDto>>
-        {
-            { CallbackConstants.PaymentSum, paymentSumCommand },
-            { CallbackConstants.CustomPaymentSum, customPaymentSumCommand },
-        };
-    }
+        { CallbackConstants.PaymentSum, paymentSumCommand },
+        { CallbackConstants.CustomPaymentSum, customPaymentSumCommand },
+    };
 
     public async Task HandleCommand(CallbackQueryDto data)
     {

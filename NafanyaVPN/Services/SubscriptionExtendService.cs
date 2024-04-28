@@ -4,46 +4,32 @@ using NafanyaVPN.Services.Abstractions;
 
 namespace NafanyaVPN.Services;
 
-public class SubscriptionExtendService : ISubscriptionExtendService
+public class SubscriptionExtendService(
+    IUserService userService,
+    ISubscriptionService subscriptionService,
+    IOutlineService outlineService,
+    ISubscriptionDateTimeService dateTimeService,
+    ILogger<SubscriptionExtendService> logger)
+    : ISubscriptionExtendService
 {
-    private readonly IUserService _userService;
-    private readonly ISubscriptionService _subscriptionService;
-    private readonly IOutlineService _outlineService;
-    private readonly ISubscriptionDateTimeService _dateTimeService;
-    private readonly ILogger<SubscriptionExtendService> _logger;
-
-    public SubscriptionExtendService(
-        IUserService userService, 
-        ISubscriptionService subscriptionService, 
-        IOutlineService outlineService, 
-        ISubscriptionDateTimeService dateTimeService, 
-        ILogger<SubscriptionExtendService> logger)
-    {
-        _userService = userService;
-        _subscriptionService = subscriptionService;
-        _outlineService = outlineService;
-        _dateTimeService = dateTimeService;
-        _logger = logger;
-    }
-
     public async Task ExtendForAllUsers()
     {
-        DateTime newSubscriptionEndDate = _dateTimeService.GetNewSubscriptionEndDate();
+        DateTime newSubscriptionEndDate = dateTimeService.GetNewSubscriptionEndDate();
         
-        Subscription defaultSubscription = await _subscriptionService.GetAsync(DatabaseConstants.Default);
+        Subscription defaultSubscription = await subscriptionService.GetAsync(DatabaseConstants.Default);
 
-        if (defaultSubscription.NextUpdateTime > _dateTimeService.Now())
+        if (defaultSubscription.NextUpdateTime > dateTimeService.Now())
         {
-            _logger.LogInformation($"Стандартная подписка пока не может обновиться. " +
+            logger.LogInformation($"Стандартная подписка пока не может обновиться. " +
                                    $"Это не ошибка (может появляться при запуске приложения). " +
                                    $"Следующее обновление: {defaultSubscription.NextUpdateTime}");
             return;
         }
 
         defaultSubscription.NextUpdateTime = newSubscriptionEndDate;
-        await _subscriptionService.UpdateAsync(defaultSubscription);
+        await subscriptionService.UpdateAsync(defaultSubscription);
         
-        var users = await _userService.GetAllAsync();
+        var users = await userService.GetAllAsync();
         foreach (var user in users)
         {
             var subscriptionPrice = user.Subscription.DailyCostInRoubles;
@@ -53,8 +39,8 @@ public class SubscriptionExtendService : ISubscriptionExtendService
                     continue;
                 
                 var keyId = user.OutlineKey!.Id;
-                _outlineService.DisableKey(keyId);
-                _logger.LogInformation($"Ключ деактивирован. " +
+                outlineService.DisableKey(keyId);
+                logger.LogInformation($"Ключ деактивирован. " +
                                        $"На счёте {user.TelegramUserName}({user.TelegramUserId}) " +
                                        $"недостаточно средств. Стоимость подписки: {subscriptionPrice}. " +
                                        $"Текущий баланс: {user.MoneyInRoubles}");
@@ -63,12 +49,12 @@ public class SubscriptionExtendService : ISubscriptionExtendService
             {
                 user.MoneyInRoubles -= subscriptionPrice;
                 user.SubscriptionEndDate = newSubscriptionEndDate;
-                _logger.LogInformation($"Со счёта {user.TelegramUserName}({user.TelegramUserId}) " +
+                logger.LogInformation($"Со счёта {user.TelegramUserName}({user.TelegramUserId}) " +
                                        $"списано {subscriptionPrice} рублей. Осталось: {user.MoneyInRoubles}");
             }
         }
 
-        await _userService.UpdateAllAsync(users);
+        await userService.UpdateAllAsync(users);
     }
 
     public async Task TryExtendForUser(User user)
@@ -77,7 +63,7 @@ public class SubscriptionExtendService : ISubscriptionExtendService
         if (subscriptionPrice > user.MoneyInRoubles)
         {
             var keyId = user.OutlineKey!.Id;
-            _outlineService.DisableKey(keyId);
+            outlineService.DisableKey(keyId);
         }
         else
         {
@@ -85,6 +71,6 @@ public class SubscriptionExtendService : ISubscriptionExtendService
             user.SubscriptionEndDate = user.Subscription.NextUpdateTime;
         }
 
-        await _userService.UpdateAsync(user);
+        await userService.UpdateAsync(user);
     }
 }

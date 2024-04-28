@@ -2,23 +2,16 @@
 
 namespace NafanyaVPN.Services;
 
-public class UserRegistrationService : IUserRegistrationService
+public class UserRegistrationService(IUserService userService) : IUserRegistrationService
 {
-    private readonly IUserService _userService;
-
-    public UserRegistrationService(IUserService userService)
-    {
-        _userService = userService;
-    }
-
     public async Task<bool> IsRegistered(long telegramUserId)
     {
-        var user = await _userService.TryGetAsync(telegramUserId);
+        var user = await userService.TryGetAsync(telegramUserId);
         return user is not null;
     }
 
     public async Task RegisterUser(long telegramUserId, string telegramUserName)
     {
-        await _userService.AddAsync(telegramUserId, telegramUserName);
+        await userService.AddAsync(telegramUserId, telegramUserName);
     }
 }

@@ -6,18 +6,11 @@ using NafanyaVPN.Services.Abstractions;
 
 namespace NafanyaVPN.Services;
 
-public class SubscriptionService : ISubscriptionService
+public class SubscriptionService(IBaseRepository<Subscription> subscriptionRepository) : ISubscriptionService
 {
-    private readonly IBaseRepository<Subscription> _subscriptionRepository;
-
-    public SubscriptionService(IBaseRepository<Subscription> subscriptionRepository)
-    {
-        _subscriptionRepository = subscriptionRepository;
-    }
-
     public async Task<Subscription> GetAsync(string name = DatabaseConstants.Default)
     {
-        var subscription = await _subscriptionRepository.GetAll()
+        var subscription = await subscriptionRepository.GetAll()
             .FirstOrDefaultAsync(s => s.Name == name);
 
         return subscription!;
@@ -25,6 +18,6 @@ public class SubscriptionService : ISubscriptionService
 
     public async Task UpdateAsync(Subscription model)
     {
-        await _subscriptionRepository.UpdateAsync(model);
+        await subscriptionRepository.UpdateAsync(model);
     }
 }
