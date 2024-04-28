@@ -26,7 +26,7 @@ public class UserService(
     {
         var user = await TryGetAsync(telegramUserId);
         if (user is null)
-            throw new NullReferenceException($"No user with such telegramUserId: {telegramUserId}");
+            throw new NullReferenceException($"User with telegramUserId: \"{telegramUserId}\" does not exist");
 
         return user;
     }

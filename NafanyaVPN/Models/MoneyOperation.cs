@@ -1,11 +1,11 @@
 ﻿namespace NafanyaVPN.Models;
 
-public class MoneyOperation
+public record MoneyOperation(
+    int Id,
+    string Label,
+    DateTime DateTime,
+    User User,
+    decimal Sum,
+    MoneyOperationType Type)
 {
-    public int Id { get; set; }
-    public Guid Label { get; set; }
-    public DateTime DateTime { get; set; }
-    public virtual User User { get; set; }
-    public decimal Sum { get; set; }
-    public virtual MoneyOperationType Type { get; set; }
 }

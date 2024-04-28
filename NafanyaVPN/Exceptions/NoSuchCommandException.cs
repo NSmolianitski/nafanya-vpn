@@ -2,8 +2,6 @@
 
 public class NoSuchCommandException : Exception
 {
-    public override string Message => "No such command!";
-
     public NoSuchCommandException()
     {
     }
