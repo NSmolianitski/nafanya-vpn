@@ -15,7 +15,7 @@ public class SendOutlineKeyCommand(
     ISubscriptionExtendService subscriptionExtendService)
     : ICommand<Message>
 {
-    public async Task Execute(global::Telegram.Bot.Types.Message message)
+    public async Task Execute(Message message)
     {
         var telegramUser = message.From;
         var user = await userService.GetAsync(telegramUser!.Id);

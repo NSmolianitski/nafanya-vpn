@@ -2,7 +2,7 @@
 using yoomoney_api.notification;
 using yoomoney_api.quickpay;
 
-namespace NafanyaVPN.Entities.Payment;
+namespace NafanyaVPN.Entities.Payments;
 
 public class YoomoneyPaymentService : IPaymentService
 {
@@ -13,7 +13,9 @@ public class YoomoneyPaymentService : IPaymentService
     private readonly string _serverAddress;
     private readonly int _serverPort;
     
-    public YoomoneyPaymentService(IConfiguration configuration)
+    private readonly IPaymentRepository _paymentRepository;
+    
+    public YoomoneyPaymentService(IConfiguration configuration, IPaymentRepository paymentRepository)
     {
         var yoomoneyConfig = configuration.GetRequiredSection(YoomoneyConstants.Yoomoney);
         var clientId = yoomoneyConfig[$"{YoomoneyConstants.ClientId}"]!;
@@ -25,6 +27,8 @@ public class YoomoneyPaymentService : IPaymentService
 
         _serverAddress = configuration[$"{YoomoneyConstants.Yoomoney}:{YoomoneyConstants.NafanyaIp}"]!;
         _serverPort = 5219;
+        
+        _paymentRepository = paymentRepository;
 
         // _authorize = new Authorize(clientId: clientId, redirectUri: redirectUri, 
         //     scope: new [] 
@@ -52,4 +56,7 @@ public class YoomoneyPaymentService : IPaymentService
         var paymentResult = await paymentListenerToYooMoney.Listen(_serverAddress, _serverPort);
         return paymentResult;
     }
+    
+    public async Task<Payment> GetByLabelAsync(string label) =>
+        await _paymentRepository.GetByLabelAsync(label);
 }

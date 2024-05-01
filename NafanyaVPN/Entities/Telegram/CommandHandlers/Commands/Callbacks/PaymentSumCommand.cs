@@ -1,4 +1,5 @@
-﻿using NafanyaVPN.Entities.Payment;
+﻿using NafanyaVPN.Entities.PaymentNotifications;
+using NafanyaVPN.Entities.Payments;
 using NafanyaVPN.Entities.Telegram.CommandHandlers.Commands.Messages;
 using NafanyaVPN.Entities.Telegram.CommandHandlers.DTOs;
 using NafanyaVPN.Utils;
@@ -21,8 +22,9 @@ public class PaymentSumCommand(
         await replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, 
             $"Совершите оплату по ссылке: {quickpay.LinkPayment}");
         
-        var paymentResult = await paymentService.ListenForPayment(paymentLabel);
+        // TODO: проверить совершение оплаты
+        // var paymentResult = await paymentService.ListenForPayment(paymentLabel);
         
-        await replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, $"{paymentResult}");
+        // await replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, $"{paymentResult}");
     }
 }

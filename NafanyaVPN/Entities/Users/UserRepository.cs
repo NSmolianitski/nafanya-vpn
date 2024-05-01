@@ -1,6 +1,6 @@
-﻿using NafanyaVPN.Entities.Users;
+﻿using NafanyaVPN.Database;
 
-namespace NafanyaVPN.Database.Repositories;
+namespace NafanyaVPN.Entities.Users;
 
 public class UserRepository(NafanyaVPNContext db) : IUserRepository
 {

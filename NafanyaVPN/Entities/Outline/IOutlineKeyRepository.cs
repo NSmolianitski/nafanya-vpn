@@ -1,6 +1,4 @@
-﻿using NafanyaVPN.Entities.Outline;
-
-namespace NafanyaVPN.Database.Repositories;
+﻿namespace NafanyaVPN.Entities.Outline;
 
 public interface IOutlineKeyRepository
 {

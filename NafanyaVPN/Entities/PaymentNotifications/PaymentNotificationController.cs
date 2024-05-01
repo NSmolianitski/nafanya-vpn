@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NafanyaVPN.Utils;
 
-namespace NafanyaVPN.Entities.Payment;
+namespace NafanyaVPN.Entities.PaymentNotifications;
 
 [Route("api/v1/")]
-public class YoomoneyNotificationController(
-    ILogger<YoomoneyNotificationController> logger,
+public class PaymentNotificationController(
+    ILogger<PaymentNotificationController> logger,
     INotificationHandleService notificationHandleService) : Controller
 {
     [HttpPost]

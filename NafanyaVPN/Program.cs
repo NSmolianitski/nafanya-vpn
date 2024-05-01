@@ -2,9 +2,8 @@ using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using NafanyaVPN;
 using NafanyaVPN.Database;
-using NafanyaVPN.Database.Repositories;
 using NafanyaVPN.Entities.Outline;
-using NafanyaVPN.Entities.Payment;
+using NafanyaVPN.Entities.Payments;
 using NafanyaVPN.Entities.Registration;
 using NafanyaVPN.Entities.Subscription;
 using NafanyaVPN.Entities.Telegram;
@@ -56,13 +55,13 @@ appBuilder.Services.AddDbContext<NafanyaVPNContext>(options => options.UseSqlite
 
 // REPOSITORIES
 appBuilder.Services.AddScoped<IUserRepository, UserRepository>();
-appBuilder.Services.AddScoped<IMoneyOperationRepository, MoneyOperationRepository>();
+appBuilder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 appBuilder.Services.AddScoped<IOutlineKeyRepository, OutlineKeyRepository>();
 appBuilder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
 
 // SERVICES
 appBuilder.Services.AddScoped<IUserService, UserService>();
-appBuilder.Services.AddScoped<IMoneyOperationRepository, MoneyOperationRepository>();
+appBuilder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 appBuilder.Services.AddScoped<IOutlineKeysService, OutlineKeysService>();
 appBuilder.Services.AddScoped<IPaymentService, YoomoneyPaymentService>();
 

@@ -1,10 +1,9 @@
-﻿using NafanyaVPN.Entities.MoneyOperations;
-using NafanyaVPN.Exceptions;
+﻿using NafanyaVPN.Exceptions;
 
-namespace NafanyaVPN.Entities.Payment;
+namespace NafanyaVPN.Entities.PaymentNotifications;
 
 public class YoomoneyNotificationHandleService(
-    IMoneyOperationService moneyOperationService, 
+    Payments.IPaymentService paymentService, 
     ILogger<YoomoneyNotificationHandleService> logger)
     : INotificationHandleService
 {
@@ -12,7 +11,7 @@ public class YoomoneyNotificationHandleService(
     {
         try
         {
-            var moneyOperation = await moneyOperationService.GetByLabelAsync(notification.Label);
+            var payment = await paymentService.GetByLabelAsync(notification.Label);
         }
         catch (NoSuchEntityException e)
         {

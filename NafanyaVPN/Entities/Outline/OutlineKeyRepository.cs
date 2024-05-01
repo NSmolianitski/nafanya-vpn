@@ -1,6 +1,6 @@
-﻿using NafanyaVPN.Entities.Outline;
+﻿using NafanyaVPN.Database;
 
-namespace NafanyaVPN.Database.Repositories;
+namespace NafanyaVPN.Entities.Outline;
 
 public class OutlineKeyRepository(NafanyaVPNContext db) : IOutlineKeyRepository
 {

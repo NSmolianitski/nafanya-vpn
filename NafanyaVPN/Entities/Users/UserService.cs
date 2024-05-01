@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NafanyaVPN.Database;
-using NafanyaVPN.Database.Repositories;
 using NafanyaVPN.Entities.Subscription;
 
 namespace NafanyaVPN.Entities.Users;

@@ -1,6 +1,4 @@
-﻿using NafanyaVPN.Entities.Subscription;
-
-namespace NafanyaVPN.Database.Repositories;
+﻿namespace NafanyaVPN.Entities.Subscription;
 
 public interface ISubscriptionRepository
 {

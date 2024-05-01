@@ -1,6 +1,4 @@
-﻿using NafanyaVPN.Entities.Users;
-
-namespace NafanyaVPN.Database.Repositories;
+﻿namespace NafanyaVPN.Entities.Users;
 
 public interface IUserRepository
 {

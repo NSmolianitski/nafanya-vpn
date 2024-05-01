@@ -1,4 +1,4 @@
-﻿namespace NafanyaVPN.Entities.Payment;
+﻿namespace NafanyaVPN.Entities.PaymentNotifications;
 
 public record YoomoneyPaymentNotification(
     string? NotificationType,
