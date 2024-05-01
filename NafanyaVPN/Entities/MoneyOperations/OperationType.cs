@@ -1,6 +1,6 @@
 ﻿namespace NafanyaVPN.Entities.MoneyOperations;
 
-public enum Type
+public enum OperationType
 {
     Deposit,
     Withdrawal

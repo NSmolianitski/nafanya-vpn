@@ -2,12 +2,12 @@
 
 namespace NafanyaVPN.Entities.MoneyOperations;
 
-public record MoneyOperation(
-    int Id,
-    string Label,
-    DateTime DateTime,
-    User User,
-    decimal Sum,
-    MoneyOperationType Type)
+public class MoneyOperation
 {
+    public int Id { get; set; }
+    public string Label { get; set; }
+    public DateTime DateTime { get; set; }
+    public User User { get; set; }
+    public decimal Sum { get; set; }
+    public MoneyOperationType Type { get; set; }
 }

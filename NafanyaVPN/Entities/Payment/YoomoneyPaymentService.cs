@@ -4,7 +4,7 @@ using yoomoney_api.quickpay;
 
 namespace NafanyaVPN.Entities.Payment;
 
-public class YoomoneyService : IPaymentService
+public class YoomoneyPaymentService : IPaymentService
 {
     private readonly Client _client;
     private readonly Account _accountInfo;
@@ -13,7 +13,7 @@ public class YoomoneyService : IPaymentService
     private readonly string _serverAddress;
     private readonly int _serverPort;
     
-    public YoomoneyService(IConfiguration configuration)
+    public YoomoneyPaymentService(IConfiguration configuration)
     {
         var yoomoneyConfig = configuration.GetRequiredSection(YoomoneyConstants.Yoomoney);
         var clientId = yoomoneyConfig[$"{YoomoneyConstants.ClientId}"]!;
@@ -24,7 +24,7 @@ public class YoomoneyService : IPaymentService
         _secret = configuration[$"{YoomoneyConstants.Yoomoney}:{YoomoneyConstants.Secret}"]!;
 
         _serverAddress = configuration[$"{YoomoneyConstants.Yoomoney}:{YoomoneyConstants.NafanyaIp}"]!;
-        _serverPort = 5200;
+        _serverPort = 5219;
 
         // _authorize = new Authorize(clientId: clientId, redirectUri: redirectUri, 
         //     scope: new [] 

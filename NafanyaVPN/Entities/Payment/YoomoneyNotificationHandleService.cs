@@ -6,13 +6,13 @@ namespace NafanyaVPN.Entities.Payment;
 public class YoomoneyNotificationHandleService(
     IMoneyOperationService moneyOperationService, 
     ILogger<YoomoneyNotificationHandleService> logger)
-    : IYoomoneyNotificationHandleService
+    : INotificationHandleService
 {
-    public void Handle(YoomoneyPaymentNotification notification)
+    public async Task Handle(YoomoneyPaymentNotification notification)
     {
         try
         {
-            var moneyOperation = moneyOperationService.GetByLabelAsync(notification.Label);
+            var moneyOperation = await moneyOperationService.GetByLabelAsync(notification.Label);
         }
         catch (NoSuchEntityException e)
         {

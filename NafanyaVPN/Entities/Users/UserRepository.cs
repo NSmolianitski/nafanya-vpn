@@ -1,9 +1,8 @@
-﻿using NafanyaVPN.Database.Abstract;
-using NafanyaVPN.Entities.Users;
+﻿using NafanyaVPN.Entities.Users;
 
 namespace NafanyaVPN.Database.Repositories;
 
-public class UserRepository(NafanyaVPNContext db) : IBaseRepository<User>
+public class UserRepository(NafanyaVPNContext db) : IUserRepository
 {
     public async Task<User> CreateAsync(User model)
     {

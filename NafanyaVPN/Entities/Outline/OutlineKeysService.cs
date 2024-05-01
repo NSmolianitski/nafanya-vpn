@@ -1,11 +1,9 @@
-﻿using NafanyaVPN.Database.Abstract;
+﻿using NafanyaVPN.Database.Repositories;
 
 namespace NafanyaVPN.Entities.Outline;
 
-public class OutlineKeysService(IBaseRepository<OutlineKey> outlineKeysRepository) : IOutlineKeysService
+public class OutlineKeysService(IOutlineKeyRepository outlineKeysRepository) : IOutlineKeysService
 {
-    public async Task<OutlineKey> CreateAsync(OutlineKey model)
-    {
-        return await outlineKeysRepository.CreateAsync(model);
-    }
+    public async Task<OutlineKey> CreateAsync(OutlineKey model) =>
+        await outlineKeysRepository.CreateAsync(model);
 }

@@ -1,9 +1,8 @@
-﻿using NafanyaVPN.Database.Abstract;
-using NafanyaVPN.Entities.Subscription;
+﻿using NafanyaVPN.Entities.Subscription;
 
 namespace NafanyaVPN.Database.Repositories;
 
-public class SubscriptionRepository(NafanyaVPNContext db) : IBaseRepository<Subscription>
+public class SubscriptionRepository(NafanyaVPNContext db) : ISubscriptionRepository
 {
     public async Task<Subscription> CreateAsync(Subscription model)
     {

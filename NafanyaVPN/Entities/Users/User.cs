@@ -10,6 +10,6 @@ public class User
     public decimal MoneyInRoubles { get; set; }
     public DateTime SubscriptionEndDate { get; set; }
     public string TelegramState { get; set; }
-    public virtual OutlineKey? OutlineKey { get; set; }
-    public virtual Subscription.Subscription Subscription { get; set; }
+    public OutlineKey? OutlineKey { get; set; }
+    public Subscription.Subscription Subscription { get; set; }
 }

@@ -1,25 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using NafanyaVPN.Database.Abstract;
-using NafanyaVPN.Exceptions;
+﻿using NafanyaVPN.Database.Repositories;
 
 namespace NafanyaVPN.Entities.MoneyOperations;
 
-public class MoneyOperationService(IBaseRepository<MoneyOperation> moneyOperationRepository)
+public class MoneyOperationService(IMoneyOperationRepository moneyOperationRepository)
     : IMoneyOperationService
 {
-    public async Task<MoneyOperation> GetByLabelAsync(string label)
-    {
-        var moneyOperation = await TryGetByLabelAsync(label) ??
-            throw new NoSuchEntityException(
-             $"Money operation with label: \"{label}\" does not exist. " +
-                        $"Repository: \"{GetType().Name}\".");
-
-        return moneyOperation;
-    }
-
-    public async Task<MoneyOperation?> TryGetByLabelAsync(string label)
-    {
-        var user = await moneyOperationRepository.GetAll().FirstOrDefaultAsync(o => o.Label == label);
-        return user;
-    }
+    public async Task<MoneyOperation> GetByLabelAsync(string label) =>
+        await moneyOperationRepository.GetByLabelAsync(label);
 }

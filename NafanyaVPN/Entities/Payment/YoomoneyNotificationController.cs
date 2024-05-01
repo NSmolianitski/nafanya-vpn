@@ -5,7 +5,8 @@ namespace NafanyaVPN.Entities.Payment;
 
 [Route("api/v1/")]
 public class YoomoneyNotificationController(
-    ILogger<YoomoneyNotificationController> logger) : Controller
+    ILogger<YoomoneyNotificationController> logger,
+    INotificationHandleService notificationHandleService) : Controller
 {
     [HttpPost]
     [Route("payment-notification")]
@@ -20,6 +21,8 @@ public class YoomoneyNotificationController(
         }
         
         logger.LogInformation(modelLog);
+        await notificationHandleService.Handle(notification);
+        
         return Ok();
     }
 }

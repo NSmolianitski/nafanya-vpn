@@ -2,7 +2,6 @@ using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using NafanyaVPN;
 using NafanyaVPN.Database;
-using NafanyaVPN.Database.Abstract;
 using NafanyaVPN.Database.Repositories;
 using NafanyaVPN.Entities.Outline;
 using NafanyaVPN.Entities.Payment;
@@ -19,7 +18,6 @@ using Serilog;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
-using User = NafanyaVPN.Entities.Users.User;
 
 var appBuilder = WebApplication.CreateBuilder(args);
 appBuilder.Services.AddControllers();
@@ -52,28 +50,35 @@ var telegramBotOptions = new TelegramBotClientOptions(
 var telegramBotClient = new TelegramBotClient(telegramBotOptions);
 appBuilder.Services.AddSingleton<ITelegramBotClient>(telegramBotClient);
 
+// DATABASE
+var connectionString = configuration.GetConnectionString(DatabaseConstants.Default);
+appBuilder.Services.AddDbContext<NafanyaVPNContext>(options => options.UseSqlite(connectionString));
+
+// REPOSITORIES
+appBuilder.Services.AddScoped<IUserRepository, UserRepository>();
+appBuilder.Services.AddScoped<IMoneyOperationRepository, MoneyOperationRepository>();
+appBuilder.Services.AddScoped<IOutlineKeyRepository, OutlineKeyRepository>();
+appBuilder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
+
+// SERVICES
+appBuilder.Services.AddScoped<IUserService, UserService>();
+appBuilder.Services.AddScoped<IMoneyOperationRepository, MoneyOperationRepository>();
+appBuilder.Services.AddScoped<IOutlineKeysService, OutlineKeysService>();
+appBuilder.Services.AddScoped<IPaymentService, YoomoneyPaymentService>();
+
 appBuilder.Services.AddScoped<IUpdateHandler, MessageReceiveService>();
 appBuilder.Services.AddScoped<ICommandHandlerService<Message>, MessageCommandHandlerService>();
 appBuilder.Services.AddScoped<ICommandHandlerService<CallbackQueryDto>, CallbackCommandHandlerService>();
+
 appBuilder.Services.AddScoped<IReplyService, ReplyService>();
 appBuilder.Services.AddScoped<IOutlineService, OutlineService>();
-
-var connectionString = configuration.GetConnectionString(DatabaseConstants.Default);
-appBuilder.Services.AddDbContext<NafanyaVPNContext>(options => options.UseLazyLoadingProxies()
-    .UseSqlite(connectionString));
-
-appBuilder.Services.AddScoped<IBaseRepository<User>, UserRepository>();
-appBuilder.Services.AddScoped<IBaseRepository<OutlineKey>, OutlineKeyRepository>();
-appBuilder.Services.AddScoped<IBaseRepository<Subscription>, SubscriptionRepository>();
 appBuilder.Services.AddScoped<ITelegramStateService, TelegramStateService>();
 appBuilder.Services.AddScoped<IUserRegistrationService, UserRegistrationService>();
-appBuilder.Services.AddScoped<IUserService, UserService>();
 appBuilder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
-appBuilder.Services.AddScoped<IOutlineKeysService, OutlineKeysService>();
 appBuilder.Services.AddScoped<ISubscriptionDateTimeService, SubscriptionDateTimeService>();
 appBuilder.Services.AddScoped<ISubscriptionExtendService, SubscriptionExtendService>();
-appBuilder.Services.AddScoped<IPaymentService, YoomoneyService>();
 
+// COMMANDS
 appBuilder.Services.AddScoped<SendAccountDataCommand>();
 appBuilder.Services.AddScoped<DonateMoneyCommand>();
 appBuilder.Services.AddScoped<SendOutlineKeyCommand>();
@@ -86,8 +91,9 @@ appBuilder.Services.AddScoped<SendPaymentSumChooseCommand>();
 
 appBuilder.Services.AddScoped<CheckCustomPaymentSumCommand>();
 
+// APP LAUNCH
 appBuilder.Services.AddHostedService<BotInitTask>();
-appBuilder.Services.AddHostedService<SubscriptionExtendTask>();
+// appBuilder.Services.AddHostedService<SubscriptionExtendTask>();
 
 var app = appBuilder.Build();
 
