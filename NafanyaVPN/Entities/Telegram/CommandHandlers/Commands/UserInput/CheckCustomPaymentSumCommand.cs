@@ -1,8 +1,6 @@
-﻿using NafanyaVPN.Entities.PaymentNotifications;
-using NafanyaVPN.Entities.Payments;
+﻿using NafanyaVPN.Entities.Payments;
 using NafanyaVPN.Entities.Telegram.CommandHandlers.DTOs;
 using NafanyaVPN.Entities.Users;
-using NafanyaVPN.Utils;
 
 namespace NafanyaVPN.Entities.Telegram.CommandHandlers.Commands.UserInput;
 
@@ -24,16 +22,9 @@ public class CheckCustomPaymentSumCommand(
         user.TelegramState = string.Empty;
         await userService.UpdateAsync(user);
 
-        var paymentLabel = StringUtils.GetUniqueLabel();
-        var quickpay = paymentService.GetPaymentForm(paymentSum, paymentLabel);
+        var quickpay = await paymentService.CreatePaymentFormAsync(paymentSum, user);
         await replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, 
             $"Совершите оплату по ссылке: {quickpay.LinkPayment}");
-        
-        // TODO: проверить совершение оплаты
-        // var paymentResult = await paymentService.ListenForPayment(paymentLabel);paymentService
-        // Console.WriteLine(paymentResult);
-        
-        // await replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, $"{paymentResult}");
     }
 
     private bool TryParseCustomSum(string sumInput, out decimal paymentSum, out string errorMessage)

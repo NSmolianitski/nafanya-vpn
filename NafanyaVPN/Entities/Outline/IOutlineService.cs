@@ -7,4 +7,5 @@ public interface IOutlineService
     void EnableKey(int keyId);
     void DisableKey(int keyId);
     void DeleteKey(int keyId);
+    string GetInstruction();
 }

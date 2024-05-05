@@ -6,7 +6,7 @@ namespace NafanyaVPN.Entities.Telegram.CommandHandlers.Commands.Messages;
 public class SendAccountDataCommand(IReplyService replyService, IUserService userService)
     : ICommand<Message>
 {
-    public async Task Execute(global::Telegram.Bot.Types.Message message)
+    public async Task Execute(Message message)
     {
         var telegramUser = message.From;
         var user = await userService.GetAsync(telegramUser!.Id);

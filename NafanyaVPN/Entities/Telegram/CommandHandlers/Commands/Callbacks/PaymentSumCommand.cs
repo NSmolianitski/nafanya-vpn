@@ -1,14 +1,14 @@
-﻿using NafanyaVPN.Entities.PaymentNotifications;
-using NafanyaVPN.Entities.Payments;
+﻿using NafanyaVPN.Entities.Payments;
 using NafanyaVPN.Entities.Telegram.CommandHandlers.Commands.Messages;
 using NafanyaVPN.Entities.Telegram.CommandHandlers.DTOs;
-using NafanyaVPN.Utils;
+using NafanyaVPN.Entities.Users;
 
 namespace NafanyaVPN.Entities.Telegram.CommandHandlers.Commands.Callbacks;
 
 public class PaymentSumCommand(
     IReplyService replyService,
     IPaymentService paymentService,
+    IUserService userService,
     ILogger<SendPaymentSumChooseCommand> logger)
     : ICommand<CallbackQueryDto>
 {
@@ -17,14 +17,10 @@ public class PaymentSumCommand(
     public async Task Execute(CallbackQueryDto data)
     {
         var paymentSum = decimal.Parse(data.Payload);
-        var paymentLabel = StringUtils.GetUniqueLabel();
-        var quickpay = paymentService.GetPaymentForm(paymentSum, paymentLabel);
+        var user = await userService.GetAsync(data.User.Id);
+        var quickpay = await paymentService.CreatePaymentFormAsync(paymentSum, user);
+        
         await replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, 
             $"Совершите оплату по ссылке: {quickpay.LinkPayment}");
-        
-        // TODO: проверить совершение оплаты
-        // var paymentResult = await paymentService.ListenForPayment(paymentLabel);
-        
-        // await replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, $"{paymentResult}");
     }
 }

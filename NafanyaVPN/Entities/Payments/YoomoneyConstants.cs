@@ -9,4 +9,5 @@ public static class YoomoneyConstants
     public const string Wallet = "Wallet";
     public const string Secret = "Secret";
     public const string NafanyaIp = "NafanyaIP";
+    public const string NafanyaPort = "NafanyaPort";
 }

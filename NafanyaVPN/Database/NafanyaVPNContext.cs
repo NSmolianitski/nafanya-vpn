@@ -4,6 +4,7 @@ using NafanyaVPN.Entities.Payments;
 using NafanyaVPN.Entities.Subscription;
 using NafanyaVPN.Entities.Users;
 using NafanyaVPN.Entities.Withdraws;
+using NafanyaVPN.Utils;
 
 namespace NafanyaVPN.Database;
 
@@ -29,7 +30,7 @@ public class NafanyaVPNContext : DbContext
             .WithOne(o => o.User)
             .HasForeignKey<OutlineKey>(o => o.UserId);
 
-        var nowDateTime = DateTime.Now;
+        var nowDateTime = DateTimeUtils.GetMoscowTime();
         modelBuilder.Entity<PaymentStatus>()
             .HasData(
                 new
