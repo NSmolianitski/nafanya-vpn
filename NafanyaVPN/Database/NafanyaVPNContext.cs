@@ -8,7 +8,7 @@ using NafanyaVPN.Utils;
 
 namespace NafanyaVPN.Database;
 
-public class NafanyaVPNContext : DbContext
+public class NafanyaVPNContext(DbContextOptions<NafanyaVPNContext> options) : DbContext(options)
 {
     public DbSet<User> Users { get; init; } = null!;
     public DbSet<OutlineKey> OutlineKeys { get; init; } = null!;
@@ -17,12 +17,6 @@ public class NafanyaVPNContext : DbContext
     public DbSet<Withdraw> Withdraws { get; init; } = null!;
     public DbSet<PaymentStatus> PaymentStatuses { get; init; } = null!;
 
-    public NafanyaVPNContext(DbContextOptions<NafanyaVPNContext> options) : base(options)
-    {
-        Database.EnsureDeleted();
-        Database.EnsureCreated();
-    }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>()
@@ -30,6 +24,19 @@ public class NafanyaVPNContext : DbContext
             .WithOne(o => o.User)
             .HasForeignKey<OutlineKey>(o => o.UserId);
 
+        modelBuilder.Entity<Payment>()
+            .Property(p => p.Status)
+            .HasColumnName("StatusId")
+            .HasConversion(
+                p => (PaymentStatusType) Enum.Parse(typeof(PaymentStatusType), p.Name),
+                p => new PaymentStatus(p)
+                );
+        
+        AddInitialData(modelBuilder);
+    }
+
+    private void AddInitialData(ModelBuilder modelBuilder)
+    {
         var nowDateTime = DateTimeUtils.GetMoscowTime();
         modelBuilder.Entity<PaymentStatus>()
             .HasData(

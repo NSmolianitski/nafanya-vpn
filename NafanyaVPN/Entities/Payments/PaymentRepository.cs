@@ -20,7 +20,7 @@ public class PaymentRepository(NafanyaVPNContext db) : IPaymentRepository
     
     public async Task<Payment?> TryGetByLabelAsync(string label)
     {
-        var payment = await Items.FirstOrDefaultAsync(o => o.Label == label);
+        var payment = await Items.FirstOrDefaultAsync(p => p.Label == label);
         return payment;
     }
     
