@@ -10,7 +10,7 @@ public class PaymentBuilder
     private User _user;
     private decimal _sum;
     private string _label;
-    private PaymentStatus _status;
+    private PaymentStatusType _status;
 
     public PaymentBuilder WithId(long id)
     {
@@ -50,7 +50,7 @@ public class PaymentBuilder
 
     public PaymentBuilder WithStatus(PaymentStatusType status)
     {
-        _status = new PaymentStatus(status);
+        _status = status;
         return this;
     }
 

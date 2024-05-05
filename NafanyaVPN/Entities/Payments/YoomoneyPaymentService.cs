@@ -42,7 +42,7 @@ public class YoomoneyPaymentService(IConfiguration configuration, IPaymentReposi
 
     public async Task<Payment> FinishPaymentAsync(Payment payment)
     {
-        payment.Status = new PaymentStatus(PaymentStatusType.Finished);
+        payment.Status = PaymentStatusType.Finished;
         return await paymentRepository.UpdateAsync(payment);
     }
 

@@ -28,8 +28,8 @@ public class NafanyaVPNContext(DbContextOptions<NafanyaVPNContext> options) : Db
             .Property(p => p.Status)
             .HasColumnName("StatusId")
             .HasConversion(
-                p => (PaymentStatusType) Enum.Parse(typeof(PaymentStatusType), p.Name),
-                p => new PaymentStatus(p)
+                p => p.ToString(),
+                p => (PaymentStatusType) Enum.Parse(typeof(PaymentStatusType), p)
                 );
         
         AddInitialData(modelBuilder);

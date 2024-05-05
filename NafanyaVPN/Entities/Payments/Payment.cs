@@ -13,7 +13,7 @@ public class Payment
         User user,
         decimal sum,
         string label,
-        PaymentStatus status)
+        PaymentStatusType status)
     {
         Id = id;
         CreatedAt = createdAt;
@@ -30,6 +30,5 @@ public class Payment
     public User User { get; set; }
     public decimal Sum { get; set; }
     public string Label { get; set; }
-    // public int StatusId { get; set; }
-    public PaymentStatus Status { get; set; }
+    public PaymentStatusType Status { get; set; }
 }
