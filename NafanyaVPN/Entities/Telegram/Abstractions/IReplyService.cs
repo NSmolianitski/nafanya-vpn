@@ -1,6 +1,6 @@
 ﻿using Telegram.Bot.Types.ReplyMarkups;
 
-namespace NafanyaVPN.Entities.Telegram;
+namespace NafanyaVPN.Entities.Telegram.Abstractions;
 
 public interface IReplyService
 {

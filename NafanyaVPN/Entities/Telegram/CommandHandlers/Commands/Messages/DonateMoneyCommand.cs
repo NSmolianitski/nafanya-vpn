@@ -1,4 +1,5 @@
 ﻿using NafanyaVPN.Entities.Payments;
+using NafanyaVPN.Entities.Telegram.Abstractions;
 using NafanyaVPN.Entities.Users;
 using Telegram.Bot.Types;
 

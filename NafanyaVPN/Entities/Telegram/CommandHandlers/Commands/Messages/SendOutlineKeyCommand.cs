@@ -1,5 +1,6 @@
 ﻿using NafanyaVPN.Entities.Outline;
 using NafanyaVPN.Entities.Subscription;
+using NafanyaVPN.Entities.Telegram.Abstractions;
 using NafanyaVPN.Entities.Users;
 using Telegram.Bot.Types;
 using User = NafanyaVPN.Entities.Users.User;

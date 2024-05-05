@@ -1,4 +1,5 @@
 ﻿using NafanyaVPN.Entities.Outline;
+using NafanyaVPN.Entities.Telegram.Abstractions;
 using Telegram.Bot.Types;
 
 namespace NafanyaVPN.Entities.Telegram.CommandHandlers.Commands.Messages;

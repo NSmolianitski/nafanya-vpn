@@ -1,4 +1,5 @@
 ﻿using NafanyaVPN.Entities.Registration;
+using NafanyaVPN.Entities.Telegram.Abstractions;
 using NafanyaVPN.Entities.Telegram.CommandHandlers.DTOs;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
