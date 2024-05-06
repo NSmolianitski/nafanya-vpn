@@ -5,6 +5,7 @@ using NafanyaVPN.Entities.Users;
 
 namespace NafanyaVPN.Entities.Telegram.CommandHandlers.Commands.UserInput;
 
+// Ручной выбор суммы (через ввод текстом). В данный момент не используется
 public class CheckCustomPaymentSumCommand(
     IReplyService replyService,
     IUserService userService,

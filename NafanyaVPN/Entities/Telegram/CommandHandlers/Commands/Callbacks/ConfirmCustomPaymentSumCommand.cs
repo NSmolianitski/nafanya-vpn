@@ -7,7 +7,7 @@ using NafanyaVPN.Utils;
 
 namespace NafanyaVPN.Entities.Telegram.CommandHandlers.Commands.Callbacks;
 
-public class PaymentSumCommand(
+public class ConfirmCustomPaymentSumCommand(
     IReplyService replyService,
     IPaymentService paymentService,
     IUserService userService,
@@ -18,8 +18,12 @@ public class PaymentSumCommand(
 
     public async Task Execute(CallbackQueryDto data)
     {
-        var paymentSum = StringUtils.ParseSum(data.Payload);
         var user = await userService.GetAsync(data.User.Id);
+        var paymentSum = StringUtils.GetPaymentSumFromTelegramState(user.TelegramState);
+
+        user.TelegramState = string.Empty;
+        await userService.UpdateAsync(user);
+        
         var quickpay = await paymentService.CreatePaymentFormAsync(paymentSum, user);
         
         await replyService.EditMessageAsync(data.Message,

@@ -8,13 +8,17 @@ namespace NafanyaVPN.Entities.Telegram.CommandHandlers;
 
 public class CallbackCommandHandlerService(
     PaymentSumCommand paymentSumCommand,
-    CustomPaymentSumCommand customPaymentSumCommand)
+    CustomPaymentSumCommand customPaymentSumCommand,
+    ConfirmCustomPaymentSumCommand confirmCustomPaymentSumCommand,
+    BackToPaymentSumCommand backToPaymentSumCommand)
     : ICommandHandlerService<CallbackQueryDto>
 {
     private readonly Dictionary<string, ICommand<CallbackQueryDto>> _commands = new()
     {
         { CallbackConstants.PaymentSum, paymentSumCommand },
         { CallbackConstants.CustomPaymentSum, customPaymentSumCommand },
+        { CallbackConstants.ConfirmPaymentSum, confirmCustomPaymentSumCommand },
+        { CallbackConstants.BackToPaymentSum, backToPaymentSumCommand }
     };
 
     public async Task HandleCommand(CallbackQueryDto data)

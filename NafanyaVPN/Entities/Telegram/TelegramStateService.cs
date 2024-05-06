@@ -13,7 +13,7 @@ public class TelegramStateService(IUserService userService, CheckCustomPaymentSu
 {
     private readonly Dictionary<string, ICommand<UserInputDto>> _commands = new()
     {
-        { TelegramUserStateConstants.CustomPaymentSum, checkCustomPaymentSumCommand },
+        { CallbackConstants.CustomPaymentSum, checkCustomPaymentSumCommand },
     };
 
     public async Task<bool> UserHasState(long telegramUserId)

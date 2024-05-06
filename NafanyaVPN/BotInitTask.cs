@@ -18,6 +18,7 @@ public class BotInitTask(IServiceScopeFactory scopeFactory, ILogger<BotInitTask>
 
         var receiverOptions = new ReceiverOptions
         {
+            ThrowPendingUpdates = true,
             AllowedUpdates =
             [
                 UpdateType.Message,

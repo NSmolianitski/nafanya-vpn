@@ -1,6 +1,7 @@
 ﻿using NafanyaVPN.Entities.Telegram.Abstractions;
 using NafanyaVPN.Entities.Telegram.Constants;
 using Telegram.Bot;
+using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace NafanyaVPN.Entities.Telegram;
@@ -42,6 +43,16 @@ public class ReplyService : IReplyService
     public async Task SendTextWithMarkupAsync(long chatId, string text, IReplyMarkup markup)
     {
         await _botClient.SendTextMessageAsync(chatId, text, replyMarkup: markup);
+    }
+
+    public async Task EditMessageWithMarkupAsync(Message message, string newText, InlineKeyboardMarkup markup)
+    {
+        await _botClient.EditMessageTextAsync(message.Chat.Id, message.MessageId, newText, replyMarkup: markup);
+    }
+
+    public async Task EditMessageAsync(Message message, string newText)
+    {
+        await _botClient.EditMessageTextAsync(message.Chat.Id, message.MessageId, newText);
     }
 
     public async Task SendHelloAsync(long chatId)

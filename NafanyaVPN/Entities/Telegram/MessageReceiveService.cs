@@ -1,6 +1,7 @@
 ﻿using NafanyaVPN.Entities.Registration;
 using NafanyaVPN.Entities.Telegram.Abstractions;
 using NafanyaVPN.Entities.Telegram.CommandHandlers.DTOs;
+using NafanyaVPN.Utils;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
@@ -49,16 +50,17 @@ public class MessageReceiveService(
     private async Task OnCallbackQueryReceived(CallbackQuery callbackQuery, CancellationToken cancellationToken)
     {
         string query;
-        string data = string.Empty;
-        if (!callbackQuery.Data!.Contains('+'))
+        var data = string.Empty;
+        var hasSplitSymbol = StringUtils.HasSplitSymbol(callbackQuery.Data!); 
+        if (hasSplitSymbol)
         {
-            query = callbackQuery.Data;
+            var splitQuery = StringUtils.SplitBySymbol(callbackQuery.Data!);
+            query = splitQuery[0];
+            data = splitQuery[1];
         }
         else
         {
-            var splitQuery = callbackQuery.Data!.Split('+');
-            query = splitQuery[0];
-            data = splitQuery[1];
+            query = callbackQuery.Data!;
         }
         var dto = new CallbackQueryDto(query, data, callbackQuery.Message!, callbackQuery.From);
         await callbackQueryCommandHandlerService.HandleCommand(dto);
