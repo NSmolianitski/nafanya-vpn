@@ -18,6 +18,10 @@ public static class Markups
         {
             InlineKeyboardButton.WithCallbackData("500", $"{PaymentSumPrefix}500"),
             InlineKeyboardButton.WithCallbackData("1000", $"{PaymentSumPrefix}1000"),
+            InlineKeyboardButton.WithCallbackData("2000", $"{PaymentSumPrefix}2000"),
+        },
+        new InlineKeyboardButton[] 
+        {
             InlineKeyboardButton.WithCallbackData("Другая", CallbackConstants.CustomPaymentSum)
         }
     });
@@ -28,7 +32,6 @@ public static class Markups
     {
         new InlineKeyboardButton[]
         {
-            InlineKeyboardButton.WithCallbackData("+1", $"{CustomPaymentPrefix}+1"),
             InlineKeyboardButton.WithCallbackData("+10", $"{CustomPaymentPrefix}+10"),
             InlineKeyboardButton.WithCallbackData("+50", $"{CustomPaymentPrefix}+50"),
             InlineKeyboardButton.WithCallbackData("+100", $"{CustomPaymentPrefix}+100"),
@@ -37,7 +40,6 @@ public static class Markups
         },
         new InlineKeyboardButton[]
         {
-            InlineKeyboardButton.WithCallbackData("-1", $"{CustomPaymentPrefix}-1"),
             InlineKeyboardButton.WithCallbackData("-10", $"{CustomPaymentPrefix}-10"),
             InlineKeyboardButton.WithCallbackData("-50", $"{CustomPaymentPrefix}-50"),
             InlineKeyboardButton.WithCallbackData("-100", $"{CustomPaymentPrefix}-100"),
@@ -46,8 +48,41 @@ public static class Markups
         },
         new InlineKeyboardButton[]
         {
-            InlineKeyboardButton.WithCallbackData("Подтвердить", CallbackConstants.ConfirmPaymentSum),
+            InlineKeyboardButton.WithCallbackData("Назад", CallbackConstants.BackToPaymentSum),
+            InlineKeyboardButton.WithCallbackData("Подтвердить", CallbackConstants.ConfirmPaymentSum)
+        }
+    });
+    
+    public static readonly InlineKeyboardMarkup CustomPaymentSumLowBorder = new InlineKeyboardMarkup(new[]
+    {
+        new InlineKeyboardButton[]
+        {
+            InlineKeyboardButton.WithCallbackData("+10", $"{CustomPaymentPrefix}+10"),
+            InlineKeyboardButton.WithCallbackData("+50", $"{CustomPaymentPrefix}+50"),
+            InlineKeyboardButton.WithCallbackData("+100", $"{CustomPaymentPrefix}+100"),
+            InlineKeyboardButton.WithCallbackData("+500", $"{CustomPaymentPrefix}+500"),
+            InlineKeyboardButton.WithCallbackData("+1000", $"{CustomPaymentPrefix}+1000")
+        },
+        new InlineKeyboardButton[]
+        {
             InlineKeyboardButton.WithCallbackData("Назад", CallbackConstants.BackToPaymentSum)
+        }
+    });
+    
+    public static readonly InlineKeyboardMarkup CustomPaymentSumHighBorder = new InlineKeyboardMarkup(new[]
+    {
+        new InlineKeyboardButton[]
+        {
+            InlineKeyboardButton.WithCallbackData("-10", $"{CustomPaymentPrefix}-10"),
+            InlineKeyboardButton.WithCallbackData("-50", $"{CustomPaymentPrefix}-50"),
+            InlineKeyboardButton.WithCallbackData("-100", $"{CustomPaymentPrefix}-100"),
+            InlineKeyboardButton.WithCallbackData("-500", $"{CustomPaymentPrefix}-500"),
+            InlineKeyboardButton.WithCallbackData("-1000", $"{CustomPaymentPrefix}-1000")
+        },
+        new InlineKeyboardButton[]
+        {
+            InlineKeyboardButton.WithCallbackData("Назад", CallbackConstants.BackToPaymentSum),
+            InlineKeyboardButton.WithCallbackData("Подтвердить", CallbackConstants.ConfirmPaymentSum)
         }
     });
 }
