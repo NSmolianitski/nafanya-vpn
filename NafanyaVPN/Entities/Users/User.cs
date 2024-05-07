@@ -1,5 +1,5 @@
 ﻿using NafanyaVPN.Entities.Outline;
-using NafanyaVPN.Entities.Payments;
+using NafanyaVPN.Entities.PaymentMessages;
 
 namespace NafanyaVPN.Entities.Users;
 

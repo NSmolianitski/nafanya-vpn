@@ -1,7 +1,5 @@
 ﻿using NafanyaVPN.Entities.Telegram.Abstractions;
 using NafanyaVPN.Entities.Telegram.CommandHandlers.DTOs;
-using NafanyaVPN.Entities.Users;
-using Telegram.Bot.Types;
 
 namespace NafanyaVPN.Entities.Telegram.CommandHandlers.Commands.Messages;
 

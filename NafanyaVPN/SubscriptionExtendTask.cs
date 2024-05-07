@@ -4,7 +4,9 @@ using NafanyaVPN.Utils;
 
 namespace NafanyaVPN;
 
-public class SubscriptionExtendTask(IServiceScopeFactory scopeFactory, ILogger<SubscriptionExtendTask> logger)
+public class SubscriptionExtendTask(
+    IServiceScopeFactory scopeFactory,
+    ILogger<SubscriptionExtendTask> logger)
     : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -17,12 +19,12 @@ public class SubscriptionExtendTask(IServiceScopeFactory scopeFactory, ILogger<S
                 var dateTimeService = scope.ServiceProvider.GetRequiredService<ISubscriptionDateTimeService>();
                 var subscriptionExtendService = scope.ServiceProvider.GetRequiredService<ISubscriptionExtendService>();
 
-                await subscriptionExtendService.ExtendForAllUsers();
-
-                var nextUpdateDelay = dateTimeService.GetDelayForNextSubscriptionUpdate();
+                var nextUpdateDelay = dateTimeService.GetDelayUntilNextUpdate();
                 logger.LogInformation("Следующее обновление подписки: {Datetime}",
                     (DateTimeUtils.GetMoscowNowTime() + nextUpdateDelay)
                     .ToString(CultureInfo.InvariantCulture));
+                
+                await subscriptionExtendService.TryExtendForAllUsers();
             
                 await Task.Delay(nextUpdateDelay, stoppingToken);
             }

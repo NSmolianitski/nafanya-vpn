@@ -10,7 +10,7 @@ public class SendOutlineKeyCommand(
     IReplyService replyService,
     IOutlineService outlineService,
     ISubscriptionDateTimeService subscriptionDateTimeService,
-    IOutlineKeysService outlineKeysService,
+    IOutlineKeyService outlineKeyService,
     ISubscriptionExtendService subscriptionExtendService)
     : ICommand<MessageDto>
 {
@@ -36,9 +36,9 @@ public class SendOutlineKeyCommand(
 
     private async Task CreateOutlineKeyForUser(User user)
     {
-        var keyAccessUrl = outlineService.GetNewKey(user.TelegramUserName, user.TelegramUserId);
+        var keyAccessUrl = outlineService.CreateNewKeyInOutlineManager(user.TelegramUserName, user.TelegramUserId);
 
-        user.OutlineKey = await outlineKeysService.CreateAsync(
+        user.OutlineKey = await outlineKeyService.CreateAsync(
             new OutlineKey
             {
                 User = user, AccessUrl = keyAccessUrl

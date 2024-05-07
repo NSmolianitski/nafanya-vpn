@@ -1,6 +1,6 @@
 ﻿using NafanyaVPN.Entities.Users;
 
-namespace NafanyaVPN.Entities.Payments;
+namespace NafanyaVPN.Entities.PaymentMessages;
 
 public class PaymentMessageBuilder
 {

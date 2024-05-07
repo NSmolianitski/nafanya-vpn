@@ -12,65 +12,79 @@ public class SubscriptionExtendService(
     ILogger<SubscriptionExtendService> logger)
     : ISubscriptionExtendService
 {
-    public async Task ExtendForAllUsers()
+    public async Task TryExtendForAllUsers()
     {
         DateTime newSubscriptionEndDate = dateTimeService.GetNewSubscriptionEndDate();
         
         Subscription defaultSubscription = await subscriptionService.GetAsync(DatabaseConstants.Default);
 
-        if (defaultSubscription.NextUpdateTime > dateTimeService.Now())
-        {
-            logger.LogInformation($"Стандартная подписка пока не может обновиться. " +
-                                   $"Это не ошибка (может появляться при запуске приложения). " +
-                                   $"Следующее обновление: {defaultSubscription.NextUpdateTime}");
-            return;
-        }
-
         defaultSubscription.NextUpdateTime = newSubscriptionEndDate;
         await subscriptionService.UpdateAsync(defaultSubscription);
         
-        var users = await userService.GetAllAsync();
+        var users = await userService.GetAllWithOutlineKeysAsync();
+        var extendedUsers = new List<User>();
         foreach (var user in users)
         {
-            var subscriptionPrice = user.Subscription.DailyCostInRoubles;
-            if (subscriptionPrice > user.MoneyInRoubles)
-            {
-                if (user.OutlineKey is null)
-                    continue;
-                
-                var keyId = user.OutlineKey!.Id;
-                outlineService.DisableKey(keyId);
-                logger.LogInformation($"Ключ деактивирован. " +
-                                       $"На счёте {user.TelegramUserName}({user.TelegramUserId}) " +
-                                       $"недостаточно средств. Стоимость подписки: {subscriptionPrice}. " +
-                                       $"Текущий баланс: {user.MoneyInRoubles}");
-            }
-            else
-            {
-                user.MoneyInRoubles -= subscriptionPrice;
-                user.SubscriptionEndDate = newSubscriptionEndDate;
-                logger.LogInformation($"Со счёта {user.TelegramUserName}({user.TelegramUserId}) " +
-                                       $"списано {subscriptionPrice} рублей. Осталось: {user.MoneyInRoubles}");
-            }
+            var subscriptionExtended = await TryExtendForUserWithoutDbSavingAsync(user);
+            if (subscriptionExtended)
+                extendedUsers.Add(user);
         }
 
-        await userService.UpdateAllAsync(users);
+        await userService.UpdateAllAsync(extendedUsers);
+    }
+
+    private async Task<bool> TryExtendForUserWithoutDbSavingAsync(User user)
+    {
+        if (user.OutlineKey is null)
+            return false;
+        
+        var subscriptionPrice = user.Subscription.CostInRoubles;
+        
+        if (user.MoneyInRoubles >= subscriptionPrice)
+        {
+            user.MoneyInRoubles -= subscriptionPrice;
+            user.SubscriptionEndDate = dateTimeService.GetNewSubscriptionEndDate();
+            if (!user.OutlineKey.Enabled)
+                await outlineService.EnableKeyAsync(user.OutlineKey!.Id);
+            
+            LogSubscriptionExtension(user, subscriptionPrice);
+        }
+        else if (user.OutlineKey.Enabled)
+        {
+            var keyId = user.OutlineKey!.Id;
+            await outlineService.DisableKeyAsync(keyId);
+            
+            LogSubscriptionCancellation(user, subscriptionPrice);
+        }
+
+        return true;
     }
 
     public async Task TryExtendForUser(User user)
     {
-        var subscriptionPrice = user.Subscription.DailyCostInRoubles;
-        if (subscriptionPrice > user.MoneyInRoubles)
-        {
-            var keyId = user.OutlineKey!.Id;
-            outlineService.DisableKey(keyId);
-        }
-        else
-        {
-            user.MoneyInRoubles -= subscriptionPrice;
-            user.SubscriptionEndDate = user.Subscription.NextUpdateTime;
-        }
+        var subscriptionExtended = await TryExtendForUserWithoutDbSavingAsync(user);
+        if (subscriptionExtended)
+            await userService.UpdateAsync(user);
+    }
 
-        await userService.UpdateAsync(user);
+    private void LogSubscriptionCancellation(User user, decimal subscriptionPrice)
+    {
+        logger.LogInformation("Ключ деактивирован. " +
+                              "На счёте {TelegramUserName}({TelegramUserId}) недостаточно средств. " +
+                              "Стоимость подписки: {SubscriptionPrice}. Текущий баланс: {MoneyInRoubles}", 
+            user.TelegramUserName,
+            user.TelegramUserId,
+            subscriptionPrice, 
+            user.MoneyInRoubles);
+    }
+
+    private void LogSubscriptionExtension(User user, decimal subscriptionPrice)
+    {
+        logger.LogInformation("Со счёта {TelegramUserName}({TelegramUserId}) " +
+                              "списано {SubscriptionPrice} рублей. Осталось: {MoneyInRoubles}", 
+            user.TelegramUserName, 
+            user.TelegramUserId, 
+            subscriptionPrice, 
+            user.MoneyInRoubles);
     }
 }

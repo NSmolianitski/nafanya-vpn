@@ -1,4 +1,4 @@
-﻿using NafanyaVPN.Entities.Payments;
+﻿using NafanyaVPN.Entities.PaymentMessages;
 using NafanyaVPN.Entities.Telegram.Abstractions;
 using NafanyaVPN.Entities.Telegram.CommandHandlers.DTOs;
 using NafanyaVPN.Entities.Telegram.Constants;

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NafanyaVPN.Entities.Outline;
+using NafanyaVPN.Entities.PaymentMessages;
 using NafanyaVPN.Entities.Payments;
 using NafanyaVPN.Entities.Subscription;
 using NafanyaVPN.Entities.Users;
@@ -8,7 +9,10 @@ using NafanyaVPN.Utils;
 
 namespace NafanyaVPN.Database;
 
-public class NafanyaVPNContext(DbContextOptions<NafanyaVPNContext> options) : DbContext(options)
+public class NafanyaVPNContext(
+    DbContextOptions<NafanyaVPNContext> options, 
+    IConfiguration configuration) 
+    : DbContext(options)
 {
     public DbSet<User> Users { get; init; } = null!;
     public DbSet<OutlineKey> OutlineKeys { get; init; } = null!;
@@ -64,13 +68,15 @@ public class NafanyaVPNContext(DbContextOptions<NafanyaVPNContext> options) : Db
                 }
             );
 
+        var config = configuration.GetRequiredSection(SubscriptionConstants.Subscription);
+        var costInRoubles = decimal.Parse(config[SubscriptionConstants.SubscriptionCostInRoubles]!);
         var defaultSubscription = new Subscription
         {
             Id = 1,
             CreatedAt = nowDateTime,
             UpdatedAt = nowDateTime,
             Name = DatabaseConstants.Default,
-            DailyCostInRoubles = 1
+            CostInRoubles = costInRoubles
         };
         modelBuilder.Entity<Subscription>().HasData(defaultSubscription);
     }

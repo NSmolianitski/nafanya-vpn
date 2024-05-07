@@ -2,7 +2,7 @@
 using NafanyaVPN.Database;
 using NafanyaVPN.Exceptions;
 
-namespace NafanyaVPN.Entities.Payments;
+namespace NafanyaVPN.Entities.PaymentMessages;
 
 public class PaymentMessageRepository(NafanyaVPNContext db) : IPaymentMessageRepository
 {
@@ -12,7 +12,7 @@ public class PaymentMessageRepository(NafanyaVPNContext db) : IPaymentMessageRep
     {
         var paymentMessage = await TryGetByUserIdAsync(userId) ??
                       throw new NoSuchEntityException(
-                          $"Payment with label: \"{userId}\" does not exist. " +
+                          $"Payment message with userId: \"{userId}\" does not exist. " +
                           $"Repository: \"{GetType().Name}\".");
 
         return paymentMessage;

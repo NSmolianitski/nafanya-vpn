@@ -1,4 +1,5 @@
-﻿using NafanyaVPN.Entities.Payments;
+﻿using NafanyaVPN.Entities.PaymentMessages;
+using NafanyaVPN.Entities.Payments;
 using NafanyaVPN.Entities.Telegram.Abstractions;
 using NafanyaVPN.Entities.Telegram.CommandHandlers.Commands.Messages;
 using NafanyaVPN.Entities.Telegram.CommandHandlers.DTOs;
@@ -27,7 +28,7 @@ public class ConfirmCustomPaymentSumCommand(
         
         var quickpay = await paymentService.CreatePaymentFormAsync(paymentSum, user);
         
-        await paymentMessageService.ClearPaymentMessageAsync(user.Id);
+        await paymentMessageService.RemoveTelegramPaymentMessageAsync(user.Id);
         await replyService.EditMessageAsync(data.Message,
             $"Совершите оплату по ссылке: {quickpay.LinkPayment}");
     }

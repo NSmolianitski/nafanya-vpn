@@ -2,10 +2,10 @@
 
 public interface IOutlineService
 {
-    string GetNewKey(string userName, long userId);
-    string GetKeyById(int keyId);
-    void EnableKey(int keyId);
-    void DisableKey(int keyId);
-    void DeleteKey(int keyId);
+    string CreateNewKeyInOutlineManager(string userName, long userId);
+    string GetKeyByIdFromOutlineManager(int keyId);
+    Task EnableKeyAsync(int keyId);
+    Task DisableKeyAsync(int keyId);
+    void DeleteKeyFromOutlineManager(int keyId);
     string GetInstruction();
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NafanyaVPN.Database;
 using NafanyaVPN.Entities.Outline;
+using NafanyaVPN.Entities.PaymentMessages;
 using NafanyaVPN.Entities.PaymentNotifications;
 using NafanyaVPN.Entities.Payments;
 using NafanyaVPN.Entities.Registration;
@@ -17,7 +18,6 @@ using NafanyaVPN.Entities.Users;
 using Serilog;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
-using Telegram.Bot.Types;
 
 namespace NafanyaVPN;
 
@@ -67,7 +67,7 @@ public static class AppBuilderExtensions
     {
         appBuilder.Services.AddScoped<IUserService, UserService>();
         appBuilder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
-        appBuilder.Services.AddScoped<IOutlineKeysService, OutlineKeysService>();
+        appBuilder.Services.AddScoped<IOutlineKeyService, OutlineKeyService>();
         appBuilder.Services.AddScoped<IPaymentService, YoomoneyPaymentService>();
         appBuilder.Services.AddScoped<INotificationHandleService, YoomoneyNotificationHandleService>();
         appBuilder.Services.AddScoped<IPaymentMessageService, PaymentMessageService>();

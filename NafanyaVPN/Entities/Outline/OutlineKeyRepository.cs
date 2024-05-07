@@ -1,9 +1,13 @@
-﻿using NafanyaVPN.Database;
+﻿using Microsoft.EntityFrameworkCore;
+using NafanyaVPN.Database;
+using NafanyaVPN.Exceptions;
 
 namespace NafanyaVPN.Entities.Outline;
 
 public class OutlineKeyRepository(NafanyaVPNContext db) : IOutlineKeyRepository
 {
+    private IQueryable<OutlineKey> Items => db.OutlineKeys;
+    
     public async Task<OutlineKey> CreateAsync(OutlineKey model)
     {
         var outlineKey = db.OutlineKeys.Add(model);
@@ -16,6 +20,21 @@ public class OutlineKeyRepository(NafanyaVPNContext db) : IOutlineKeyRepository
         return db.OutlineKeys;
     }
 
+    public async Task<OutlineKey> GetByIdAsync(long keyId)
+    {
+        var paymentMessage = await TryGetByIdAsync(keyId) ??
+                             throw new NoSuchEntityException(
+                                 $"Payment with label: \"{keyId}\" does not exist. " +
+                                 $"Repository: \"{GetType().Name}\".");
+
+        return paymentMessage;
+    }
+    
+    public async Task<OutlineKey?> TryGetByIdAsync(long keyId)
+    {
+        return await Items.FirstOrDefaultAsync(p => p.Id == keyId);
+    }
+    
     public async Task<bool> DeleteAsync(OutlineKey model)
     {
         db.OutlineKeys.Remove(model);

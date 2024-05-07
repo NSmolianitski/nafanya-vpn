@@ -4,6 +4,6 @@ namespace NafanyaVPN.Entities.Subscription;
 
 public interface ISubscriptionExtendService
 {
-    Task ExtendForAllUsers();
+    Task TryExtendForAllUsers();
     Task TryExtendForUser(User user);
 }

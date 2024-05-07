@@ -1,10 +1,9 @@
-﻿using NafanyaVPN.Entities.Telegram.CommandHandlers.DTOs;
-using NafanyaVPN.Utils;
+﻿using NafanyaVPN.Utils;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using User = NafanyaVPN.Entities.Users.User;
 
-namespace NafanyaVPN.Entities.Payments;
+namespace NafanyaVPN.Entities.PaymentMessages;
 
 public class PaymentMessageService(
     ITelegramBotClient botClient, 
@@ -36,7 +35,7 @@ public class PaymentMessageService(
         }
     }
 
-    public async Task ClearPaymentMessageAsync(long userId)
+    public async Task RemoveTelegramPaymentMessageAsync(long userId)
     {
         await paymentMessageRepository.DeleteByUserIdAsync(userId);
     }

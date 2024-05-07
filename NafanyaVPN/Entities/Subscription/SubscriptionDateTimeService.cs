@@ -2,27 +2,38 @@
 
 namespace NafanyaVPN.Entities.Subscription;
 
-public class SubscriptionDateTimeService(ILogger<SubscriptionDateTimeService> logger) : ISubscriptionDateTimeService
+public class SubscriptionDateTimeService : ISubscriptionDateTimeService
 {
-    private readonly ILogger<SubscriptionDateTimeService> _logger = logger;
+    private readonly TimeSpan _subscriptionLength;
+    private readonly TimeSpan _delayBetweenChecks;
+
+    public SubscriptionDateTimeService(IConfiguration configuration, 
+        ILogger<SubscriptionDateTimeService> logger)
+    {
+        var config = configuration.GetRequiredSection(SubscriptionConstants.Subscription);
+        _subscriptionLength = TimeSpan.Parse(config[SubscriptionConstants.SubscriptionLength]!);
+        _delayBetweenChecks = TimeSpan
+            .Parse(config[SubscriptionConstants.SubscriptionCheckInterval]!);
+    }
 
     public bool IsSubscriptionActive(DateTime subscriptionEndTime)
     {
-        return DateTimeUtils.GetMoscowNowTime().Date < subscriptionEndTime.Date;
+        return DateTimeUtils.GetMoscowNowTime() < subscriptionEndTime;
     }
 
     public DateTime GetNewSubscriptionEndDate()
     {
-        return DateTimeUtils.GetMoscowNowTime().AddDays(1).Date;
+        return DateTimeUtils.GetMoscowNowTime().Add(_subscriptionLength);
     }
     
-    public TimeSpan GetDelayForNextSubscriptionUpdate()
+    public TimeSpan GetDelayUntilNextUpdate()
     {
         var moscowNowTime = DateTimeUtils.GetMoscowNowTime();
-        var nextMidnight = moscowNowTime.AddDays(1).Date;
-        var delay = nextMidnight - moscowNowTime;
+        // var nextMidnight = moscowNowTime.AddDays(1).Date;
+        // var delay = nextMidnight - moscowNowTime;
         
-        return delay;
+        // return delay;
+        return _delayBetweenChecks;
     }
 
     public DateTime Now()

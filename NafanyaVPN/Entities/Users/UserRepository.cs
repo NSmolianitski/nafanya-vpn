@@ -1,4 +1,6 @@
-﻿using NafanyaVPN.Database;
+﻿using Microsoft.EntityFrameworkCore;
+using NafanyaVPN.Database;
+using NafanyaVPN.Exceptions;
 
 namespace NafanyaVPN.Entities.Users;
 
@@ -11,9 +13,25 @@ public class UserRepository(NafanyaVPNContext db) : IUserRepository
         return user.Entity;
     }
 
-    public IQueryable<User> GetAll()
+    public async Task<List<User>> GetAllWithOutlineKeysAsync()
     {
-        return db.Users;
+        return await db.Users.Include(u => u.OutlineKey).ToListAsync();
+    }
+    
+    public async Task<User> GetByTelegramIdAsync(long telegramId)
+    {
+        var user = await TryGetByTelegramIdAsync(telegramId) ??
+                      throw new NoSuchEntityException(
+                          $"User with telegram id: \"{telegramId}\" does not exist. " +
+                          $"Repository: \"{GetType().Name}\".");
+
+        return user;
+    }
+    
+    public async Task<User?> TryGetByTelegramIdAsync(long telegramId)
+    {
+        var user = await db.Users.FirstOrDefaultAsync(u => u.TelegramUserId == telegramId);
+        return user;
     }
 
     public async Task<bool> DeleteAsync(User model)

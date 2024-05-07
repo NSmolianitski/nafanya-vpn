@@ -5,7 +5,11 @@ using yoomoney_api.quickpay;
 
 namespace NafanyaVPN.Entities.Payments;
 
-public class YoomoneyPaymentService(IConfiguration configuration, IPaymentRepository paymentRepository) : IPaymentService
+public class YoomoneyPaymentService(
+    IConfiguration configuration,
+    IUserRepository userRepository,
+    IPaymentRepository paymentRepository) 
+    : IPaymentService
 {
     private readonly string _wallet = configuration[$"{YoomoneyConstants.Yoomoney}:{YoomoneyConstants.Wallet}"]!;
     private readonly string _secret = configuration[$"{YoomoneyConstants.Yoomoney}:{YoomoneyConstants.Secret}"]!;
@@ -20,6 +24,13 @@ public class YoomoneyPaymentService(IConfiguration configuration, IPaymentReposi
     {
         var paymentLabel = StringUtils.GetUniqueLabel();
         await CreatePaymentAsync(sum, user, paymentLabel);
+        
+        // TODO: убрать (добавлено для тестов) //
+        //////////////////////////////////////////
+        user.MoneyInRoubles += sum;
+        await userRepository.UpdateAsync(user);
+        //////////////////////////////////////////
+        
         return new Quickpay(_wallet, "shop", sum, paymentLabel, 
             PaymentMethodConstants.BankCard);
     }

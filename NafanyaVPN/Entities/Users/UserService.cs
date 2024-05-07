@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using NafanyaVPN.Database;
+﻿using NafanyaVPN.Database;
 using NafanyaVPN.Entities.Subscription;
 
 namespace NafanyaVPN.Entities.Users;
@@ -15,9 +14,9 @@ public class UserService(
         return await userRepository.CreateAsync(userModel);
     }
 
-    public async Task<List<User>> GetAllAsync()
+    public async Task<List<User>> GetAllWithOutlineKeysAsync()
     {
-        return await userRepository.GetAll().ToListAsync();
+        return await userRepository.GetAllWithOutlineKeysAsync();
     }
 
     public async Task<User> GetAsync(long telegramUserId)
@@ -31,7 +30,7 @@ public class UserService(
 
     public async Task<User?> TryGetAsync(long telegramUserId)
     {
-        var user = await userRepository.GetAll().FirstOrDefaultAsync(u => u.TelegramUserId == telegramUserId);
+        var user = await userRepository.TryGetByTelegramIdAsync(telegramUserId);
         return user;
     }
 

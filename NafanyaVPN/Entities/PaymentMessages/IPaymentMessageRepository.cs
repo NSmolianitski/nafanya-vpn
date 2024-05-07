@@ -1,4 +1,4 @@
-﻿namespace NafanyaVPN.Entities.Payments;
+﻿namespace NafanyaVPN.Entities.PaymentMessages;
 
 public interface IPaymentMessageRepository
 {
