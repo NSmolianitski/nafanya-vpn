@@ -13,9 +13,9 @@ public class CustomPaymentSumCommand(
     ILogger<CustomPaymentSumCommand> logger)
     : ICommand<CallbackQueryDto>
 {
-    private readonly InlineKeyboardMarkup _replyMarkup = Markups.CustomPaymentSum;
-    private readonly InlineKeyboardMarkup _replyMarkupHighBorder = Markups.CustomPaymentSumHighBorder;
-    private readonly InlineKeyboardMarkup _replyMarkupLowBorder = Markups.CustomPaymentSumLowBorder;
+    private readonly InlineKeyboardMarkup _replyMarkup = InlineMarkups.CustomPaymentSum;
+    private readonly InlineKeyboardMarkup _replyMarkupHighBorder = InlineMarkups.CustomPaymentSumHighBorder;
+    private readonly InlineKeyboardMarkup _replyMarkupLowBorder = InlineMarkups.CustomPaymentSumLowBorder;
     private readonly ILogger<CustomPaymentSumCommand> _logger = logger;
     
     private const decimal MinPaymentSum = 2;

@@ -6,7 +6,7 @@ public class OutlineKeyRepository(NafanyaVPNContext db) : IOutlineKeyRepository
 {
     public async Task<OutlineKey> CreateAsync(OutlineKey model)
     {
-        var outlineKey = await db.OutlineKeys.AddAsync(model);
+        var outlineKey = db.OutlineKeys.Add(model);
         await db.SaveChangesAsync();
         return outlineKey.Entity;
     }

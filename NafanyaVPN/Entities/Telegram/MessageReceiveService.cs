@@ -5,6 +5,7 @@ using NafanyaVPN.Utils;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
 
 namespace NafanyaVPN.Entities.Telegram;
 
@@ -12,6 +13,7 @@ public class MessageReceiveService(
     ICommandHandlerService<MessageDto> messageCommandHandlerService,
     ICommandHandlerService<CallbackQueryDto> callbackQueryCommandHandlerService,
     ITelegramStateService telegramStateService,
+    IReplyService replyService,
     ILogger<MessageReceiveService> logger,
     IUserRegistrationService userRegistrationService)
     : IUpdateHandler
@@ -44,6 +46,8 @@ public class MessageReceiveService(
 
     private async Task OnMessageReceived(Message message, CancellationToken cancellationToken)
     {
+        await replyService.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
+        
         var telegramUserId = message.From!.Id;
         var user = await userRegistrationService.GetIfRegisteredAsync(telegramUserId) 
                    ?? await userRegistrationService.RegisterUser(telegramUserId, message.From.Username!);
@@ -60,6 +64,8 @@ public class MessageReceiveService(
 
     private async Task OnCallbackQueryReceived(CallbackQuery callbackQuery, CancellationToken cancellationToken)
     {
+        await replyService.SendChatActionAsync(callbackQuery.Message!.Chat.Id, ChatAction.Typing);
+        
         string query;
         var data = string.Empty;
         var hasSplitSymbol = StringUtils.HasSplitSymbol(callbackQuery.Data!); 

@@ -10,6 +10,7 @@ namespace NafanyaVPN.Entities.Telegram.CommandHandlers.Commands.Callbacks;
 public class ConfirmCustomPaymentSumCommand(
     IReplyService replyService,
     IPaymentService paymentService,
+    IPaymentMessageService paymentMessageService,
     IUserService userService,
     ILogger<SendPaymentSumChooseCommand> logger)
     : ICommand<CallbackQueryDto>
@@ -26,6 +27,7 @@ public class ConfirmCustomPaymentSumCommand(
         
         var quickpay = await paymentService.CreatePaymentFormAsync(paymentSum, user);
         
+        await paymentMessageService.ClearPaymentMessageAsync(user.Id);
         await replyService.EditMessageAsync(data.Message,
             $"Совершите оплату по ссылке: {quickpay.LinkPayment}");
     }

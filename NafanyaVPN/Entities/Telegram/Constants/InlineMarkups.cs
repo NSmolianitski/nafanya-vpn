@@ -2,9 +2,9 @@
 
 namespace NafanyaVPN.Entities.Telegram.Constants;
 
-public static class Markups
+public static class InlineMarkups
 {
-    private static readonly string PaymentSumPrefix = $"{CallbackConstants.PaymentSum}{CallbackConstants.SplitSymbol}";
+    private static readonly string PaymentSumPrefix = $"{CallbackConstants.ConfirmPaymentSum}{CallbackConstants.SplitSymbol}";
     
     public static readonly InlineKeyboardMarkup PaymentSum = new InlineKeyboardMarkup(new []
     {
@@ -49,7 +49,7 @@ public static class Markups
         new InlineKeyboardButton[]
         {
             InlineKeyboardButton.WithCallbackData("Назад", CallbackConstants.BackToPaymentSum),
-            InlineKeyboardButton.WithCallbackData("Подтвердить", CallbackConstants.ConfirmPaymentSum)
+            InlineKeyboardButton.WithCallbackData("Подтвердить", CallbackConstants.ConfirmCustomPaymentSum)
         }
     });
     
@@ -82,7 +82,7 @@ public static class Markups
         new InlineKeyboardButton[]
         {
             InlineKeyboardButton.WithCallbackData("Назад", CallbackConstants.BackToPaymentSum),
-            InlineKeyboardButton.WithCallbackData("Подтвердить", CallbackConstants.ConfirmPaymentSum)
+            InlineKeyboardButton.WithCallbackData("Подтвердить", CallbackConstants.ConfirmCustomPaymentSum)
         }
     });
 }

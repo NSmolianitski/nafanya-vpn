@@ -60,6 +60,7 @@ public static class AppBuilderExtensions
         appBuilder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
         appBuilder.Services.AddScoped<IOutlineKeyRepository, OutlineKeyRepository>();
         appBuilder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
+        appBuilder.Services.AddScoped<IPaymentMessageRepository, PaymentMessageRepository>();
     }
     
     public static void UseNafanyaVPNServices(this WebApplicationBuilder appBuilder)
@@ -69,6 +70,7 @@ public static class AppBuilderExtensions
         appBuilder.Services.AddScoped<IOutlineKeysService, OutlineKeysService>();
         appBuilder.Services.AddScoped<IPaymentService, YoomoneyPaymentService>();
         appBuilder.Services.AddScoped<INotificationHandleService, YoomoneyNotificationHandleService>();
+        appBuilder.Services.AddScoped<IPaymentMessageService, PaymentMessageService>();
 
         appBuilder.Services.AddScoped<IUpdateHandler, MessageReceiveService>();
         appBuilder.Services.AddScoped<ICommandHandlerService<MessageDto>, MessageCommandHandlerService>();
@@ -89,7 +91,7 @@ public static class AppBuilderExtensions
         appBuilder.Services.AddScoped<SendOutlineKeyCommand>();
         appBuilder.Services.AddScoped<SendInstructionCommand>();
         appBuilder.Services.AddScoped<SendHelloCommand>();
-        appBuilder.Services.AddScoped<PaymentSumCommand>();
+        appBuilder.Services.AddScoped<ConfirmPaymentSumCommand>();
         appBuilder.Services.AddScoped<CustomPaymentSumCommand>();
         appBuilder.Services.AddScoped<ConfirmCustomPaymentSumCommand>();
         appBuilder.Services.AddScoped<BackToPaymentSumCommand>();

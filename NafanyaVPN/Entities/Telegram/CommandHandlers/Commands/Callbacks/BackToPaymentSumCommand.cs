@@ -10,7 +10,7 @@ namespace NafanyaVPN.Entities.Telegram.CommandHandlers.Commands.Callbacks;
 public class BackToPaymentSumCommand(IUserService userService, IReplyService replyService, ILogger<SendPaymentSumChooseCommand> logger)
     : ICommand<CallbackQueryDto>
 {
-    private readonly InlineKeyboardMarkup _replyMarkup = Markups.PaymentSum;
+    private readonly InlineKeyboardMarkup _replyMarkup = InlineMarkups.PaymentSum;
     private readonly ILogger<SendPaymentSumChooseCommand> _logger = logger;
 
     public async Task Execute(CallbackQueryDto data)

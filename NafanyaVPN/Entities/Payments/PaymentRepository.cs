@@ -26,7 +26,7 @@ public class PaymentRepository(NafanyaVPNContext db) : IPaymentRepository
     
     public async Task<Payment> CreateAsync(Payment model)
     {
-        var payment = await db.Payments.AddAsync(model);
+        var payment = db.Payments.Add(model);
         await db.SaveChangesAsync();
         return payment.Entity;
     }

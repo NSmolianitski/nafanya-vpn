@@ -8,17 +8,17 @@ public class SubscriptionDateTimeService(ILogger<SubscriptionDateTimeService> lo
 
     public bool IsSubscriptionActive(DateTime subscriptionEndTime)
     {
-        return DateTimeUtils.GetMoscowTime().Date < subscriptionEndTime.Date;
+        return DateTimeUtils.GetMoscowNowTime().Date < subscriptionEndTime.Date;
     }
 
     public DateTime GetNewSubscriptionEndDate()
     {
-        return DateTimeUtils.GetMoscowTime().AddDays(1).Date;
+        return DateTimeUtils.GetMoscowNowTime().AddDays(1).Date;
     }
     
     public TimeSpan GetDelayForNextSubscriptionUpdate()
     {
-        var moscowNowTime = DateTimeUtils.GetMoscowTime();
+        var moscowNowTime = DateTimeUtils.GetMoscowNowTime();
         var nextMidnight = moscowNowTime.AddDays(1).Date;
         var delay = nextMidnight - moscowNowTime;
         
@@ -27,6 +27,6 @@ public class SubscriptionDateTimeService(ILogger<SubscriptionDateTimeService> lo
 
     public DateTime Now()
     {
-        return DateTimeUtils.GetMoscowTime();
+        return DateTimeUtils.GetMoscowNowTime();
     }
 }

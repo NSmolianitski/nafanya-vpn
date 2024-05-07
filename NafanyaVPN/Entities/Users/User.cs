@@ -1,4 +1,5 @@
 ﻿using NafanyaVPN.Entities.Outline;
+using NafanyaVPN.Entities.Payments;
 
 namespace NafanyaVPN.Entities.Users;
 
@@ -12,6 +13,7 @@ public class User
     public decimal MoneyInRoubles { get; set; }
     public DateTime SubscriptionEndDate { get; set; }
     public string TelegramState { get; set; }
+    public PaymentMessage? PaymentMessage { get; set; }
     public OutlineKey? OutlineKey { get; set; }
     public Subscription.Subscription Subscription { get; set; }
 }

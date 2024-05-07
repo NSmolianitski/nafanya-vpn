@@ -7,7 +7,7 @@ using NafanyaVPN.Exceptions;
 namespace NafanyaVPN.Entities.Telegram.CommandHandlers;
 
 public class CallbackCommandHandlerService(
-    PaymentSumCommand paymentSumCommand,
+    ConfirmPaymentSumCommand confirmPaymentSumCommand,
     CustomPaymentSumCommand customPaymentSumCommand,
     ConfirmCustomPaymentSumCommand confirmCustomPaymentSumCommand,
     BackToPaymentSumCommand backToPaymentSumCommand)
@@ -15,9 +15,9 @@ public class CallbackCommandHandlerService(
 {
     private readonly Dictionary<string, ICommand<CallbackQueryDto>> _commands = new()
     {
-        { CallbackConstants.PaymentSum, paymentSumCommand },
+        { CallbackConstants.ConfirmPaymentSum, confirmPaymentSumCommand },
         { CallbackConstants.CustomPaymentSum, customPaymentSumCommand },
-        { CallbackConstants.ConfirmPaymentSum, confirmCustomPaymentSumCommand },
+        { CallbackConstants.ConfirmCustomPaymentSum, confirmCustomPaymentSumCommand },
         { CallbackConstants.BackToPaymentSum, backToPaymentSumCommand }
     };
 

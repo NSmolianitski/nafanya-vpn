@@ -27,8 +27,8 @@ public class YoomoneyPaymentService(IConfiguration configuration, IPaymentReposi
     private async Task<Payment> CreatePaymentAsync(decimal sum, User user, string paymentLabel)
     {
         var payment = new PaymentBuilder()
-            .WithCreatedAt(DateTimeUtils.GetMoscowTime())
-            .WithUpdatedAt(DateTimeUtils.GetMoscowTime())
+            .WithCreatedAt(DateTimeUtils.GetMoscowNowTime())
+            .WithUpdatedAt(DateTimeUtils.GetMoscowNowTime())
             .WithUser(user)
             .WithSum(sum)
             .WithLabel(paymentLabel)

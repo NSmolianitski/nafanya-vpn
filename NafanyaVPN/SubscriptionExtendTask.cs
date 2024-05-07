@@ -21,7 +21,7 @@ public class SubscriptionExtendTask(IServiceScopeFactory scopeFactory, ILogger<S
 
                 var nextUpdateDelay = dateTimeService.GetDelayForNextSubscriptionUpdate();
                 logger.LogInformation("Следующее обновление подписки: {Datetime}",
-                    (DateTimeUtils.GetMoscowTime() + nextUpdateDelay)
+                    (DateTimeUtils.GetMoscowNowTime() + nextUpdateDelay)
                     .ToString(CultureInfo.InvariantCulture));
             
                 await Task.Delay(nextUpdateDelay, stoppingToken);

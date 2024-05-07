@@ -7,10 +7,11 @@ using NafanyaVPN.Utils;
 
 namespace NafanyaVPN.Entities.Telegram.CommandHandlers.Commands.Callbacks;
 
-public class PaymentSumCommand(
+public class ConfirmPaymentSumCommand(
     IReplyService replyService,
     IPaymentService paymentService,
     IUserService userService,
+    IPaymentMessageService paymentMessageService,
     ILogger<SendPaymentSumChooseCommand> logger)
     : ICommand<CallbackQueryDto>
 {
@@ -20,8 +21,10 @@ public class PaymentSumCommand(
     {
         var paymentSum = StringUtils.ParseSum(data.Payload);
         var user = await userService.GetAsync(data.User.Id);
+        
         var quickpay = await paymentService.CreatePaymentFormAsync(paymentSum, user);
         
+        await paymentMessageService.ClearPaymentMessageAsync(user.Id);
         await replyService.EditMessageAsync(data.Message,
             $"Совершите оплату по ссылке: {quickpay.LinkPayment}");
     }

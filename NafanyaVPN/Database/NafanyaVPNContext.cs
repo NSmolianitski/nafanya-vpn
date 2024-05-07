@@ -16,13 +16,20 @@ public class NafanyaVPNContext(DbContextOptions<NafanyaVPNContext> options) : Db
     public DbSet<Payment> Payments { get; init; } = null!;
     public DbSet<Withdraw> Withdraws { get; init; } = null!;
     public DbSet<PaymentStatus> PaymentStatuses { get; init; } = null!;
+    public DbSet<PaymentMessage> PaymentMessages { get; init; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>()
             .HasOne(u => u.OutlineKey)
             .WithOne(o => o.User)
-            .HasForeignKey<OutlineKey>(o => o.UserId);
+            .HasForeignKey<OutlineKey>(o => o.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<User>()
+            .HasOne(u => u.PaymentMessage)
+            .WithOne(p => p.User)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<Payment>()
             .Property(p => p.Status)
@@ -30,14 +37,14 @@ public class NafanyaVPNContext(DbContextOptions<NafanyaVPNContext> options) : Db
             .HasConversion(
                 p => p.ToString(),
                 p => (PaymentStatusType) Enum.Parse(typeof(PaymentStatusType), p)
-                );
+            );
         
         AddInitialData(modelBuilder);
     }
 
     private void AddInitialData(ModelBuilder modelBuilder)
     {
-        var nowDateTime = DateTimeUtils.GetMoscowTime();
+        var nowDateTime = DateTimeUtils.GetMoscowNowTime();
         modelBuilder.Entity<PaymentStatus>()
             .HasData(
                 new
