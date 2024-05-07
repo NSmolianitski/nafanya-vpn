@@ -16,11 +16,11 @@ public class PaymentNotificationController(
         
         if (!ModelState.IsValid)
         {
-            logger.LogError(modelLog);
+            logger.LogError("{ModelLog}", modelLog);
             return BadRequest();
         }
         
-        logger.LogInformation(modelLog);
+        logger.LogInformation("{ModelLog}", modelLog);
         await notificationHandleService.Handle(notification);
         
         return Ok();

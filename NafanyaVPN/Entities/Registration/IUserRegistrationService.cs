@@ -1,7 +1,9 @@
-﻿namespace NafanyaVPN.Entities.Registration;
+﻿using NafanyaVPN.Entities.Users;
+
+namespace NafanyaVPN.Entities.Registration;
 
 public interface IUserRegistrationService
 {
-    Task<bool> IsRegistered(long telegramUserId);
-    Task RegisterUser(long telegramUserId, string telegramUserName);
+    Task<User?> GetIfRegisteredAsync(long telegramUserId);
+    Task<User> RegisterUser(long telegramUserId, string telegramUserName);
 }

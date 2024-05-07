@@ -1,26 +1,22 @@
 ﻿using NafanyaVPN.Entities.Outline;
 using NafanyaVPN.Entities.Subscription;
 using NafanyaVPN.Entities.Telegram.Abstractions;
+using NafanyaVPN.Entities.Telegram.CommandHandlers.DTOs;
 using NafanyaVPN.Entities.Users;
-using Telegram.Bot.Types;
-using User = NafanyaVPN.Entities.Users.User;
 
 namespace NafanyaVPN.Entities.Telegram.CommandHandlers.Commands.Messages;
 
 public class SendOutlineKeyCommand(
     IReplyService replyService,
-    IUserService userService,
     IOutlineService outlineService,
     ISubscriptionDateTimeService subscriptionDateTimeService,
     IOutlineKeysService outlineKeysService,
     ISubscriptionExtendService subscriptionExtendService)
-    : ICommand<Message>
+    : ICommand<MessageDto>
 {
-    public async Task Execute(Message message)
+    public async Task Execute(MessageDto data)
     {
-        var telegramUser = message.From;
-        var user = await userService.GetAsync(telegramUser!.Id);
-        
+        var user = data.User;
         if (user.OutlineKey is null)
         {
             await CreateOutlineKeyForUser(user);
@@ -29,11 +25,11 @@ public class SendOutlineKeyCommand(
         
         if (subscriptionDateTimeService.IsSubscriptionActive(user.SubscriptionEndDate))
         {
-            await replyService.SendTextWithMainKeyboardAsync(message.Chat.Id, $"{user.OutlineKey!.AccessUrl}");
+            await replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, $"{user.OutlineKey!.AccessUrl}");
         }
         else
         {
-            await replyService.SendTextWithMainKeyboardAsync(message.Chat.Id,
+            await replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id,
                 $"Ваш ключ временно отключён из-за недостатка средств. На счёте: {user.MoneyInRoubles} рублей");
         }
     }

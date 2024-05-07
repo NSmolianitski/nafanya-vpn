@@ -17,7 +17,7 @@ public class YoomoneyNotificationHandleService(
         }
         catch (NoSuchEntityException e)
         {
-            logger.LogWarning(e.Message);
+            logger.LogWarning("{Message}", e);
         }
     }
 }

@@ -4,11 +4,10 @@ using NafanyaVPN.Entities.Telegram.CommandHandlers.DTOs;
 using NafanyaVPN.Entities.Telegram.Constants;
 using NafanyaVPN.Entities.Users;
 using NafanyaVPN.Exceptions;
-using Telegram.Bot.Types;
 
 namespace NafanyaVPN.Entities.Telegram;
 
-public class TelegramStateService(IUserService userService, CheckCustomPaymentSumCommand checkCustomPaymentSumCommand)
+public class TelegramStateService(CheckCustomPaymentSumCommand checkCustomPaymentSumCommand)
     : ITelegramStateService
 {
     private readonly Dictionary<string, ICommand<UserInputDto>> _commands = new()
@@ -16,20 +15,23 @@ public class TelegramStateService(IUserService userService, CheckCustomPaymentSu
         { CallbackConstants.CustomPaymentSum, checkCustomPaymentSumCommand },
     };
 
-    public async Task<bool> UserHasState(long telegramUserId)
+    public bool UserHasState(User user)
     {
-        var user = await userService.GetAsync(telegramUserId);
         return !string.IsNullOrWhiteSpace(user.TelegramState);
     }
 
-    public async Task HandleStateAsync(Message message)
+    public bool CommandExists(string userTelegramState)
     {
-        var user = await userService.GetAsync(message.From!.Id);
-        
-        if (!_commands.TryGetValue(user.TelegramState, out var command))
-            throw new NoSuchCommandException(user.TelegramState);
+        return _commands.ContainsKey(userTelegramState);
+    }
 
-        var userInputDto = new UserInputDto(message.Text!, message, message.From);
+    public async Task HandleStateAsync(MessageDto data)
+    {
+        if (!_commands.TryGetValue(data.User.TelegramState, out var command))
+            throw new NoSuchCommandException(data.User.TelegramState);
+
+        var message = data.Message;
+        var userInputDto = new UserInputDto(message.Text!, message, message.From!);
         await command.Execute(userInputDto);
     }
 }

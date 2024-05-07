@@ -1,14 +1,14 @@
 ﻿using NafanyaVPN.Entities.Outline;
 using NafanyaVPN.Entities.Telegram.Abstractions;
-using Telegram.Bot.Types;
+using NafanyaVPN.Entities.Telegram.CommandHandlers.DTOs;
 
 namespace NafanyaVPN.Entities.Telegram.CommandHandlers.Commands.Messages;
 
-public class SendInstructionCommand(IReplyService replyService, IOutlineService outlineService) : ICommand<Message>
+public class SendInstructionCommand(IReplyService replyService, IOutlineService outlineService) : ICommand<MessageDto>
 {
-    public async Task Execute(Message message)
+    public async Task Execute(MessageDto data)
     {
         var instruction = outlineService.GetInstruction();
-        await replyService.SendTextWithMainKeyboardAsync(message.Chat.Id, $"{instruction}");
+        await replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, $"{instruction}");
     }
 }

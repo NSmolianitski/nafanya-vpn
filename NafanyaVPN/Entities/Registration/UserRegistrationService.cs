@@ -4,14 +4,13 @@ namespace NafanyaVPN.Entities.Registration;
 
 public class UserRegistrationService(IUserService userService) : IUserRegistrationService
 {
-    public async Task<bool> IsRegistered(long telegramUserId)
+    public async Task<User?> GetIfRegisteredAsync(long telegramUserId)
     {
-        var user = await userService.TryGetAsync(telegramUserId);
-        return user is not null;
+        return await userService.TryGetAsync(telegramUserId);
     }
 
-    public async Task RegisterUser(long telegramUserId, string telegramUserName)
+    public async Task<User> RegisterUser(long telegramUserId, string telegramUserName)
     {
-        await userService.AddAsync(telegramUserId, telegramUserName);
+        return await userService.AddAsync(telegramUserId, telegramUserName);
     }
 }

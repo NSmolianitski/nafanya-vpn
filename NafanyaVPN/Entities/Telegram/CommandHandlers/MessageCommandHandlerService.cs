@@ -1,5 +1,6 @@
 ﻿using NafanyaVPN.Entities.Telegram.Abstractions;
 using NafanyaVPN.Entities.Telegram.CommandHandlers.Commands.Messages;
+using NafanyaVPN.Entities.Telegram.CommandHandlers.DTOs;
 using NafanyaVPN.Entities.Telegram.Constants;
 using Telegram.Bot.Types;
 
@@ -11,9 +12,9 @@ public class MessageCommandHandlerService(
     SendOutlineKeyCommand sendOutlineKeyCommand,
     SendInstructionCommand sendInstructionCommand,
     SendHelloCommand sendHelloCommand)
-    : ICommandHandlerService<Message>
+    : ICommandHandlerService<MessageDto>
 {
-    private readonly Dictionary<string, ICommand<Message>> _commands = new()
+    private readonly Dictionary<string, ICommand<MessageDto>> _commands = new()
     {
         { MainKeyboardConstants.Account, sendAccountDataCommand },
         { MainKeyboardConstants.Donate, sendPaymentSumChooseCommand },
@@ -22,9 +23,9 @@ public class MessageCommandHandlerService(
         { MainKeyboardConstants.Hello, sendHelloCommand },
     };
 
-    public async Task HandleCommand(Message data)
+    public async Task HandleCommand(MessageDto data)
     {
-        var text = data.Text!;
+        var text = data.Message.Text!;
         if (!_commands.TryGetValue(text, out var command))
             command = _commands[MainKeyboardConstants.Hello];
 

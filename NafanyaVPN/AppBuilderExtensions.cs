@@ -71,7 +71,7 @@ public static class AppBuilderExtensions
         appBuilder.Services.AddScoped<INotificationHandleService, YoomoneyNotificationHandleService>();
 
         appBuilder.Services.AddScoped<IUpdateHandler, MessageReceiveService>();
-        appBuilder.Services.AddScoped<ICommandHandlerService<Message>, MessageCommandHandlerService>();
+        appBuilder.Services.AddScoped<ICommandHandlerService<MessageDto>, MessageCommandHandlerService>();
         appBuilder.Services.AddScoped<ICommandHandlerService<CallbackQueryDto>, CallbackCommandHandlerService>();
 
         appBuilder.Services.AddScoped<IReplyService, ReplyService>();

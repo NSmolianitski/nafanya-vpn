@@ -4,39 +4,31 @@ using NafanyaVPN.Utils;
 
 namespace NafanyaVPN;
 
-public class SubscriptionExtendTask : BackgroundService
+public class SubscriptionExtendTask(IServiceScopeFactory scopeFactory, ILogger<SubscriptionExtendTask> logger)
+    : BackgroundService
 {
-    private readonly IServiceScopeFactory _scopeFactory;
-    private readonly ILogger<SubscriptionExtendTask> _logger;
-
-    public SubscriptionExtendTask(IServiceScopeFactory scopeFactory, ILogger<SubscriptionExtendTask> logger)
-    {
-        _scopeFactory = scopeFactory;
-        _logger = logger;
-    }
-
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         while (!stoppingToken.IsCancellationRequested)
         {
             try
             {
-                using var scope = _scopeFactory.CreateScope();
+                using var scope = scopeFactory.CreateScope();
                 var dateTimeService = scope.ServiceProvider.GetRequiredService<ISubscriptionDateTimeService>();
                 var subscriptionExtendService = scope.ServiceProvider.GetRequiredService<ISubscriptionExtendService>();
 
                 await subscriptionExtendService.ExtendForAllUsers();
 
                 var nextUpdateDelay = dateTimeService.GetDelayForNextSubscriptionUpdate();
-                _logger.LogInformation("Следующее обновление подписки: " 
-                                       + (DateTimeUtils.GetMoscowTime() + nextUpdateDelay)
-                                       .ToString(CultureInfo.InvariantCulture));
+                logger.LogInformation("Следующее обновление подписки: {Datetime}",
+                    (DateTimeUtils.GetMoscowTime() + nextUpdateDelay)
+                    .ToString(CultureInfo.InvariantCulture));
             
                 await Task.Delay(nextUpdateDelay, stoppingToken);
             }
             catch (Exception e)
             {
-                _logger.LogError(e.Message);
+                logger.LogError("{Message}", e.Message);
             }
         }
     }

@@ -1,17 +1,16 @@
 ﻿using NafanyaVPN.Entities.Telegram.Abstractions;
+using NafanyaVPN.Entities.Telegram.CommandHandlers.DTOs;
 using NafanyaVPN.Entities.Users;
 using Telegram.Bot.Types;
 
 namespace NafanyaVPN.Entities.Telegram.CommandHandlers.Commands.Messages;
 
-public class SendAccountDataCommand(IReplyService replyService, IUserService userService)
-    : ICommand<Message>
+public class SendAccountDataCommand(IReplyService replyService)
+    : ICommand<MessageDto>
 {
-    public async Task Execute(Message message)
+    public async Task Execute(MessageDto data)
     {
-        var telegramUser = message.From;
-        var user = await userService.GetAsync(telegramUser!.Id);
-
-        await replyService.SendTextWithMainKeyboardAsync(message.Chat.Id, $"Остаток средств: {user.MoneyInRoubles}");
+        await replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, 
+            $"Остаток средств: {data.User.MoneyInRoubles}");
     }
 }

@@ -58,7 +58,7 @@ public class CustomPaymentSumCommand(
         return currentSum switch
         {
             < 0 => 0,
-            > 5000 => 5000,
+            > MaxPaymentSum => MaxPaymentSum,
             _ => currentSum
         };
     }

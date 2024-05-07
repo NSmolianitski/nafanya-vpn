@@ -1,9 +1,11 @@
-﻿using Telegram.Bot.Types;
+﻿using NafanyaVPN.Entities.Telegram.CommandHandlers.DTOs;
+using NafanyaVPN.Entities.Users;
 
 namespace NafanyaVPN.Entities.Telegram.Abstractions;
 
 public interface ITelegramStateService
 {
-    public Task<bool> UserHasState(long telegramUserId);
-    public Task HandleStateAsync(Message message);
+    public bool UserHasState(User user);
+    public bool CommandExists(string userTelegramState);
+    public Task HandleStateAsync(MessageDto message);
 }

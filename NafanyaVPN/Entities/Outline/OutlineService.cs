@@ -22,7 +22,8 @@ public class OutlineService(IConfiguration configuration, ILogger<OutlineService
         var key = _outline.CreateKey();
 
         if (!_outline.RenameKey(key.Id, $"{userName} ({userId})"))
-            logger.LogError("Ключ Outline не был переименован.");
+            logger.LogError("Ключ Outline не был переименован. " +
+                            "Username: {Username} UserId: {UserId}", userName, userId);
 
         return key.AccessUrl;
     }
@@ -36,19 +37,19 @@ public class OutlineService(IConfiguration configuration, ILogger<OutlineService
     public void EnableKey(int keyId)
     {
         if (!_outline.DeleteDataLimit(keyId))
-            logger.LogError($"Не удалось убрать лимит у ключа: {keyId}");
+            logger.LogError("Не удалось убрать лимит у ключа: {KeyId}", keyId);
     }
 
     public void DisableKey(int keyId)
     {
         if (!_outline.AddDataLimit(keyId, 0))
-            logger.LogError($"Не удалось добавить лимит ключу: {keyId}");
+            logger.LogError("Не удалось добавить лимит ключу: {KeyId}", keyId);
     }
 
     public void DeleteKey(int keyId)
     {
         if (!_outline.DeleteKey(keyId))
-            logger.LogError($"Не удалось удалить ключ: {keyId}");
+            logger.LogError("Не удалось удалить ключ: {KeyId}", keyId);
     }
 
     public string GetInstruction() => _instructionText;
