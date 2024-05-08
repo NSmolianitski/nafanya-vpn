@@ -7,5 +7,4 @@ public class Subscription
     public DateTime UpdatedAt { get; set; }
     public string Name { get; set; }
     public decimal CostInRoubles { get; set; }
-    public DateTime NextUpdateTime { get; set; }
 }

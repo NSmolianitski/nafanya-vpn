@@ -1,12 +1,10 @@
-﻿using NafanyaVPN.Database;
-using NafanyaVPN.Entities.Outline;
+﻿using NafanyaVPN.Entities.Outline;
 using NafanyaVPN.Entities.Users;
 
 namespace NafanyaVPN.Entities.Subscription;
 
 public class SubscriptionExtendService(
     IUserService userService,
-    ISubscriptionService subscriptionService,
     IOutlineService outlineService,
     ISubscriptionDateTimeService dateTimeService,
     ILogger<SubscriptionExtendService> logger)
@@ -14,14 +12,7 @@ public class SubscriptionExtendService(
 {
     public async Task TryExtendForAllUsers()
     {
-        DateTime newSubscriptionEndDate = dateTimeService.GetNewSubscriptionEndDate();
-        
-        Subscription defaultSubscription = await subscriptionService.GetAsync(DatabaseConstants.Default);
-
-        defaultSubscription.NextUpdateTime = newSubscriptionEndDate;
-        await subscriptionService.UpdateAsync(defaultSubscription);
-        
-        var users = await userService.GetAllWithOutlineKeysAsync();
+        var users = await userService.GetAllWithForeignKeysAsync();
         var extendedUsers = new List<User>();
         foreach (var user in users)
         {
@@ -35,12 +26,19 @@ public class SubscriptionExtendService(
 
     private async Task<bool> TryExtendForUserWithoutDbSavingAsync(User user)
     {
-        if (user.OutlineKey is null)
+        // TODO: изменить user.OutlineKey.Enabled на Subscription.Enabled,
+        // TODO: добавить User'у List<Subscription> и изменить Subscription на SubscriptionPlan (или что-то такое)
+        
+        if (user.OutlineKey is null) 
             return false;
         
         var subscriptionPrice = user.Subscription.CostInRoubles;
+        var subscriptionExpired = dateTimeService.IsSubscriptionHasExpired(user.SubscriptionEndDate);
+        if (!subscriptionExpired)
+            return false;
         
-        if (user.MoneyInRoubles >= subscriptionPrice)
+        var userHasEnoughMoney = user.MoneyInRoubles >= subscriptionPrice;
+        if (userHasEnoughMoney)
         {
             user.MoneyInRoubles -= subscriptionPrice;
             user.SubscriptionEndDate = dateTimeService.GetNewSubscriptionEndDate();
@@ -49,7 +47,7 @@ public class SubscriptionExtendService(
             
             LogSubscriptionExtension(user, subscriptionPrice);
         }
-        else if (user.OutlineKey.Enabled)
+        else
         {
             var keyId = user.OutlineKey!.Id;
             await outlineService.DisableKeyAsync(keyId);

@@ -15,9 +15,12 @@ public class UserRepository(NafanyaVPNContext db) : IUserRepository
         return user.Entity;
     }
 
-    public async Task<List<User>> GetAllWithOutlineKeysAsync()
+    public async Task<List<User>> GetAllWithForeignKeysAsync()
     {
-        return await db.Users.Include(u => u.OutlineKey).ToListAsync();
+        return await db.Users
+            .Include(u => u.OutlineKey)
+            .Include(u => u.Subscription)
+            .ToListAsync();
     }
     
     public async Task<User> GetByTelegramIdAsync(long telegramId)
@@ -32,7 +35,9 @@ public class UserRepository(NafanyaVPNContext db) : IUserRepository
     
     public async Task<User?> TryGetByTelegramIdAsync(long telegramId)
     {
-        var user = await db.Users.Include(u => u.Subscription)
+        var user = await db.Users
+            .Include(u => u.Subscription)
+            .Include(u => u.OutlineKey)
             .FirstOrDefaultAsync(u => u.TelegramUserId == telegramId);
         return user;
     }

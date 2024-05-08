@@ -2,7 +2,7 @@
 
 public interface ISubscriptionDateTimeService
 {
-    bool IsSubscriptionActive(DateTime subscriptionEndTime);
+    bool IsSubscriptionHasExpired(DateTime subscriptionEndTime);
     DateTime GetNewSubscriptionEndDate();
     TimeSpan GetDelayUntilNextUpdate();
     DateTime Now();

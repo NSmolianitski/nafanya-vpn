@@ -16,9 +16,9 @@ public class SubscriptionDateTimeService : ISubscriptionDateTimeService
             .Parse(config[SubscriptionConstants.SubscriptionCheckInterval]!);
     }
 
-    public bool IsSubscriptionActive(DateTime subscriptionEndTime)
+    public bool IsSubscriptionHasExpired(DateTime subscriptionEndTime)
     {
-        return DateTimeUtils.GetMoscowNowTime() < subscriptionEndTime;
+        return DateTimeUtils.GetMoscowNowTime() > subscriptionEndTime;
     }
 
     public DateTime GetNewSubscriptionEndDate()

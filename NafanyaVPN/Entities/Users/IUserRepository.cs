@@ -3,7 +3,7 @@
 public interface IUserRepository
 {
     Task<User> CreateAsync(User model);
-    Task<List<User>> GetAllWithOutlineKeysAsync();
+    Task<List<User>> GetAllWithForeignKeysAsync();
     Task<User> GetByTelegramIdAsync(long telegramId);
     Task<User?> TryGetByTelegramIdAsync(long telegramId);
     Task<bool> DeleteAsync(User model);

@@ -23,7 +23,7 @@ public class SendOutlineKeyCommand(
             await subscriptionExtendService.TryExtendForUser(user);
         }
         
-        if (subscriptionDateTimeService.IsSubscriptionActive(user.SubscriptionEndDate))
+        if (!subscriptionDateTimeService.IsSubscriptionHasExpired(user.SubscriptionEndDate))
         {
             await replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, $"{user.OutlineKey!.AccessUrl}");
         }

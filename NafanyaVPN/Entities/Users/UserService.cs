@@ -15,9 +15,9 @@ public class UserService(
         return await userRepository.CreateAsync(userModel);
     }
 
-    public async Task<List<User>> GetAllWithOutlineKeysAsync()
+    public async Task<List<User>> GetAllWithForeignKeysAsync()
     {
-        return await userRepository.GetAllWithOutlineKeysAsync();
+        return await userRepository.GetAllWithForeignKeysAsync();
     }
 
     public async Task<User> GetAsync(long telegramUserId)
