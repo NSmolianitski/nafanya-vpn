@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NafanyaVPN.Database;
 using NafanyaVPN.Exceptions;
+using NafanyaVPN.Utils;
 
 namespace NafanyaVPN.Entities.PaymentMessages;
 
@@ -31,6 +32,7 @@ public class PaymentMessageRepository(NafanyaVPNContext db) : IPaymentMessageRep
 
     public async Task UpdateAsync(PaymentMessage paymentMessage)
     {
+        paymentMessage.UpdatedAt = DateTimeUtils.GetMoscowNowTime();
         db.PaymentMessages.Update(paymentMessage);
         await db.SaveChangesAsync();
     }

@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using NafanyaVPN.Database;
 using NafanyaVPN.Exceptions;
+using NafanyaVPN.Utils;
 
 namespace NafanyaVPN.Entities.Users;
 
@@ -44,17 +46,23 @@ public class UserRepository(NafanyaVPNContext db) : IUserRepository
 
     public async Task<User> UpdateAsync(User model)
     {
-        db.Users.Update(model);
+        UpdateWithoutSaving(model);
         await db.SaveChangesAsync();
         return model;
     }
-    
+
     public async Task UpdateAllAsync(IEnumerable<User> models)
     {
         foreach (var model in models)
         {
-            db.Users.Update(model);
+            UpdateWithoutSaving(model);
         }
         await db.SaveChangesAsync();
+    }
+
+    private EntityEntry<User> UpdateWithoutSaving(User model)
+    {
+        model.UpdatedAt = DateTimeUtils.GetMoscowNowTime();
+        return db.Users.Update(model);
     }
 }

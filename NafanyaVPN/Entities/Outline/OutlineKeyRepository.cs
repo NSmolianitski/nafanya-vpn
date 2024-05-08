@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using NafanyaVPN.Database;
 using NafanyaVPN.Exceptions;
+using NafanyaVPN.Utils;
 
 namespace NafanyaVPN.Entities.Outline;
 
@@ -44,7 +46,7 @@ public class OutlineKeyRepository(NafanyaVPNContext db) : IOutlineKeyRepository
 
     public async Task<OutlineKey> UpdateAsync(OutlineKey model)
     {
-        db.OutlineKeys.Update(model);
+        UpdateWithoutSaving(model);
         await db.SaveChangesAsync();
         return model;
     }
@@ -53,8 +55,14 @@ public class OutlineKeyRepository(NafanyaVPNContext db) : IOutlineKeyRepository
     {
         foreach (var model in models)
         {
-            db.OutlineKeys.Update(model);
+            UpdateWithoutSaving(model);
         }
         await db.SaveChangesAsync();
+    }
+    
+    private EntityEntry<OutlineKey> UpdateWithoutSaving(OutlineKey model)
+    {
+        model.UpdatedAt = DateTimeUtils.GetMoscowNowTime();
+        return db.OutlineKeys.Update(model);
     }
 }

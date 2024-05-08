@@ -1,4 +1,6 @@
-﻿using NafanyaVPN.Database;
+﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+using NafanyaVPN.Database;
+using NafanyaVPN.Utils;
 
 namespace NafanyaVPN.Entities.Subscription;
 
@@ -25,7 +27,7 @@ public class SubscriptionRepository(NafanyaVPNContext db) : ISubscriptionReposit
 
     public async Task<Subscription> UpdateAsync(Subscription model)
     {
-        db.Subscriptions.Update(model);
+        UpdateWithoutSaving(model);
         await db.SaveChangesAsync();
         return model;
     }
@@ -34,8 +36,14 @@ public class SubscriptionRepository(NafanyaVPNContext db) : ISubscriptionReposit
     {
         foreach (var model in models)
         {
-            db.Subscriptions.Update(model);
+            UpdateWithoutSaving(model);
         }
         await db.SaveChangesAsync();
+    }
+    
+    private EntityEntry<Subscription> UpdateWithoutSaving(Subscription model)
+    {
+        model.UpdatedAt = DateTimeUtils.GetMoscowNowTime();
+        return db.Subscriptions.Update(model);
     }
 }

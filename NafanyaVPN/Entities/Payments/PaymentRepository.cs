@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using NafanyaVPN.Database;
 using NafanyaVPN.Exceptions;
+using NafanyaVPN.Utils;
 
 namespace NafanyaVPN.Entities.Payments;
 
@@ -40,17 +42,23 @@ public class PaymentRepository(NafanyaVPNContext db) : IPaymentRepository
 
     public async Task<Payment> UpdateAsync(Payment model)
     {
-        db.Payments.Update(model);
+        UpdateWithoutSaving(model);
         await db.SaveChangesAsync();
         return model;
     }
-    
+
     public async Task UpdateAllAsync(IEnumerable<Payment> models)
     {
         foreach (var model in models)
         {
-            db.Payments.Update(model);
+            UpdateWithoutSaving(model);
         }
         await db.SaveChangesAsync();
+    }
+
+    private EntityEntry<Payment> UpdateWithoutSaving(Payment model)
+    {
+        model.UpdatedAt = DateTimeUtils.GetMoscowNowTime();
+        return db.Payments.Update(model);
     }
 }

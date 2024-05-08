@@ -1,5 +1,6 @@
 ﻿using NafanyaVPN.Database;
 using NafanyaVPN.Entities.Subscription;
+using NafanyaVPN.Utils;
 
 namespace NafanyaVPN.Entities.Users;
 
@@ -48,14 +49,15 @@ public class UserService(
     {
         var defaultSubscription = await subscriptionService.GetAsync(DatabaseConstants.Default);
 
-        var user = new User
-        {
-            TelegramUserId = telegramUserId,
-            TelegramUserName = telegramUserName,
-            MoneyInRoubles = 0,
-            Subscription = defaultSubscription,
-            TelegramState = ""
-        };
+        var user = new UserBuilder()
+            .WithCreatedAt(DateTimeUtils.GetMoscowNowTime())
+            .WithUpdatedAt(DateTimeUtils.GetMoscowNowTime())
+            .WithTelegramUserId(telegramUserId)
+            .WithTelegramUserName(telegramUserName)
+            .WithMoneyInRoubles(0m)
+            .WithSubscription(defaultSubscription)
+            .WithTelegramState(string.Empty)
+            .Build();
 
         return user;
     }
