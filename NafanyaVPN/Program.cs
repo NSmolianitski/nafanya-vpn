@@ -3,7 +3,8 @@ using NafanyaVPN;
 using NafanyaVPN.Database;
 
 var appBuilder = WebApplication.CreateBuilder(args);
-appBuilder.Services.AddControllers();
+appBuilder.Services.AddControllers()
+    .AddNewtonsoftJson();
 
 var cultureInfo = new CultureInfo("ru-RU")
 {

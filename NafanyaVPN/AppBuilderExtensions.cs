@@ -17,7 +17,6 @@ using NafanyaVPN.Entities.Telegram.Constants;
 using NafanyaVPN.Entities.Users;
 using Serilog;
 using Telegram.Bot;
-using Telegram.Bot.Polling;
 
 namespace NafanyaVPN;
 
@@ -25,16 +24,17 @@ public static class AppBuilderExtensions
 {
     public static void UseNafanyaVPNConfiguration(this WebApplicationBuilder appBuilder)
     {
-        var settingFilePath = appBuilder.Environment.IsDevelopment()
+        var settingsFilePath = appBuilder.Environment.IsDevelopment()
             ? AppSettingsPathConstants.Development
             : AppSettingsPathConstants.Production;
-        appBuilder.Configuration.AddJsonFile(settingFilePath);
+        appBuilder.Configuration.AddJsonFile(settingsFilePath);
     }
     
     public static void UseNafanyaVPNLogging(this WebApplicationBuilder appBuilder)
     {
         appBuilder.Logging.ClearProviders();
-        var loggerConfiguration = new LoggerConfiguration().ReadFrom.Configuration(appBuilder.Configuration)
+        var loggerConfiguration = new LoggerConfiguration()
+            .ReadFrom.Configuration(appBuilder.Configuration)
             .WriteTo.SQLite(appBuilder.Environment.ContentRootPath + @"\Logs\logs.db");
         
         appBuilder.Logging.AddSerilog(loggerConfiguration.CreateLogger());
@@ -72,7 +72,7 @@ public static class AppBuilderExtensions
         appBuilder.Services.AddScoped<INotificationHandleService, YoomoneyNotificationHandleService>();
         appBuilder.Services.AddScoped<IPaymentMessageService, PaymentMessageService>();
 
-        appBuilder.Services.AddScoped<IUpdateHandler, MessageReceiveService>();
+        appBuilder.Services.AddScoped<ITelegramUpdatesHandlerService, TelegramUpdatesHandlerServiceService>();
         appBuilder.Services.AddScoped<ICommandHandlerService<MessageDto>, MessageCommandHandlerService>();
         appBuilder.Services.AddScoped<ICommandHandlerService<CallbackQueryDto>, CallbackCommandHandlerService>();
 

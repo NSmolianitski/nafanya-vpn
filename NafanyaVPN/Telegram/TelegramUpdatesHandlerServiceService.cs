@@ -3,22 +3,21 @@ using NafanyaVPN.Entities.Telegram.Abstractions;
 using NafanyaVPN.Entities.Telegram.CommandHandlers.DTOs;
 using NafanyaVPN.Utils;
 using Telegram.Bot;
-using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
 namespace NafanyaVPN.Entities.Telegram;
 
-public class MessageReceiveService(
+public class TelegramUpdatesHandlerServiceService(
     ICommandHandlerService<MessageDto> messageCommandHandlerService,
     ICommandHandlerService<CallbackQueryDto> callbackQueryCommandHandlerService,
     ITelegramStateService telegramStateService,
     IReplyService replyService,
-    ILogger<MessageReceiveService> logger,
-    IUserRegistrationService userRegistrationService)
-    : IUpdateHandler
+    IUserRegistrationService userRegistrationService,
+    ILogger<TelegramUpdatesHandlerServiceService> logger)
+    : ITelegramUpdatesHandlerService
 {
-    public async Task HandleUpdateAsync(ITelegramBotClient _, Update update, CancellationToken cancellationToken)
+    public async Task HandleUpdateAsync(Update update, CancellationToken cancellationToken)
     {
         try
         {

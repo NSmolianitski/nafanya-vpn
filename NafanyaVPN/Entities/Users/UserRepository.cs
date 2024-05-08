@@ -30,7 +30,8 @@ public class UserRepository(NafanyaVPNContext db) : IUserRepository
     
     public async Task<User?> TryGetByTelegramIdAsync(long telegramId)
     {
-        var user = await db.Users.FirstOrDefaultAsync(u => u.TelegramUserId == telegramId);
+        var user = await db.Users.Include(u => u.Subscription)
+            .FirstOrDefaultAsync(u => u.TelegramUserId == telegramId);
         return user;
     }
 
