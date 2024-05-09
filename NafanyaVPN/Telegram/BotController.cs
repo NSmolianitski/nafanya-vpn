@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NafanyaVPN.Entities.Telegram.Abstractions;
+using NafanyaVPN.Telegram.Abstractions;
 using Telegram.Bot.Types;
 
-namespace NafanyaVPN.Entities.Telegram;
+namespace NafanyaVPN.Telegram;
 
 [Route("/api/v1/bot")]
 [ApiController]

@@ -1,11 +1,11 @@
-﻿using NafanyaVPN.Entities.Telegram.Abstractions;
-using NafanyaVPN.Entities.Telegram.CommandHandlers.Commands.Messages;
-using NafanyaVPN.Entities.Telegram.CommandHandlers.DTOs;
-using NafanyaVPN.Entities.Telegram.Constants;
-using NafanyaVPN.Entities.Users;
+﻿using NafanyaVPN.Entities.Users;
+using NafanyaVPN.Telegram.Abstractions;
+using NafanyaVPN.Telegram.Commands.Messages;
+using NafanyaVPN.Telegram.Constants;
+using NafanyaVPN.Telegram.DTOs;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace NafanyaVPN.Entities.Telegram.CommandHandlers.Commands.Callbacks;
+namespace NafanyaVPN.Telegram.Commands.Callbacks;
 
 public class BackToPaymentSumCommand(IUserService userService, IReplyService replyService, ILogger<SendPaymentSumChooseCommand> logger)
     : ICommand<CallbackQueryDto>

@@ -1,4 +1,4 @@
-﻿using NafanyaVPN.Entities.Telegram.Constants;
+﻿using NafanyaVPN.Telegram.Constants;
 
 namespace NafanyaVPN.Utils;
 

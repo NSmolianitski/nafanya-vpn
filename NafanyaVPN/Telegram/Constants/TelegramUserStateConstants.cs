@@ -1,4 +1,4 @@
-﻿namespace NafanyaVPN.Entities.Telegram.Constants;
+﻿namespace NafanyaVPN.Telegram.Constants;
 
 public static class TelegramUserStateConstants
 {

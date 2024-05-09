@@ -1,6 +1,6 @@
 ﻿using NafanyaVPN.Utils;
 
-namespace NafanyaVPN.Entities.Subscription;
+namespace NafanyaVPN.Entities.SubscriptionPlans;
 
 public class SubscriptionDateTimeService : ISubscriptionDateTimeService
 {

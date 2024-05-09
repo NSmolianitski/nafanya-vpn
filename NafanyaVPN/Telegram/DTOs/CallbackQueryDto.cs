@@ -1,6 +1,6 @@
 ﻿using Telegram.Bot.Types;
 
-namespace NafanyaVPN.Entities.Telegram.CommandHandlers.DTOs;
+namespace NafanyaVPN.Telegram.DTOs;
 
 public record CallbackQueryDto(string CallbackQuery, string Payload, Message Message, User User)
 {

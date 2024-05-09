@@ -1,4 +1,4 @@
-﻿namespace NafanyaVPN.Entities.Subscription;
+﻿namespace NafanyaVPN.Entities.SubscriptionPlans;
 
 public static class SubscriptionConstants
 {

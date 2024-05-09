@@ -1,9 +1,9 @@
-﻿using NafanyaVPN.Entities.Telegram.Abstractions;
-using NafanyaVPN.Entities.Telegram.CommandHandlers.Commands.Messages;
-using NafanyaVPN.Entities.Telegram.CommandHandlers.DTOs;
-using NafanyaVPN.Entities.Telegram.Constants;
+﻿using NafanyaVPN.Telegram.Abstractions;
+using NafanyaVPN.Telegram.Commands.Messages;
+using NafanyaVPN.Telegram.Constants;
+using NafanyaVPN.Telegram.DTOs;
 
-namespace NafanyaVPN.Entities.Telegram.CommandHandlers;
+namespace NafanyaVPN.Telegram.CommandHandlers;
 
 public class MessageCommandHandlerService(
     SendAccountDataCommand sendAccountDataCommand,

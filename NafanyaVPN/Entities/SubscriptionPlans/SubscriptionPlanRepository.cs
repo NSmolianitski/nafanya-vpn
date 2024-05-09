@@ -2,7 +2,7 @@
 using NafanyaVPN.Database;
 using NafanyaVPN.Utils;
 
-namespace NafanyaVPN.Entities.Subscription;
+namespace NafanyaVPN.Entities.SubscriptionPlans;
 
 public class SubscriptionPlanRepository(NafanyaVPNContext db) : ISubscriptionPlanRepository
 {

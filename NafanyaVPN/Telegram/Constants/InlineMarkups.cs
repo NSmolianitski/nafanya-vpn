@@ -1,6 +1,6 @@
 ﻿using Telegram.Bot.Types.ReplyMarkups;
 
-namespace NafanyaVPN.Entities.Telegram.Constants;
+namespace NafanyaVPN.Telegram.Constants;
 
 public static class InlineMarkups
 {

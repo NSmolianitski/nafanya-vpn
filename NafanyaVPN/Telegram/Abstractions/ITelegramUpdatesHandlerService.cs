@@ -1,6 +1,6 @@
 ﻿using Telegram.Bot.Types;
 
-namespace NafanyaVPN.Entities.Telegram.Abstractions;
+namespace NafanyaVPN.Telegram.Abstractions;
 
 public interface ITelegramUpdatesHandlerService
 {

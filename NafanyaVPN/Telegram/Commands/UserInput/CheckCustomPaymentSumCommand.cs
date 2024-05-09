@@ -1,9 +1,9 @@
 ﻿using NafanyaVPN.Entities.Payments;
-using NafanyaVPN.Entities.Telegram.Abstractions;
-using NafanyaVPN.Entities.Telegram.CommandHandlers.DTOs;
 using NafanyaVPN.Entities.Users;
+using NafanyaVPN.Telegram.Abstractions;
+using NafanyaVPN.Telegram.DTOs;
 
-namespace NafanyaVPN.Entities.Telegram.CommandHandlers.Commands.UserInput;
+namespace NafanyaVPN.Telegram.Commands.UserInput;
 
 // Ручной выбор суммы (через ввод текстом). В данный момент не используется
 public class CheckCustomPaymentSumCommand(

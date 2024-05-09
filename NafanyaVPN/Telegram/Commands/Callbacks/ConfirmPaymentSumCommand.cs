@@ -1,12 +1,12 @@
 ﻿using NafanyaVPN.Entities.PaymentMessages;
 using NafanyaVPN.Entities.Payments;
-using NafanyaVPN.Entities.Telegram.Abstractions;
-using NafanyaVPN.Entities.Telegram.CommandHandlers.Commands.Messages;
-using NafanyaVPN.Entities.Telegram.CommandHandlers.DTOs;
 using NafanyaVPN.Entities.Users;
+using NafanyaVPN.Telegram.Abstractions;
+using NafanyaVPN.Telegram.Commands.Messages;
+using NafanyaVPN.Telegram.DTOs;
 using NafanyaVPN.Utils;
 
-namespace NafanyaVPN.Entities.Telegram.CommandHandlers.Commands.Callbacks;
+namespace NafanyaVPN.Telegram.Commands.Callbacks;
 
 public class ConfirmPaymentSumCommand(
     IReplyService replyService,

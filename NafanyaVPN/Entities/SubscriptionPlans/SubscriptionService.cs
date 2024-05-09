@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NafanyaVPN.Database;
 
-namespace NafanyaVPN.Entities.Subscription;
+namespace NafanyaVPN.Entities.SubscriptionPlans;
 
 public class SubscriptionService(ISubscriptionPlanRepository subscriptionPlanRepository) : ISubscriptionService
 {

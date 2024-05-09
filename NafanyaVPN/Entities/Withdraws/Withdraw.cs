@@ -1,4 +1,4 @@
-﻿using NafanyaVPN.Entities.Subscription;
+﻿using NafanyaVPN.Entities.SubscriptionPlans;
 using NafanyaVPN.Entities.Users;
 
 namespace NafanyaVPN.Entities.Withdraws;

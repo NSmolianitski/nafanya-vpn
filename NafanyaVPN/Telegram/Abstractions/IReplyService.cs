@@ -2,7 +2,7 @@
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace NafanyaVPN.Entities.Telegram.Abstractions;
+namespace NafanyaVPN.Telegram.Abstractions;
 
 public interface IReplyService
 {

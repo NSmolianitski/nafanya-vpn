@@ -1,11 +1,11 @@
-﻿using NafanyaVPN.Entities.Telegram.Abstractions;
-using NafanyaVPN.Entities.Telegram.Constants;
+﻿using NafanyaVPN.Telegram.Abstractions;
+using NafanyaVPN.Telegram.Constants;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace NafanyaVPN.Entities.Telegram;
+namespace NafanyaVPN.Telegram;
 
 public class ReplyService(ITelegramBotClient botClient) : IReplyService
 {

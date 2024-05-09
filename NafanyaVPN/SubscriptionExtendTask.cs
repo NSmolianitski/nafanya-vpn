@@ -1,5 +1,5 @@
 ﻿using System.Globalization;
-using NafanyaVPN.Entities.Subscription;
+using NafanyaVPN.Entities.SubscriptionPlans;
 using NafanyaVPN.Utils;
 
 namespace NafanyaVPN;

@@ -1,7 +1,7 @@
-﻿using NafanyaVPN.Entities.Telegram.Abstractions;
-using NafanyaVPN.Entities.Telegram.CommandHandlers.DTOs;
+﻿using NafanyaVPN.Telegram.Abstractions;
+using NafanyaVPN.Telegram.DTOs;
 
-namespace NafanyaVPN.Entities.Telegram.CommandHandlers.Commands.Messages;
+namespace NafanyaVPN.Telegram.Commands.Messages;
 
 public class SendHelloCommand(IReplyService replyService) : ICommand<MessageDto>
 {

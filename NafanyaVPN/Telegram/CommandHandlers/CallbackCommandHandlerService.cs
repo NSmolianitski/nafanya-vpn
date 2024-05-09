@@ -1,10 +1,10 @@
-﻿using NafanyaVPN.Entities.Telegram.Abstractions;
-using NafanyaVPN.Entities.Telegram.CommandHandlers.Commands.Callbacks;
-using NafanyaVPN.Entities.Telegram.CommandHandlers.DTOs;
-using NafanyaVPN.Entities.Telegram.Constants;
-using NafanyaVPN.Exceptions;
+﻿using NafanyaVPN.Exceptions;
+using NafanyaVPN.Telegram.Abstractions;
+using NafanyaVPN.Telegram.Commands.Callbacks;
+using NafanyaVPN.Telegram.Constants;
+using NafanyaVPN.Telegram.DTOs;
 
-namespace NafanyaVPN.Entities.Telegram.CommandHandlers;
+namespace NafanyaVPN.Telegram.CommandHandlers;
 
 public class CallbackCommandHandlerService(
     ConfirmPaymentSumCommand confirmPaymentSumCommand,

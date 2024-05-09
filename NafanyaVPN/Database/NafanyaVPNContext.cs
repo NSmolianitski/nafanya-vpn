@@ -2,7 +2,7 @@
 using NafanyaVPN.Entities.Outline;
 using NafanyaVPN.Entities.PaymentMessages;
 using NafanyaVPN.Entities.Payments;
-using NafanyaVPN.Entities.Subscription;
+using NafanyaVPN.Entities.SubscriptionPlans;
 using NafanyaVPN.Entities.Users;
 using NafanyaVPN.Entities.Withdraws;
 using NafanyaVPN.Utils;

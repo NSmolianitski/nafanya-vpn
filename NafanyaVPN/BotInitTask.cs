@@ -1,4 +1,4 @@
-using NafanyaVPN.Entities.Telegram.Constants;
+using NafanyaVPN.Telegram.Constants;
 using Telegram.Bot;
 using Telegram.Bot.Types.Enums;
 

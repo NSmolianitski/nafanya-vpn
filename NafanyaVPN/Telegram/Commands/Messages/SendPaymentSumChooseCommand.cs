@@ -1,10 +1,10 @@
 ﻿using NafanyaVPN.Entities.PaymentMessages;
-using NafanyaVPN.Entities.Telegram.Abstractions;
-using NafanyaVPN.Entities.Telegram.CommandHandlers.DTOs;
-using NafanyaVPN.Entities.Telegram.Constants;
+using NafanyaVPN.Telegram.Abstractions;
+using NafanyaVPN.Telegram.Constants;
+using NafanyaVPN.Telegram.DTOs;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace NafanyaVPN.Entities.Telegram.CommandHandlers.Commands.Messages;
+namespace NafanyaVPN.Telegram.Commands.Messages;
 
 public class SendPaymentSumChooseCommand(
     IReplyService replyService,

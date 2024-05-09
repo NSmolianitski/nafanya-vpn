@@ -1,6 +1,6 @@
 ﻿using NafanyaVPN.Entities.Users;
 
-namespace NafanyaVPN.Entities.Subscription;
+namespace NafanyaVPN.Entities.SubscriptionPlans;
 
 public interface ISubscriptionExtendService
 {

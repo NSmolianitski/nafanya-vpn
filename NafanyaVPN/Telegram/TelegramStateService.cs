@@ -1,11 +1,11 @@
-﻿using NafanyaVPN.Entities.Telegram.Abstractions;
-using NafanyaVPN.Entities.Telegram.CommandHandlers.Commands.UserInput;
-using NafanyaVPN.Entities.Telegram.CommandHandlers.DTOs;
-using NafanyaVPN.Entities.Telegram.Constants;
-using NafanyaVPN.Entities.Users;
+﻿using NafanyaVPN.Entities.Users;
 using NafanyaVPN.Exceptions;
+using NafanyaVPN.Telegram.Abstractions;
+using NafanyaVPN.Telegram.Commands.UserInput;
+using NafanyaVPN.Telegram.Constants;
+using NafanyaVPN.Telegram.DTOs;
 
-namespace NafanyaVPN.Entities.Telegram;
+namespace NafanyaVPN.Telegram;
 
 public class TelegramStateService(CheckCustomPaymentSumCommand checkCustomPaymentSumCommand)
     : ITelegramStateService

@@ -1,10 +1,10 @@
 ﻿using NafanyaVPN.Entities.Outline;
-using NafanyaVPN.Entities.Subscription;
-using NafanyaVPN.Entities.Telegram.Abstractions;
-using NafanyaVPN.Entities.Telegram.CommandHandlers.DTOs;
+using NafanyaVPN.Entities.SubscriptionPlans;
 using NafanyaVPN.Entities.Users;
+using NafanyaVPN.Telegram.Abstractions;
+using NafanyaVPN.Telegram.DTOs;
 
-namespace NafanyaVPN.Entities.Telegram.CommandHandlers.Commands.Messages;
+namespace NafanyaVPN.Telegram.Commands.Messages;
 
 public class SendOutlineKeyCommand(
     IReplyService replyService,

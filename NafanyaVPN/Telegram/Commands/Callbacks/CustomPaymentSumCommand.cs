@@ -1,11 +1,11 @@
-﻿using NafanyaVPN.Entities.Telegram.Abstractions;
-using NafanyaVPN.Entities.Telegram.CommandHandlers.DTOs;
-using NafanyaVPN.Entities.Telegram.Constants;
-using NafanyaVPN.Entities.Users;
+﻿using NafanyaVPN.Entities.Users;
+using NafanyaVPN.Telegram.Abstractions;
+using NafanyaVPN.Telegram.Constants;
+using NafanyaVPN.Telegram.DTOs;
 using NafanyaVPN.Utils;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace NafanyaVPN.Entities.Telegram.CommandHandlers.Commands.Callbacks;
+namespace NafanyaVPN.Telegram.Commands.Callbacks;
 
 public class CustomPaymentSumCommand(
     IUserService userService,

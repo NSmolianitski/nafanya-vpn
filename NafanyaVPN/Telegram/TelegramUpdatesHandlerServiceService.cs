@@ -1,12 +1,12 @@
 ﻿using NafanyaVPN.Entities.Registration;
-using NafanyaVPN.Entities.Telegram.Abstractions;
-using NafanyaVPN.Entities.Telegram.CommandHandlers.DTOs;
+using NafanyaVPN.Telegram.Abstractions;
+using NafanyaVPN.Telegram.DTOs;
 using NafanyaVPN.Utils;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
-namespace NafanyaVPN.Entities.Telegram;
+namespace NafanyaVPN.Telegram;
 
 public class TelegramUpdatesHandlerServiceService(
     ICommandHandlerService<MessageDto> messageCommandHandlerService,

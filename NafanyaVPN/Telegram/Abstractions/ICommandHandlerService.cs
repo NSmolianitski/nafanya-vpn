@@ -1,4 +1,4 @@
-﻿namespace NafanyaVPN.Entities.Telegram.Abstractions;
+﻿namespace NafanyaVPN.Telegram.Abstractions;
 
 public interface ICommandHandlerService<T>
 {

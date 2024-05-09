@@ -1,7 +1,7 @@
-﻿using NafanyaVPN.Entities.Telegram.CommandHandlers.DTOs;
-using NafanyaVPN.Entities.Users;
+﻿using NafanyaVPN.Entities.Users;
+using NafanyaVPN.Telegram.DTOs;
 
-namespace NafanyaVPN.Entities.Telegram.Abstractions;
+namespace NafanyaVPN.Telegram.Abstractions;
 
 public interface ITelegramStateService
 {

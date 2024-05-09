@@ -1,7 +1,7 @@
 ﻿using Telegram.Bot.Types;
 using User = NafanyaVPN.Entities.Users.User;
 
-namespace NafanyaVPN.Entities.Telegram.CommandHandlers.DTOs;
+namespace NafanyaVPN.Telegram.DTOs;
 
 public record MessageDto(Message Message, User User)
 {

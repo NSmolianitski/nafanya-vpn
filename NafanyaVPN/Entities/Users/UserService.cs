@@ -1,5 +1,5 @@
 ﻿using NafanyaVPN.Database;
-using NafanyaVPN.Entities.Subscription;
+using NafanyaVPN.Entities.SubscriptionPlans;
 using NafanyaVPN.Utils;
 
 namespace NafanyaVPN.Entities.Users;
