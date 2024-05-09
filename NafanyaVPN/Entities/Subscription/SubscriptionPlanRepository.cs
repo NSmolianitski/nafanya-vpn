@@ -4,7 +4,7 @@ using NafanyaVPN.Utils;
 
 namespace NafanyaVPN.Entities.Subscription;
 
-public class SubscriptionPlanPlanRepository(NafanyaVPNContext db) : ISubscriptionPlanRepository
+public class SubscriptionPlanRepository(NafanyaVPNContext db) : ISubscriptionPlanRepository
 {
     public async Task<SubscriptionPlan> CreateAsync(SubscriptionPlan model)
     {
