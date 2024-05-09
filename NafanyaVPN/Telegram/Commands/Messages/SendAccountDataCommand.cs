@@ -23,7 +23,7 @@ public class SendAccountDataCommand(IReplyService replyService)
         
         var subscriptionMessage = user.Subscription.HasExpired 
             ? "-" 
-            : user.Subscription.EndDateTime.ToString(CultureInfo.InvariantCulture);
+            : user.Subscription.EndDateTime.ToString("HH:mm dd/MM/yyyy", CultureInfo.InvariantCulture);
         
         await replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, 
             $"Остаток средств: {user.MoneyInRoubles}{PaymentConstants.CurrencySymbol}\n" +
