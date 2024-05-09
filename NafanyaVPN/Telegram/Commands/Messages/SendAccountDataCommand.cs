@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using NafanyaVPN.Entities.Payments;
 using NafanyaVPN.Telegram.Abstractions;
 using NafanyaVPN.Telegram.DTOs;
 
@@ -10,15 +11,23 @@ public class SendAccountDataCommand(IReplyService replyService)
     public async Task Execute(MessageDto data)
     {
         var user = data.User;
-        
-        string subscriptionMessage;
-        if (user.OutlineKey == null || !user.OutlineKey!.Enabled) // TODO: заменить OutlineKey на Subscription
-            subscriptionMessage = "Подписка неактивна";
+        var subscription = user.Subscription;
+
+        string subscriptionStatusMessage;
+        if (subscription.HasExpired)
+            subscriptionStatusMessage = "истекла";
+        else if (subscription.RenewalDisabled)
+            subscriptionStatusMessage = "активна, продление отключено";
         else
-            subscriptionMessage = user.Subscription.EndDateTime.ToString(CultureInfo.InvariantCulture);
+            subscriptionStatusMessage = "активна, продление включено";
+        
+        var subscriptionMessage = user.Subscription.HasExpired 
+            ? "-" 
+            : user.Subscription.EndDateTime.ToString(CultureInfo.InvariantCulture);
         
         await replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, 
-            $"Остаток средств: {user.MoneyInRoubles}\n" +
-            $"Следующее обновление подписки: {subscriptionMessage}");
+            $"Остаток средств: {user.MoneyInRoubles}{PaymentConstants.CurrencySymbol}\n" +
+            $"Состояние подписки: {subscriptionStatusMessage}\n" +
+            $"Следующее продление подписки: {subscriptionMessage}");
     }
 }
