@@ -80,7 +80,7 @@ public static class AppBuilderExtensions
         appBuilder.Services.AddScoped<IOutlineService, OutlineService>();
         appBuilder.Services.AddScoped<ITelegramStateService, TelegramStateService>();
         appBuilder.Services.AddScoped<IUserRegistrationService, UserRegistrationService>();
-        appBuilder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
+        appBuilder.Services.AddScoped<ISubscriptionPlanService, SubscriptionPlanService>();
         appBuilder.Services.AddScoped<ISubscriptionDateTimeService, SubscriptionDateTimeService>();
         appBuilder.Services.AddScoped<ISubscriptionExtendService, SubscriptionExtendService>();
     }

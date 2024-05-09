@@ -6,7 +6,7 @@ namespace NafanyaVPN.Entities.Users;
 
 public class UserService(
     IUserRepository userRepository,
-    ISubscriptionService subscriptionService
+    ISubscriptionPlanService subscriptionPlanService
 ) : IUserService
 {
     public async Task<User> AddAsync(long telegramUserId, string telegramUserName)
@@ -47,7 +47,7 @@ public class UserService(
 
     private async Task<User> CreateNewUserModel(long telegramUserId, string telegramUserName)
     {
-        var defaultSubscription = await subscriptionService.GetAsync(DatabaseConstants.Default);
+        var defaultSubscription = await subscriptionPlanService.GetAsync(DatabaseConstants.Default);
 
         var user = new UserBuilder()
             .WithCreatedAt(DateTimeUtils.GetMoscowNowTime())

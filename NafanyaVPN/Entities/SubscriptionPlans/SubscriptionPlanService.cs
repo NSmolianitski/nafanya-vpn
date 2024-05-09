@@ -3,7 +3,7 @@ using NafanyaVPN.Database;
 
 namespace NafanyaVPN.Entities.SubscriptionPlans;
 
-public class SubscriptionService(ISubscriptionPlanRepository subscriptionPlanRepository) : ISubscriptionService
+public class SubscriptionPlanService(ISubscriptionPlanRepository subscriptionPlanRepository) : ISubscriptionPlanService
 {
     public async Task<SubscriptionPlan> GetAsync(string name = DatabaseConstants.Default)
     {
