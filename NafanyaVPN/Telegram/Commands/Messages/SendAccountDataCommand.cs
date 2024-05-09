@@ -15,7 +15,7 @@ public class SendAccountDataCommand(IReplyService replyService)
         if (user.OutlineKey == null || !user.OutlineKey!.Enabled) // TODO: заменить OutlineKey на Subscription
             subscriptionMessage = "Подписка неактивна";
         else
-            subscriptionMessage = user.SubscriptionEndDate.ToString(CultureInfo.InvariantCulture);
+            subscriptionMessage = user.Subscription.EndDateTime.ToString(CultureInfo.InvariantCulture);
         
         await replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, 
             $"Остаток средств: {user.MoneyInRoubles}\n" +

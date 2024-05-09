@@ -12,18 +12,17 @@ public class PaymentRepository(NafanyaVPNContext db) : IPaymentRepository
 
     public async Task<Payment> GetByLabelAsync(string label)
     {
-        var payment = await TryGetByLabelAsync(label) ??
-                             throw new NoSuchEntityException(
-                                 $"Payment with label: \"{label}\" does not exist. " +
-                                 $"Repository: \"{GetType().Name}\".");
-
-        return payment;
+        return await TryGetByLabelAsync(label) ?? 
+               throw new NoSuchEntityException(
+                   $"Payment with label: \"{label}\" does not exist. " + 
+                   $"Repository: \"{GetType().Name}\".");
     }
     
     public async Task<Payment?> TryGetByLabelAsync(string label)
     {
-        var payment = await Items.FirstOrDefaultAsync(p => p.Label == label);
-        return payment;
+        return await Items
+            .Include(p => p.User)
+            .FirstOrDefaultAsync(p => p.Label == label);
     }
     
     public async Task<Payment> CreateAsync(Payment model)

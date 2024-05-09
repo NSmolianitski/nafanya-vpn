@@ -47,9 +47,10 @@ public class TelegramUpdatesHandlerServiceService(
     {
         await replyService.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
         
+        var telegramChatId = message.Chat.Id;
         var telegramUserId = message.From!.Id;
         var user = await userRegistrationService.GetIfRegisteredAsync(telegramUserId) 
-                   ?? await userRegistrationService.RegisterUser(telegramUserId, message.From.Username!);
+                   ?? await userRegistrationService.RegisterUser(telegramChatId, telegramUserId, message.From.Username!);
 
         var hasValidTelegramState = telegramStateService.UserHasState(user) 
                                     && telegramStateService.CommandExists(user.TelegramState);

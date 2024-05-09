@@ -1,4 +1,5 @@
-﻿using NafanyaVPN.Utils;
+﻿using NafanyaVPN.Entities.Subscriptions;
+using NafanyaVPN.Utils;
 
 namespace NafanyaVPN.Entities.SubscriptionPlans;
 
@@ -16,12 +17,12 @@ public class SubscriptionDateTimeService : ISubscriptionDateTimeService
             .Parse(config[SubscriptionConstants.SubscriptionCheckInterval]!);
     }
 
-    public bool IsSubscriptionHasExpired(DateTime subscriptionEndTime)
+    public bool HasSubscriptionExpired(Subscription subscription)
     {
-        return DateTimeUtils.GetMoscowNowTime() > subscriptionEndTime;
+        return DateTimeUtils.GetMoscowNowTime() > subscription.EndDateTime;
     }
 
-    public DateTime GetNewSubscriptionEndDate()
+    public DateTime GetNewSubscriptionEndDateTime()
     {
         return DateTimeUtils.GetMoscowNowTime().Add(_subscriptionLength);
     }
@@ -29,10 +30,5 @@ public class SubscriptionDateTimeService : ISubscriptionDateTimeService
     public TimeSpan GetDelayBetweenChecks()
     {
         return _delayBetweenChecks;
-    }
-
-    public DateTime Now()
-    {
-        return DateTimeUtils.GetMoscowNowTime();
     }
 }

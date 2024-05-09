@@ -4,6 +4,6 @@ namespace NafanyaVPN.Entities.SubscriptionPlans;
 
 public interface ISubscriptionExtendService
 {
-    Task TryExtendForAllUsers();
-    Task TryExtendForUser(User user);
+    Task RenewAllNonExpiredAsync();
+    Task TryRenewForUserAsync(User user);
 }

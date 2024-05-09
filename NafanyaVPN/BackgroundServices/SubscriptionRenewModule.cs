@@ -4,9 +4,9 @@ using NafanyaVPN.Utils;
 
 namespace NafanyaVPN;
 
-public class SubscriptionExtendTask(
+public class SubscriptionRenewModule(
     IServiceScopeFactory scopeFactory,
-    ILogger<SubscriptionExtendTask> logger)
+    ILogger<SubscriptionRenewModule> logger)
     : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -24,7 +24,7 @@ public class SubscriptionExtendTask(
                     (DateTimeUtils.GetMoscowNowTime() + nextUpdateDelay)
                     .ToString(CultureInfo.InvariantCulture));
                 
-                await subscriptionExtendService.TryExtendForAllUsers();
+                await subscriptionExtendService.RenewAllNonExpiredAsync();
             
                 await Task.Delay(nextUpdateDelay, stoppingToken);
             }

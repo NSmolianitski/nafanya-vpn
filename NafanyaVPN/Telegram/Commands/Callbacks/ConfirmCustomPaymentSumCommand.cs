@@ -20,7 +20,7 @@ public class ConfirmCustomPaymentSumCommand(
 
     public async Task Execute(CallbackQueryDto data)
     {
-        var user = await userService.GetAsync(data.User.Id);
+        var user = await userService.GetByTelegramIdAsync(data.User.Id);
         var paymentSum = StringUtils.GetPaymentSumFromTelegramState(user.TelegramState);
 
         user.TelegramState = string.Empty;

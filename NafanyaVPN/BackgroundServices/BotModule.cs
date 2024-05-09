@@ -4,10 +4,10 @@ using Telegram.Bot.Types.Enums;
 
 namespace NafanyaVPN;
 
-public class BotInitTask(
+public class BotModule(
     IConfiguration configuration,
     IServiceScopeFactory scopeFactory, 
-    ILogger<BotInitTask> logger)
+    ILogger<BotModule> logger)
     : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)

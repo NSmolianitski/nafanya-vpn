@@ -1,4 +1,6 @@
-﻿namespace NafanyaVPN.Entities.Outline;
+﻿using NafanyaVPN.Entities.Users;
+
+namespace NafanyaVPN.Entities.Outline;
 
 public class OutlineService(
     IConfiguration configuration,
@@ -20,7 +22,18 @@ public class OutlineService(
         ]
     );
 
-    public string CreateNewKeyInOutlineManager(string userName, long userId)
+    public async Task CreateOutlineKeyForUser(User user)
+    {
+        var keyAccessUrl = CreateNewKeyInOutlineManager(user.TelegramUserName, user.TelegramUserId);
+
+        user.OutlineKey = await outlineKeyService.CreateAsync(
+            new OutlineKey
+            {
+                User = user, AccessUrl = keyAccessUrl
+            });
+    }
+
+    private string CreateNewKeyInOutlineManager(string userName, long userId)
     {
         var key = _outline.CreateKey();
 

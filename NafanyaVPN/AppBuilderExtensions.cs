@@ -6,6 +6,7 @@ using NafanyaVPN.Entities.PaymentNotifications;
 using NafanyaVPN.Entities.Payments;
 using NafanyaVPN.Entities.Registration;
 using NafanyaVPN.Entities.SubscriptionPlans;
+using NafanyaVPN.Entities.Subscriptions;
 using NafanyaVPN.Entities.Users;
 using NafanyaVPN.Telegram;
 using NafanyaVPN.Telegram.Abstractions;
@@ -60,6 +61,7 @@ public static class AppBuilderExtensions
         appBuilder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
         appBuilder.Services.AddScoped<IOutlineKeyRepository, OutlineKeyRepository>();
         appBuilder.Services.AddScoped<ISubscriptionPlanRepository, SubscriptionPlanRepository>();
+        appBuilder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
         appBuilder.Services.AddScoped<IPaymentMessageRepository, PaymentMessageRepository>();
     }
     
@@ -71,6 +73,7 @@ public static class AppBuilderExtensions
         appBuilder.Services.AddScoped<IPaymentService, YoomoneyPaymentService>();
         appBuilder.Services.AddScoped<INotificationHandleService, YoomoneyNotificationHandleService>();
         appBuilder.Services.AddScoped<IPaymentMessageService, PaymentMessageService>();
+        appBuilder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
 
         appBuilder.Services.AddScoped<ITelegramUpdatesHandlerService, TelegramUpdatesHandlerServiceService>();
         appBuilder.Services.AddScoped<ICommandHandlerService<MessageDto>, MessageCommandHandlerService>();

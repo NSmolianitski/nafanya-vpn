@@ -1,73 +1,94 @@
 ﻿using NafanyaVPN.Entities.Outline;
+using NafanyaVPN.Entities.Subscriptions;
 using NafanyaVPN.Entities.Users;
 
 namespace NafanyaVPN.Entities.SubscriptionPlans;
 
 public class SubscriptionExtendService(
-    IUserService userService,
     IOutlineService outlineService,
     ISubscriptionDateTimeService dateTimeService,
+    ISubscriptionService subscriptionService,
     ILogger<SubscriptionExtendService> logger)
     : ISubscriptionExtendService
 {
-    public async Task TryExtendForAllUsers()
+    public async Task RenewAllNonExpiredAsync()
     {
-        var users = await userService.GetAllWithForeignKeysAsync();
-        var extendedUsers = new List<User>();
-        foreach (var user in users)
+        var nonExpiredSubscriptions = await subscriptionService.GetAllNonExpiredAsync();
+        var extendedSubscriptions = new List<Subscription>();
+        foreach (var subscription in nonExpiredSubscriptions)
         {
-            var subscriptionExtended = await TryExtendForUserWithoutDbSavingAsync(user);
-            if (subscriptionExtended)
-                extendedUsers.Add(user);
+            var subscriptionWasExtended = await TryRenewWithoutDbSavingAsync(subscription);
+            if (subscriptionWasExtended)
+                extendedSubscriptions.Add(subscription);
         }
 
-        await userService.UpdateAllAsync(extendedUsers);
+        await subscriptionService.UpdateAllAsync(extendedSubscriptions);
     }
 
-    private async Task<bool> TryExtendForUserWithoutDbSavingAsync(User user)
+    private async Task<bool> TryRenewWithoutDbSavingAsync(Subscription subscription)
     {
-        // TODO: изменить user.OutlineKey.Enabled на Subscription.Enabled,
-        // TODO: добавить User'у List<Subscription> и изменить Subscription на SubscriptionPlan (или что-то такое)
-        
-        if (user.OutlineKey is null) 
+        var subscriptionHasExpired = dateTimeService.HasSubscriptionExpired(subscription);
+        if (!subscriptionHasExpired)
             return false;
         
-        var subscriptionPrice = user.SubscriptionPlan.CostInRoubles;
-        var subscriptionExpired = dateTimeService.IsSubscriptionHasExpired(user.SubscriptionEndDate);
-        if (!subscriptionExpired)
-            return false;
-        
-        var userHasEnoughMoney = user.MoneyInRoubles >= subscriptionPrice;
-        if (userHasEnoughMoney)
-        {
-            user.MoneyInRoubles -= subscriptionPrice;
-            user.SubscriptionEndDate = dateTimeService.GetNewSubscriptionEndDate();
-            if (!user.OutlineKey.Enabled)
-                await outlineService.EnableKeyAsync(user.OutlineKey!.Id);
-            
-            LogSubscriptionExtension(user, subscriptionPrice);
-        }
+        if (CanSubscriptionBeRenewedByOwner(subscription))
+            await RenewSubscriptionWithoutDbSaveAsync(subscription);
         else
-        {
-            var keyId = user.OutlineKey!.Id;
-            await outlineService.DisableKeyAsync(keyId);
-            
-            LogSubscriptionCancellation(user, subscriptionPrice);
-        }
+            await StopSubscriptionWithoutDbSaveAsync(subscription);
 
         return true;
     }
-
-    public async Task TryExtendForUser(User user)
+    
+    private bool CanSubscriptionBeRenewedByOwner(Subscription subscription)
     {
-        var subscriptionExtended = await TryExtendForUserWithoutDbSavingAsync(user);
+        var subscriptionPrice = subscription.SubscriptionPlan.CostInRoubles;
+        var ownerMoney = subscription.User.MoneyInRoubles;
+        return ownerMoney >= subscriptionPrice;
+    }
+
+    private async Task RenewSubscriptionWithoutDbSaveAsync(Subscription subscription)
+    {
+        var subscriptionPrice = subscription.SubscriptionPlan.CostInRoubles;
+        var user = subscription.User;
+
+        user.MoneyInRoubles -= subscriptionPrice;
+        subscription.EndDateTime = dateTimeService.GetNewSubscriptionEndDateTime();
+        subscription.HasExpired = false;
+        
+        if (!user.OutlineKey.Enabled)
+            await outlineService.EnableKeyAsync(user.OutlineKey!.Id);
+            
+        LogSubscriptionExtension(user, subscriptionPrice);
+    }
+
+    private async Task StopSubscriptionWithoutDbSaveAsync(Subscription subscription)
+    {
+        var subscriptionPrice = subscription.SubscriptionPlan.CostInRoubles;
+        var user = subscription.User;
+
+        subscription.HasExpired = true;
+        
+        if (user.OutlineKey.Enabled)
+            await outlineService.DisableKeyAsync(user.OutlineKey!.Id);
+            
+        LogSubscriptionCancellation(user, subscriptionPrice);
+    }
+
+    public async Task TryRenewForUserAsync(User user)
+    {
+        if (user.OutlineKey is null)
+            await outlineService.CreateOutlineKeyForUser(user);
+        
+        var subscription = user.Subscription;
+        
+        var subscriptionExtended = await TryRenewWithoutDbSavingAsync(subscription);
         if (subscriptionExtended)
-            await userService.UpdateAsync(user);
+            await subscriptionService.UpdateAsync(subscription);
     }
 
     private void LogSubscriptionCancellation(User user, decimal subscriptionPrice)
     {
-        logger.LogInformation("Ключ деактивирован. " +
+        logger.LogInformation("Ключ отключён. " +
                               "На счёте {TelegramUserName}({TelegramUserId}) недостаточно средств. " +
                               "Стоимость подписки: {SubscriptionPrice}. Текущий баланс: {MoneyInRoubles}", 
             user.TelegramUserName,

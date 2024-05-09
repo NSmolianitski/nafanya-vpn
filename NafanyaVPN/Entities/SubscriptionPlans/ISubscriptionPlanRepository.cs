@@ -3,7 +3,8 @@
 public interface ISubscriptionPlanRepository
 {
     Task<SubscriptionPlan> CreateAsync(SubscriptionPlan model);
-    IQueryable<SubscriptionPlan> GetAll();
+    Task<SubscriptionPlan> GetByNameAsync(string name);
+    Task<SubscriptionPlan?> TryGetByNameAsync(string name);
     Task<bool> DeleteAsync(SubscriptionPlan model);
     Task<SubscriptionPlan> UpdateAsync(SubscriptionPlan model);
     Task UpdateAllAsync(IEnumerable<SubscriptionPlan> models);

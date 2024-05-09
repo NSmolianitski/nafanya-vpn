@@ -19,8 +19,27 @@ public class UserRepository(NafanyaVPNContext db) : IUserRepository
     {
         return await db.Users
             .Include(u => u.OutlineKey)
-            .Include(u => u.SubscriptionPlan)
+            .Include(u => u.Subscription).ThenInclude(s => s.SubscriptionPlan)
             .ToListAsync();
+    }
+    
+    public async Task<User> GetByIdAsync(int id)
+    {
+        var user = await TryGetByIdAsync(id) ??
+                   throw new NoSuchEntityException(
+                       $"User with id: \"{id}\" does not exist. " +
+                       $"Repository: \"{GetType().Name}\".");
+
+        return user;
+    }
+    
+    public async Task<User?> TryGetByIdAsync(int id)
+    {
+        var user = await db.Users
+            .Include(u => u.OutlineKey)
+            .Include(u => u.Subscription).ThenInclude(s => s.SubscriptionPlan)
+            .FirstOrDefaultAsync(u => u.Id == id);
+        return user;
     }
     
     public async Task<User> GetByTelegramIdAsync(long telegramId)
@@ -36,8 +55,8 @@ public class UserRepository(NafanyaVPNContext db) : IUserRepository
     public async Task<User?> TryGetByTelegramIdAsync(long telegramId)
     {
         var user = await db.Users
-            .Include(u => u.SubscriptionPlan)
             .Include(u => u.OutlineKey)
+            .Include(u => u.Subscription).ThenInclude(s => s.SubscriptionPlan)
             .FirstOrDefaultAsync(u => u.TelegramUserId == telegramId);
         return user;
     }

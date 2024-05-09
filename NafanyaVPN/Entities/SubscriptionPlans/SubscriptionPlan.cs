@@ -1,5 +1,8 @@
 ﻿namespace NafanyaVPN.Entities.SubscriptionPlans;
 
+/// <summary>
+/// Подписочный план, в котором содержится информация о стоимости и пр.
+/// </summary>
 public class SubscriptionPlan
 {
     public int Id { get; set; }

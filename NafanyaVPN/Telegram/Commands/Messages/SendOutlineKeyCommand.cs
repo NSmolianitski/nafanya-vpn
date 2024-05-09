@@ -19,11 +19,11 @@ public class SendOutlineKeyCommand(
         var user = data.User;
         if (user.OutlineKey is null)
         {
-            await CreateOutlineKeyForUser(user);
-            await subscriptionExtendService.TryExtendForUser(user);
+            await outlineService.CreateOutlineKeyForUser(user);
+            await subscriptionExtendService.TryRenewForUserAsync(user);
         }
         
-        if (!subscriptionDateTimeService.IsSubscriptionHasExpired(user.SubscriptionEndDate))
+        if (!subscriptionDateTimeService.HasSubscriptionExpired(user.Subscription))
         {
             await replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, $"{user.OutlineKey!.AccessUrl}");
         }
@@ -32,16 +32,5 @@ public class SendOutlineKeyCommand(
             await replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id,
                 $"Ваш ключ временно отключён из-за недостатка средств. На счёте: {user.MoneyInRoubles} рублей");
         }
-    }
-
-    private async Task CreateOutlineKeyForUser(User user)
-    {
-        var keyAccessUrl = outlineService.CreateNewKeyInOutlineManager(user.TelegramUserName, user.TelegramUserId);
-
-        user.OutlineKey = await outlineKeyService.CreateAsync(
-            new OutlineKey
-            {
-                User = user, AccessUrl = keyAccessUrl
-            });
     }
 }

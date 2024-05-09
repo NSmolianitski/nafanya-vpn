@@ -20,7 +20,7 @@ public class CheckCustomPaymentSumCommand(
             return;
         }
 
-        var user = await userService.GetAsync(data.User.Id);
+        var user = await userService.GetByTelegramIdAsync(data.User.Id);
         user.TelegramState = string.Empty;
         await userService.UpdateAsync(user);
 

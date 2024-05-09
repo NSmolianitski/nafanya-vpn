@@ -26,8 +26,8 @@ appBuilder.UseNafanyaVPNServices();
 appBuilder.UseNafanyaVPNCommands();
 
 // APP LAUNCH
-appBuilder.Services.AddHostedService<BotInitTask>();
-appBuilder.Services.AddHostedService<SubscriptionExtendTask>();
+appBuilder.Services.AddHostedService<BotModule>();
+appBuilder.Services.AddHostedService<SubscriptionRenewModule>();
 
 var app = appBuilder.Build();
 

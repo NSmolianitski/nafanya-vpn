@@ -15,7 +15,7 @@ public class BackToPaymentSumCommand(IUserService userService, IReplyService rep
 
     public async Task Execute(CallbackQueryDto data)
     {
-        var user = await userService.GetAsync(data.User.Id);
+        var user = await userService.GetByTelegramIdAsync(data.User.Id);
         user.TelegramState = string.Empty;
         await userService.UpdateAsync(user);
         

@@ -1,6 +1,8 @@
 ﻿using NafanyaVPN.Entities.Outline;
 using NafanyaVPN.Entities.PaymentMessages;
 using NafanyaVPN.Entities.SubscriptionPlans;
+using NafanyaVPN.Entities.Subscriptions;
+using NafanyaVPN.Utils;
 
 namespace NafanyaVPN.Entities.Users;
 
@@ -11,12 +13,12 @@ public class UserBuilder
     private DateTime _updatedAt;
     private string _telegramUserName;
     private long _telegramUserId;
+    private long _telegramChatId;
     private decimal _moneyInRoubles;
-    private DateTime _subscriptionEndDate;
     private string _telegramState = string.Empty;
     private PaymentMessage? _paymentMessage;
     private OutlineKey? _outlineKey;
-    private SubscriptionPlan _subscriptionPlan;
+    private Subscription _subscription;
     
     public UserBuilder WithId(int id)
     {
@@ -29,10 +31,30 @@ public class UserBuilder
         _createdAt = createdAt;
         return this;
     }
+    
+    public UserBuilder WithNowCreatedAt()
+    {
+        _createdAt = DateTimeUtils.GetMoscowNowTime();
+        return this;
+    }
+    
+    public UserBuilder WithNowCreatedAtUpdatedAt()
+    {
+        var nowTime = DateTimeUtils.GetMoscowNowTime();
+        _createdAt = nowTime;
+        _updatedAt = nowTime;
+        return this;
+    }
 
     public UserBuilder WithUpdatedAt(DateTime updatedAt)
     {
         _updatedAt = updatedAt;
+        return this;
+    }
+    
+    public UserBuilder WithNowUpdatedAt()
+    {
+        _updatedAt = DateTimeUtils.GetMoscowNowTime();
         return this;
     }
 
@@ -48,15 +70,15 @@ public class UserBuilder
         return this;
     }
     
-    public UserBuilder WithMoneyInRoubles(decimal moneyInRoubles)
+    public UserBuilder WithTelegramChatId(long telegramChatId)
     {
-        _moneyInRoubles = moneyInRoubles;
+        _telegramChatId = telegramChatId;
         return this;
     }
     
-    public UserBuilder WithSubscriptionEndDate(DateTime subscriptionEndDate)
+    public UserBuilder WithMoneyInRoubles(decimal moneyInRoubles)
     {
-        _subscriptionEndDate = subscriptionEndDate;
+        _moneyInRoubles = moneyInRoubles;
         return this;
     }
     
@@ -78,9 +100,9 @@ public class UserBuilder
         return this;
     }
     
-    public UserBuilder WithSubscription(SubscriptionPlan subscriptionPlan)
+    public UserBuilder WithSubscription(Subscription subscription)
     {
-        _subscriptionPlan = subscriptionPlan;
+        _subscription = subscription;
         return this;
     }
 
@@ -90,11 +112,11 @@ public class UserBuilder
         _updatedAt,
         _telegramUserName,
         _telegramUserId,
+        _telegramChatId,
         _moneyInRoubles,
-        _subscriptionEndDate,
         _telegramState,
         _paymentMessage,
         _outlineKey,
-        _subscriptionPlan
+        _subscription
     );
 }

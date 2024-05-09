@@ -1,4 +1,5 @@
-﻿using NafanyaVPN.Entities.Users;
+﻿using NafanyaVPN.Entities.Payments;
+using NafanyaVPN.Entities.Users;
 using NafanyaVPN.Telegram.Abstractions;
 using NafanyaVPN.Telegram.Constants;
 using NafanyaVPN.Telegram.DTOs;
@@ -18,17 +19,13 @@ public class CustomPaymentSumCommand(
     private readonly InlineKeyboardMarkup _replyMarkupLowBorder = InlineMarkups.CustomPaymentSumLowBorder;
     private readonly ILogger<CustomPaymentSumCommand> _logger = logger;
     
-    private const decimal MinPaymentSum = 2;
-    private const decimal MaxPaymentSum = 5000;
-    private const string CurrencyShort = "руб.";
-
     public async Task Execute(CallbackQueryDto data)
     {
-        var user = await userService.GetAsync(data.User.Id);
+        var user = await userService.GetByTelegramIdAsync(data.User.Id);
 
         var currentSum = GetCurrentSum(user.TelegramState, data.Payload);
 
-        var answerText = $"Выбранная сумма: {currentSum} {CurrencyShort}";
+        var answerText = $"Выбранная сумма: {currentSum} {PaymentConstants.CurrencySymbol}";
         if (answerText.Equals(data.Message.Text)) // На случай, если сумма не изменилась (иначе будет Exception)
             return;
         
@@ -58,7 +55,7 @@ public class CustomPaymentSumCommand(
         return currentSum switch
         {
             < 0 => 0,
-            > MaxPaymentSum => MaxPaymentSum,
+            > PaymentConstants.MaxPayment => PaymentConstants.MaxPayment,
             _ => currentSum
         };
     }
@@ -67,16 +64,19 @@ public class CustomPaymentSumCommand(
     {
         replyMarkup = currentSum switch
         {
-            <= MinPaymentSum => _replyMarkupLowBorder,
-            >= MaxPaymentSum => _replyMarkupHighBorder,
+            <= PaymentConstants.MinPayment => _replyMarkupLowBorder,
+            >= PaymentConstants.MaxPayment => _replyMarkupHighBorder,
             _ => _replyMarkup
         };
         
-        var currentSumBorderedOrIncorrect = currentSum is <= MinPaymentSum or >= MaxPaymentSum;
+        var currentSumBorderedOrIncorrect = currentSum 
+            is <= PaymentConstants.MinPayment 
+            or >= PaymentConstants.MaxPayment;
         if (currentSumBorderedOrIncorrect)
         {
-            answerText = $"Сумма должна быть от {MinPaymentSum} до {MaxPaymentSum}. " +
-                         $"Текущая сумма: {currentSum} {CurrencyShort}";
+            answerText = $"Сумма должна быть от {PaymentConstants.MinPayment}{PaymentConstants.CurrencySymbol} " +
+                         $"до {PaymentConstants.MaxPayment}{PaymentConstants.CurrencySymbol}. " +
+                         $"Текущая сумма: {currentSum} {PaymentConstants.CurrencySymbol}";
         }
     }
 }

@@ -1,26 +1,40 @@
-﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using NafanyaVPN.Database;
+using NafanyaVPN.Exceptions;
 using NafanyaVPN.Utils;
 
 namespace NafanyaVPN.Entities.SubscriptionPlans;
 
 public class SubscriptionPlanRepository(NafanyaVPNContext db) : ISubscriptionPlanRepository
 {
+    private IQueryable<SubscriptionPlan> Items => db.SubscriptionPlans;
+    
     public async Task<SubscriptionPlan> CreateAsync(SubscriptionPlan model)
     {
-        var subscription = await db.Subscriptions.AddAsync(model);
+        var subscription = await db.SubscriptionPlans.AddAsync(model);
         await db.SaveChangesAsync();
         return subscription.Entity;
     }
 
-    public IQueryable<SubscriptionPlan> GetAll()
+    public async Task<SubscriptionPlan> GetByNameAsync(string name)
     {
-        return db.Subscriptions;
+        var subscriptionPlan = await TryGetByNameAsync(name) ?? 
+                               throw new NoSuchEntityException(
+                                   $"Subscription plan with name: \"{name}\" does not exist. " + 
+                                   $"Repository: \"{GetType().Name}\".");
+
+        return subscriptionPlan;
+    }
+    
+    public async Task<SubscriptionPlan?> TryGetByNameAsync(string name)
+    {
+        return await Items.FirstOrDefaultAsync(p => p.Name == name);
     }
 
     public async Task<bool> DeleteAsync(SubscriptionPlan model)
     {
-        db.Subscriptions.Remove(model);
+        db.SubscriptionPlans.Remove(model);
         await db.SaveChangesAsync();
         return true;
     }
@@ -44,6 +58,6 @@ public class SubscriptionPlanRepository(NafanyaVPNContext db) : ISubscriptionPla
     private EntityEntry<SubscriptionPlan> UpdateWithoutSaving(SubscriptionPlan model)
     {
         model.UpdatedAt = DateTimeUtils.GetMoscowNowTime();
-        return db.Subscriptions.Update(model);
+        return db.SubscriptionPlans.Update(model);
     }
 }

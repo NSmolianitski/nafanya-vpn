@@ -1,8 +1,10 @@
-﻿namespace NafanyaVPN.Entities.Outline;
+﻿using NafanyaVPN.Entities.Users;
+
+namespace NafanyaVPN.Entities.Outline;
 
 public interface IOutlineService
 {
-    string CreateNewKeyInOutlineManager(string userName, long userId);
+    Task CreateOutlineKeyForUser(User user);
     string GetKeyByIdFromOutlineManager(int keyId);
     Task EnableKeyAsync(int keyId);
     Task DisableKeyAsync(int keyId);

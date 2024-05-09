@@ -54,6 +54,7 @@ public class YoomoneyPaymentService(
     public async Task<Payment> FinishPaymentAsync(Payment payment)
     {
         payment.Status = PaymentStatusType.Finished;
+        payment.User.MoneyInRoubles += payment.Sum;
         return await paymentRepository.UpdateAsync(payment);
     }
 

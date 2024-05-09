@@ -1,9 +1,10 @@
-﻿namespace NafanyaVPN.Entities.SubscriptionPlans;
+﻿using NafanyaVPN.Entities.Subscriptions;
+
+namespace NafanyaVPN.Entities.SubscriptionPlans;
 
 public interface ISubscriptionDateTimeService
 {
-    bool IsSubscriptionHasExpired(DateTime subscriptionEndTime);
-    DateTime GetNewSubscriptionEndDate();
+    bool HasSubscriptionExpired(Subscription subscription);
+    DateTime GetNewSubscriptionEndDateTime();
     TimeSpan GetDelayBetweenChecks();
-    DateTime Now();
 }

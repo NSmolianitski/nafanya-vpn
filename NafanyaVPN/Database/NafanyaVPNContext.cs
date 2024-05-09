@@ -3,6 +3,7 @@ using NafanyaVPN.Entities.Outline;
 using NafanyaVPN.Entities.PaymentMessages;
 using NafanyaVPN.Entities.Payments;
 using NafanyaVPN.Entities.SubscriptionPlans;
+using NafanyaVPN.Entities.Subscriptions;
 using NafanyaVPN.Entities.Users;
 using NafanyaVPN.Entities.Withdraws;
 using NafanyaVPN.Utils;
@@ -16,7 +17,8 @@ public class NafanyaVPNContext(
 {
     public DbSet<User> Users { get; init; } = null!;
     public DbSet<OutlineKey> OutlineKeys { get; init; } = null!;
-    public DbSet<SubscriptionPlan> Subscriptions { get; init; } = null!;
+    public DbSet<Subscription> Subscriptions { get; init; } = null!;
+    public DbSet<SubscriptionPlan> SubscriptionPlans { get; init; } = null!;
     public DbSet<Payment> Payments { get; init; } = null!;
     public DbSet<Withdraw> Withdraws { get; init; } = null!;
     public DbSet<PaymentStatus> PaymentStatuses { get; init; } = null!;
@@ -27,13 +29,24 @@ public class NafanyaVPNContext(
         modelBuilder.Entity<User>()
             .HasOne(u => u.OutlineKey)
             .WithOne(o => o.User)
-            .HasForeignKey<OutlineKey>(o => o.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .HasForeignKey<OutlineKey>(o => o.UserId);
 
         modelBuilder.Entity<User>()
             .HasOne(u => u.PaymentMessage)
             .WithOne(p => p.User)
-            .OnDelete(DeleteBehavior.Cascade);
+            .IsRequired();
+
+        modelBuilder.Entity<Subscription>()
+            .HasOne(s => s.User)
+            .WithOne(u => u.Subscription)
+            .HasForeignKey<Subscription>(s => s.UserId)
+            .IsRequired();
+
+        modelBuilder.Entity<SubscriptionPlan>()
+            .HasOne<Subscription>()
+            .WithOne(s => s.SubscriptionPlan)
+            .HasForeignKey<Subscription>(s => s.SubscriptionPlanId)
+            .IsRequired();
 
         modelBuilder.Entity<Payment>()
             .Property(p => p.Status)

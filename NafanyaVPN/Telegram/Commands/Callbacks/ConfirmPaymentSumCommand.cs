@@ -21,7 +21,7 @@ public class ConfirmPaymentSumCommand(
     public async Task Execute(CallbackQueryDto data)
     {
         var paymentSum = StringUtils.ParseSum(data.Payload);
-        var user = await userService.GetAsync(data.User.Id);
+        var user = await userService.GetByTelegramIdAsync(data.User.Id);
         
         var quickpay = await paymentService.CreatePaymentFormAsync(paymentSum, user);
         
