@@ -59,7 +59,7 @@ public static class AppBuilderExtensions
         appBuilder.Services.AddScoped<IUserRepository, UserRepository>();
         appBuilder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
         appBuilder.Services.AddScoped<IOutlineKeyRepository, OutlineKeyRepository>();
-        appBuilder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
+        appBuilder.Services.AddScoped<ISubscriptionPlanRepository, SubscriptionPlanPlanRepository>();
         appBuilder.Services.AddScoped<IPaymentMessageRepository, PaymentMessageRepository>();
     }
     

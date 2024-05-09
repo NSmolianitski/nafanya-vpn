@@ -2,6 +2,6 @@
 
 public interface ISubscriptionService
 {
-    Task<Subscription> GetAsync(string name);
-    Task UpdateAsync(Subscription model);
+    Task<SubscriptionPlan> GetAsync(string name);
+    Task UpdateAsync(SubscriptionPlan model);
 }

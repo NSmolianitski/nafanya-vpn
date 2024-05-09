@@ -16,7 +16,7 @@ public class NafanyaVPNContext(
 {
     public DbSet<User> Users { get; init; } = null!;
     public DbSet<OutlineKey> OutlineKeys { get; init; } = null!;
-    public DbSet<Subscription> Subscriptions { get; init; } = null!;
+    public DbSet<SubscriptionPlan> Subscriptions { get; init; } = null!;
     public DbSet<Payment> Payments { get; init; } = null!;
     public DbSet<Withdraw> Withdraws { get; init; } = null!;
     public DbSet<PaymentStatus> PaymentStatuses { get; init; } = null!;
@@ -70,7 +70,7 @@ public class NafanyaVPNContext(
 
         var config = configuration.GetRequiredSection(SubscriptionConstants.Subscription);
         var costInRoubles = decimal.Parse(config[SubscriptionConstants.SubscriptionCostInRoubles]!);
-        var defaultSubscription = new Subscription
+        var defaultSubscription = new SubscriptionPlan
         {
             Id = 1,
             CreatedAt = nowDateTime,
@@ -78,6 +78,6 @@ public class NafanyaVPNContext(
             Name = DatabaseConstants.Default,
             CostInRoubles = costInRoubles
         };
-        modelBuilder.Entity<Subscription>().HasData(defaultSubscription);
+        modelBuilder.Entity<SubscriptionPlan>().HasData(defaultSubscription);
     }
 }

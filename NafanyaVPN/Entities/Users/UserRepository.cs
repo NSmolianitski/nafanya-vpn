@@ -19,7 +19,7 @@ public class UserRepository(NafanyaVPNContext db) : IUserRepository
     {
         return await db.Users
             .Include(u => u.OutlineKey)
-            .Include(u => u.Subscription)
+            .Include(u => u.SubscriptionPlan)
             .ToListAsync();
     }
     
@@ -36,7 +36,7 @@ public class UserRepository(NafanyaVPNContext db) : IUserRepository
     public async Task<User?> TryGetByTelegramIdAsync(long telegramId)
     {
         var user = await db.Users
-            .Include(u => u.Subscription)
+            .Include(u => u.SubscriptionPlan)
             .Include(u => u.OutlineKey)
             .FirstOrDefaultAsync(u => u.TelegramUserId == telegramId);
         return user;

@@ -4,35 +4,35 @@ using NafanyaVPN.Utils;
 
 namespace NafanyaVPN.Entities.Subscription;
 
-public class SubscriptionRepository(NafanyaVPNContext db) : ISubscriptionRepository
+public class SubscriptionPlanPlanRepository(NafanyaVPNContext db) : ISubscriptionPlanRepository
 {
-    public async Task<Subscription> CreateAsync(Subscription model)
+    public async Task<SubscriptionPlan> CreateAsync(SubscriptionPlan model)
     {
         var subscription = await db.Subscriptions.AddAsync(model);
         await db.SaveChangesAsync();
         return subscription.Entity;
     }
 
-    public IQueryable<Subscription> GetAll()
+    public IQueryable<SubscriptionPlan> GetAll()
     {
         return db.Subscriptions;
     }
 
-    public async Task<bool> DeleteAsync(Subscription model)
+    public async Task<bool> DeleteAsync(SubscriptionPlan model)
     {
         db.Subscriptions.Remove(model);
         await db.SaveChangesAsync();
         return true;
     }
 
-    public async Task<Subscription> UpdateAsync(Subscription model)
+    public async Task<SubscriptionPlan> UpdateAsync(SubscriptionPlan model)
     {
         UpdateWithoutSaving(model);
         await db.SaveChangesAsync();
         return model;
     }
     
-    public async Task UpdateAllAsync(IEnumerable<Subscription> models)
+    public async Task UpdateAllAsync(IEnumerable<SubscriptionPlan> models)
     {
         foreach (var model in models)
         {
@@ -41,7 +41,7 @@ public class SubscriptionRepository(NafanyaVPNContext db) : ISubscriptionReposit
         await db.SaveChangesAsync();
     }
     
-    private EntityEntry<Subscription> UpdateWithoutSaving(Subscription model)
+    private EntityEntry<SubscriptionPlan> UpdateWithoutSaving(SubscriptionPlan model)
     {
         model.UpdatedAt = DateTimeUtils.GetMoscowNowTime();
         return db.Subscriptions.Update(model);

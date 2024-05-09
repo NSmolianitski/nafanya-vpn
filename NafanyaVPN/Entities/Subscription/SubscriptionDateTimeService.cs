@@ -26,13 +26,8 @@ public class SubscriptionDateTimeService : ISubscriptionDateTimeService
         return DateTimeUtils.GetMoscowNowTime().Add(_subscriptionLength);
     }
     
-    public TimeSpan GetDelayUntilNextUpdate()
+    public TimeSpan GetDelayBetweenChecks()
     {
-        var moscowNowTime = DateTimeUtils.GetMoscowNowTime();
-        // var nextMidnight = moscowNowTime.AddDays(1).Date;
-        // var delay = nextMidnight - moscowNowTime;
-        
-        // return delay;
         return _delayBetweenChecks;
     }
 

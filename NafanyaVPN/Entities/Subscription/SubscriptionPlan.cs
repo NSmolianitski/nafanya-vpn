@@ -1,6 +1,6 @@
 ﻿namespace NafanyaVPN.Entities.Subscription;
 
-public class Subscription
+public class SubscriptionPlan
 {
     public int Id { get; set; }
     public DateTime CreatedAt { get; set; }

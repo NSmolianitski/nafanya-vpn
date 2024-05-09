@@ -4,6 +4,6 @@ public interface ISubscriptionDateTimeService
 {
     bool IsSubscriptionHasExpired(DateTime subscriptionEndTime);
     DateTime GetNewSubscriptionEndDate();
-    TimeSpan GetDelayUntilNextUpdate();
+    TimeSpan GetDelayBetweenChecks();
     DateTime Now();
 }

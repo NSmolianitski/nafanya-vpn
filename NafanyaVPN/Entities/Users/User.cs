@@ -1,5 +1,6 @@
 ﻿using NafanyaVPN.Entities.Outline;
 using NafanyaVPN.Entities.PaymentMessages;
+using NafanyaVPN.Entities.Subscription;
 
 namespace NafanyaVPN.Entities.Users;
 
@@ -18,7 +19,7 @@ public class User
         string telegramState,
         PaymentMessage? paymentMessage,
         OutlineKey? outlineKey,
-        Subscription.Subscription subscription)
+        SubscriptionPlan subscriptionPlan)
     {
         Id = id;
         CreatedAt = createdAt;
@@ -30,7 +31,7 @@ public class User
         TelegramState = telegramState;
         PaymentMessage = paymentMessage;
         OutlineKey = outlineKey;
-        Subscription = subscription;
+        SubscriptionPlan = subscriptionPlan;
     }
 
     public int Id { get; set; }
@@ -43,5 +44,5 @@ public class User
     public string TelegramState { get; set; }
     public PaymentMessage? PaymentMessage { get; set; }
     public OutlineKey? OutlineKey { get; set; }
-    public Subscription.Subscription Subscription { get; set; }
+    public SubscriptionPlan SubscriptionPlan { get; set; }
 }

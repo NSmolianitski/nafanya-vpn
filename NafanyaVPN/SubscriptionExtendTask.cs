@@ -19,7 +19,7 @@ public class SubscriptionExtendTask(
                 var dateTimeService = scope.ServiceProvider.GetRequiredService<ISubscriptionDateTimeService>();
                 var subscriptionExtendService = scope.ServiceProvider.GetRequiredService<ISubscriptionExtendService>();
 
-                var nextUpdateDelay = dateTimeService.GetDelayUntilNextUpdate();
+                var nextUpdateDelay = dateTimeService.GetDelayBetweenChecks();
                 logger.LogInformation("Следующее обновление подписки: {Datetime}",
                     (DateTimeUtils.GetMoscowNowTime() + nextUpdateDelay)
                     .ToString(CultureInfo.InvariantCulture));

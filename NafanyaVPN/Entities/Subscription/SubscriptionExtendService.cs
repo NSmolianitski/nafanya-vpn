@@ -32,7 +32,7 @@ public class SubscriptionExtendService(
         if (user.OutlineKey is null) 
             return false;
         
-        var subscriptionPrice = user.Subscription.CostInRoubles;
+        var subscriptionPrice = user.SubscriptionPlan.CostInRoubles;
         var subscriptionExpired = dateTimeService.IsSubscriptionHasExpired(user.SubscriptionEndDate);
         if (!subscriptionExpired)
             return false;

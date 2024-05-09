@@ -1,5 +1,6 @@
 ﻿using NafanyaVPN.Entities.Outline;
 using NafanyaVPN.Entities.PaymentMessages;
+using NafanyaVPN.Entities.Subscription;
 
 namespace NafanyaVPN.Entities.Users;
 
@@ -15,7 +16,7 @@ public class UserBuilder
     private string _telegramState = string.Empty;
     private PaymentMessage? _paymentMessage;
     private OutlineKey? _outlineKey;
-    private Subscription.Subscription _subscription;
+    private SubscriptionPlan _subscriptionPlan;
     
     public UserBuilder WithId(int id)
     {
@@ -77,9 +78,9 @@ public class UserBuilder
         return this;
     }
     
-    public UserBuilder WithSubscription(Subscription.Subscription subscription)
+    public UserBuilder WithSubscription(SubscriptionPlan subscriptionPlan)
     {
-        _subscription = subscription;
+        _subscriptionPlan = subscriptionPlan;
         return this;
     }
 
@@ -94,6 +95,6 @@ public class UserBuilder
         _telegramState,
         _paymentMessage,
         _outlineKey,
-        _subscription
+        _subscriptionPlan
     );
 }
