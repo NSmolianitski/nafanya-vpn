@@ -1,4 +1,5 @@
 ﻿using NafanyaVPN.Entities.Outline;
+using NafanyaVPN.Entities.Payments;
 using NafanyaVPN.Entities.Subscriptions;
 using NafanyaVPN.Entities.Users;
 
@@ -90,20 +91,22 @@ public class SubscriptionExtendService(
     {
         logger.LogInformation("Ключ отключён. " +
                               "На счёте {TelegramUserName}({TelegramUserId}) недостаточно средств. " +
-                              "Стоимость подписки: {SubscriptionPrice}. Текущий баланс: {MoneyInRoubles}", 
+                              "Стоимость подписки: {SubscriptionPrice}. Текущий баланс: {MoneyInRoubles}{CurrencySymbol}", 
             user.TelegramUserName,
             user.TelegramUserId,
             subscriptionPrice, 
-            user.MoneyInRoubles);
+            user.MoneyInRoubles,
+            PaymentConstants.CurrencySymbol);
     }
 
     private void LogSubscriptionExtension(User user, decimal subscriptionPrice)
     {
         logger.LogInformation("Со счёта {TelegramUserName}({TelegramUserId}) " +
-                              "списано {SubscriptionPrice} рублей. Осталось: {MoneyInRoubles}", 
+                              "списано {SubscriptionPrice} рублей. Осталось: {MoneyInRoubles}{CurrencySymbol}", 
             user.TelegramUserName, 
             user.TelegramUserId, 
             subscriptionPrice, 
-            user.MoneyInRoubles);
+            user.MoneyInRoubles,
+            PaymentConstants.CurrencySymbol);
     }
 }
