@@ -19,17 +19,20 @@ public class ReplyService(ITelegramBotClient botClient) : IReplyService
 
     public async Task<Message> SendTextWithMarkupAsync(long chatId, string text, IReplyMarkup markup)
     {
-        return await botClient.SendTextMessageAsync(chatId, text, replyMarkup: markup);
+        return await botClient.SendTextMessageAsync(chatId, text, replyMarkup: markup, 
+            parseMode: ParseMode.Html);
     }
 
     public async Task EditMessageWithMarkupAsync(Message message, string newText, InlineKeyboardMarkup markup)
     {
-        await botClient.EditMessageTextAsync(message.Chat.Id, message.MessageId, newText, replyMarkup: markup);
+        await botClient.EditMessageTextAsync(message.Chat.Id, message.MessageId, newText, replyMarkup: markup, 
+            parseMode: ParseMode.Html);
     }
 
     public async Task EditMessageAsync(Message message, string newText)
     {
-        await botClient.EditMessageTextAsync(message.Chat.Id, message.MessageId, newText);
+        await botClient.EditMessageTextAsync(message.Chat.Id, message.MessageId, newText, 
+            parseMode: ParseMode.Html);
     }
 
     public async Task SendHelloAsync(long chatId)

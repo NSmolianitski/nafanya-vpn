@@ -13,21 +13,22 @@ public class SendAccountDataCommand(IReplyService replyService)
         var user = data.User;
         var subscription = user.Subscription;
 
-        string subscriptionStatusMessage;
-        if (subscription.HasExpired)
-            subscriptionStatusMessage = "истекла";
-        else if (subscription.RenewalDisabled)
-            subscriptionStatusMessage = "активна, продление отключено";
-        else
-            subscriptionStatusMessage = "активна, продление включено";
+        var statusMessage = subscription.HasExpired
+            ? "\ud83d\udd34 отключена"
+            : "\ud83d\udfe2 активна";
+
+        var renewalMessage = subscription.RenewalDisabled
+            ? "\u23f9 отключено"
+            : "\ud83d\udd04 включено";
         
-        var subscriptionMessage = user.Subscription.HasExpired 
+        var renewalDate = subscription.HasExpired || subscription.RenewalDisabled
             ? "-" 
             : user.Subscription.EndDateTime.ToString("HH:mm dd/MM/yyyy", CultureInfo.InvariantCulture);
         
         await replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, 
-            $"Остаток средств: {user.MoneyInRoubles}{PaymentConstants.CurrencySymbol}\n" +
-            $"Состояние подписки: {subscriptionStatusMessage}\n" +
-            $"Следующее продление подписки: {subscriptionMessage}");
+            $"<b>Остаток средств:</b> \ud83d\udcb0{user.MoneyInRoubles}{PaymentConstants.CurrencySymbol}\n" +
+            $"<b>Состояние подписки:</b> {statusMessage}\n" +
+            $"<b>Продление подписки:</b> {renewalMessage}\n" +
+            $"<b>Следующее продление подписки:</b> {renewalDate}");
     }
 }
