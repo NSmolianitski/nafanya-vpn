@@ -4,12 +4,12 @@ using NafanyaVPN.Telegram.DTOs;
 
 namespace NafanyaVPN.Telegram.Commands.Messages;
 
-public class SendSettingsCommand(
+public class SettingsCommand(
     IReplyService replyService, 
-    ILogger<SendPaymentSumChooseCommand> logger)
+    ILogger<PaymentSumChooseCommand> logger)
     : ICommand<MessageDto>
 {
-    private readonly ILogger<SendPaymentSumChooseCommand> _logger = logger;
+    private readonly ILogger<PaymentSumChooseCommand> _logger = logger;
 
     public async Task Execute(MessageDto data)
     {

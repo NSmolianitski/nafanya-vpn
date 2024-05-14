@@ -7,7 +7,7 @@ using NafanyaVPN.Telegram.DTOs;
 
 namespace NafanyaVPN.Telegram.Commands.Messages;
 
-public class SendOutlineKeyCommand(
+public class OutlineKeyCommand(
     IReplyService replyService,
     IOutlineService outlineService,
     ISubscriptionDateTimeService subscriptionDateTimeService,

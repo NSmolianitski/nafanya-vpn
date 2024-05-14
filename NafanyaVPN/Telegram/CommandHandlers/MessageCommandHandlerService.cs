@@ -6,22 +6,22 @@ using NafanyaVPN.Telegram.DTOs;
 namespace NafanyaVPN.Telegram.CommandHandlers;
 
 public class MessageCommandHandlerService(
-    SendAccountDataCommand sendAccountDataCommand,
-    SendPaymentSumChooseCommand sendPaymentSumChooseCommand,
-    SendOutlineKeyCommand sendOutlineKeyCommand,
-    SendInstructionCommand sendInstructionCommand,
-    SendSettingsCommand sendSettingsCommand,
-    SendHelloCommand sendHelloCommand)
+    AccountDataCommand accountDataCommand,
+    PaymentSumChooseCommand paymentSumChooseCommand,
+    OutlineKeyCommand outlineKeyCommand,
+    InstructionCommand instructionCommand,
+    SettingsCommand settingsCommand,
+    HelloCommand helloCommand)
     : ICommandHandlerService<MessageDto>
 {
     private readonly Dictionary<string, ICommand<MessageDto>> _commands = new()
     {
-        { MainKeyboardConstants.Account, sendAccountDataCommand },
-        { MainKeyboardConstants.Donate, sendPaymentSumChooseCommand },
-        { MainKeyboardConstants.GetKey, sendOutlineKeyCommand },
-        { MainKeyboardConstants.Instruction, sendInstructionCommand },
-        { MainKeyboardConstants.Settings, sendSettingsCommand },
-        { MainKeyboardConstants.Hello, sendHelloCommand },
+        { MainKeyboardConstants.Account, accountDataCommand },
+        { MainKeyboardConstants.Donate, paymentSumChooseCommand },
+        { MainKeyboardConstants.GetKey, outlineKeyCommand },
+        { MainKeyboardConstants.Instruction, instructionCommand },
+        { MainKeyboardConstants.Settings, settingsCommand },
+        { MainKeyboardConstants.Hello, helloCommand },
     };
 
     public async Task HandleCommand(MessageDto data)

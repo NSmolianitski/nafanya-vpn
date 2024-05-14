@@ -13,10 +13,10 @@ public class ConfirmPaymentSumCommand(
     IPaymentService paymentService,
     IUserService userService,
     IPaymentMessageService paymentMessageService,
-    ILogger<SendPaymentSumChooseCommand> logger)
+    ILogger<PaymentSumChooseCommand> logger)
     : ICommand<CallbackQueryDto>
 {
-    private readonly ILogger<SendPaymentSumChooseCommand> _logger = logger;
+    private readonly ILogger<PaymentSumChooseCommand> _logger = logger;
 
     public async Task Execute(CallbackQueryDto data)
     {

@@ -4,7 +4,7 @@ using NafanyaVPN.Telegram.DTOs;
 
 namespace NafanyaVPN.Telegram.Commands.Messages;
 
-public class SendInstructionCommand(IReplyService replyService, IOutlineService outlineService) : ICommand<MessageDto>
+public class InstructionCommand(IReplyService replyService, IOutlineService outlineService) : ICommand<MessageDto>
 {
     public async Task Execute(MessageDto data)
     {

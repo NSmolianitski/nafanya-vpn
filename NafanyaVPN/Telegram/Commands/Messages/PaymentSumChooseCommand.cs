@@ -6,14 +6,14 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace NafanyaVPN.Telegram.Commands.Messages;
 
-public class SendPaymentSumChooseCommand(
+public class PaymentSumChooseCommand(
     IReplyService replyService,
     IPaymentMessageService paymentMessageService,
-    ILogger<SendPaymentSumChooseCommand> logger)
+    ILogger<PaymentSumChooseCommand> logger)
     : ICommand<MessageDto>
 {
     private readonly InlineKeyboardMarkup _replyMarkup = InlineMarkups.PaymentSum;
-    private readonly ILogger<SendPaymentSumChooseCommand> _logger = logger;
+    private readonly ILogger<PaymentSumChooseCommand> _logger = logger;
 
     public async Task Execute(MessageDto data)
     {

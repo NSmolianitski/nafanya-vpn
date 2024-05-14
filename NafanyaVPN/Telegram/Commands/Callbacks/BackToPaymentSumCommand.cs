@@ -7,11 +7,11 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace NafanyaVPN.Telegram.Commands.Callbacks;
 
-public class BackToPaymentSumCommand(IUserService userService, IReplyService replyService, ILogger<SendPaymentSumChooseCommand> logger)
+public class BackToPaymentSumCommand(IUserService userService, IReplyService replyService, ILogger<PaymentSumChooseCommand> logger)
     : ICommand<CallbackQueryDto>
 {
     private readonly InlineKeyboardMarkup _replyMarkup = InlineMarkups.PaymentSum;
-    private readonly ILogger<SendPaymentSumChooseCommand> _logger = logger;
+    private readonly ILogger<PaymentSumChooseCommand> _logger = logger;
 
     public async Task Execute(CallbackQueryDto data)
     {
