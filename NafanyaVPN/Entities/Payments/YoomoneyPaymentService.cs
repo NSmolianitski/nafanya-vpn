@@ -1,5 +1,8 @@
-﻿using NafanyaVPN.Entities.Users;
+﻿using System.Text;
+using NafanyaVPN.Entities.PaymentNotifications;
+using NafanyaVPN.Entities.Users;
 using NafanyaVPN.Utils;
+using Newtonsoft.Json;
 using yoomoney_api.notification;
 using yoomoney_api.quickpay;
 
@@ -24,12 +27,6 @@ public class YoomoneyPaymentService(
     {
         var paymentLabel = StringUtils.GetUniqueLabel();
         await CreatePaymentAsync(sum, user, paymentLabel);
-        
-        // TODO: убрать (добавлено для тестов) //
-        //////////////////////////////////////////
-        user.MoneyInRoubles += sum;
-        await userRepository.UpdateAsync(user);
-        //////////////////////////////////////////
         
         return new Quickpay(_wallet, "shop", sum, paymentLabel, 
             PaymentMethodConstants.BankCard);

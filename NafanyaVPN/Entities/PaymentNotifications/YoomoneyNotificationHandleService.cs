@@ -25,10 +25,10 @@ public class YoomoneyNotificationHandleService(
             await paymentService.FinishPaymentAsync(payment);
 
             var user = await userService.GetByIdAsync(payment.UserId);
-            await subscriptionExtendService.TryRenewForUserAsync(user);
-            
-            await replyService.SendTextWithMainKeyboardAsync(user.TelegramChatId, 
+            await replyService.SendTextWithMainKeyboardAsync(user.TelegramChatId, user.Subscription,
                 $"Счёт успешно пополнен на сумму {payment.Sum}{PaymentConstants.CurrencySymbol}!");
+            
+            await subscriptionExtendService.TryRenewForUserAsync(user);
         }
         catch (NoSuchEntityException e)
         {

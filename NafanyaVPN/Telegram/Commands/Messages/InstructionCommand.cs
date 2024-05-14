@@ -9,6 +9,7 @@ public class InstructionCommand(IReplyService replyService, IOutlineService outl
     public async Task Execute(MessageDto data)
     {
         var instruction = outlineService.GetInstruction();
-        await replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, $"{instruction}");
+        await replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, data.User.Subscription, 
+            $"{instruction}");
     }
 }

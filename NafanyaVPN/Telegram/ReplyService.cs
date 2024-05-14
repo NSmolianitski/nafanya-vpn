@@ -1,10 +1,10 @@
-﻿using NafanyaVPN.Telegram.Abstractions;
+﻿using NafanyaVPN.Entities.Subscriptions;
+using NafanyaVPN.Telegram.Abstractions;
 using NafanyaVPN.Telegram.Constants;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
-using User = NafanyaVPN.Entities.Users.User;
 
 namespace NafanyaVPN.Telegram;
 
@@ -12,9 +12,10 @@ public class ReplyService(ITelegramBotClient botClient) : IReplyService
 {
     private readonly ReplyKeyboardMarkup _mainKeyboardMarkup = ReplyMarkups.MainKeyboardMarkup;
 
-    public async Task SendTextWithMainKeyboardAsync(long chatId, string text)
+    public async Task SendTextWithMainKeyboardAsync(long chatId, Subscription subscription, string text)
     {
-        await SendTextWithMarkupAsync(chatId, text, _mainKeyboardMarkup);
+        var replyMarkup = ReplyMarkups.CreateMainMarkup(subscription);
+        await SendTextWithMarkupAsync(chatId, text, replyMarkup);
     }
 
     public async Task<Message> SendTextWithMarkupAsync(long chatId, string text, IReplyMarkup markup)
@@ -35,9 +36,9 @@ public class ReplyService(ITelegramBotClient botClient) : IReplyService
             parseMode: ParseMode.Html);
     }
 
-    public async Task SendHelloAsync(long chatId)
+    public async Task SendHelloAsync(long chatId, Subscription subscription)
     {
-        await SendTextWithMainKeyboardAsync(chatId, "Добро пожаловать!");
+        await SendTextWithMainKeyboardAsync(chatId, subscription, "Добро пожаловать!");
     }
 
     public async Task SendChatActionAsync(ChatId chatId, ChatAction chatAction)

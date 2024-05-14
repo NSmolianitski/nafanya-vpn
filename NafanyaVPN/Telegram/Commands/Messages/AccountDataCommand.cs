@@ -22,16 +22,16 @@ public class AccountDataCommand(IReplyService replyService)
             ? "⏹ отключено"
             : "🔄 включено";
         
-        var renewalDate = subscription.HasExpired || subscription.RenewalDisabled
+        var renewalDate = subscription.HasExpired
             ? "-" 
             : user.Subscription.EndDateTime.ToString(TelegramConstants.DateTimeFormat, CultureInfo.InvariantCulture);
         
-        await replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, 
+        await replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, user.Subscription, 
             $"<b>Остаток средств:</b> 💰 {user.MoneyInRoubles}{PaymentConstants.CurrencySymbol}\n" +
             $"<b>Состояние подписки:</b> {statusMessage}\n" +
-            $"<b>Продление подписки:</b> {renewalMessage}\n" +
+            $"<b>Автопродление подписки:</b> {renewalMessage}\n" +
             $"<b>Стоимость подписки (за 30 дней):</b> 🔖 {subscription.SubscriptionPlan.CostInRoubles} " +
             $"{PaymentConstants.CurrencySymbol}\n" +
-            $"<b>Следующее продление подписки:</b> 📅 {renewalDate}");
+            $"<b>Окончание подписки:</b> 📅 {renewalDate}");
     }
 }

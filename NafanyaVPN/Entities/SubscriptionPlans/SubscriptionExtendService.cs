@@ -23,8 +23,15 @@ public class SubscriptionExtendService(
         var extendedSubscriptions = new List<Subscription>();
         foreach (var subscription in nonExpiredSubscriptions)
         {
-            var subscriptionWasExtended = await TryRenewWithoutDbSavingAsync(subscription);
-            if (subscriptionWasExtended)
+            var expiredForReal = dateTimeService.HasSubscriptionExpired(subscription);
+            if (expiredForReal)
+                await StopSubscriptionWithoutDbSaveAsync(subscription);
+            
+            if (!expiredForReal || subscription.RenewalDisabled)
+                continue;
+            
+            var subscriptionWasRenewed = await RenewIfEnoughMoneyWithoutDbSavingAsync(subscription);
+            if (subscriptionWasRenewed)
                 extendedSubscriptions.Add(subscription);
         }
 
@@ -39,27 +46,22 @@ public class SubscriptionExtendService(
 
     private async Task SendRenewalNotificationAsync(Subscription subscription)
     {
-        await replyService.SendTextWithMainKeyboardAsync(subscription.User.TelegramUserId,
+        await replyService.SendTextWithMainKeyboardAsync(subscription.User.TelegramUserId, subscription,
             $"Подписка продлена до {subscription.EndDateTime.ToString(TelegramConstants.DateTimeFormat)}. " +
             $"Списано {subscription.SubscriptionPlan.CostInRoubles}{PaymentConstants.CurrencySymbol}.\n" +
             $"Ваш баланс: {subscription.User.MoneyInRoubles}{PaymentConstants.CurrencySymbol}");
     }
 
-    private async Task<bool> TryRenewWithoutDbSavingAsync(Subscription subscription)
+    private async Task<bool> RenewIfEnoughMoneyWithoutDbSavingAsync(Subscription subscription)
     {
-        var subscriptionHasExpired = dateTimeService.HasSubscriptionExpired(subscription);
-        if (!subscriptionHasExpired)
+        if (!IsEnoughMoneyForRenewal(subscription)) 
             return false;
         
-        if (!subscription.RenewalDisabled && CanSubscriptionBeRenewedByOwner(subscription))
-            await RenewSubscriptionWithoutDbSaveAsync(subscription);
-        else
-            await StopSubscriptionWithoutDbSaveAsync(subscription);
-
+        await RenewSubscriptionWithoutDbSaveAsync(subscription);
         return true;
     }
     
-    private bool CanSubscriptionBeRenewedByOwner(Subscription subscription)
+    private bool IsEnoughMoneyForRenewal(Subscription subscription)
     {
         var subscriptionPrice = subscription.SubscriptionPlan.CostInRoubles;
         var ownerMoney = subscription.User.MoneyInRoubles;
@@ -103,7 +105,7 @@ public class SubscriptionExtendService(
         
         var subscription = user.Subscription;
         
-        var subscriptionExtended = await TryRenewWithoutDbSavingAsync(subscription);
+        var subscriptionExtended = await RenewIfEnoughMoneyWithoutDbSavingAsync(subscription);
         if (subscriptionExtended)
         {
             await subscriptionService.UpdateAsync(subscription);

@@ -13,12 +13,17 @@ public class RenewSubscriptionCommand(
 {
     public async Task Execute(MessageDto data)
     {
-        var user = await userService.GetByTelegramIdAsync(data.User.Id);
+        var user = await userService.GetByTelegramIdAsync(data.User.TelegramUserId);
         var subscription = user.Subscription;
 
         if (subscription.HasExpired)
+        {
             await subscriptionExtendService.TryRenewForUserAsync(user);
+        }
         else
-            await replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, "Ваша подписка не истекла.");
+        {
+            await replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, subscription,
+                "Ваша подписка не истекла.");
+        }
     }
 }
