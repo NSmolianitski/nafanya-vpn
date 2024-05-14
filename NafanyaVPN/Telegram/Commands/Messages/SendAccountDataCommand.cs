@@ -14,21 +14,22 @@ public class SendAccountDataCommand(IReplyService replyService)
         var subscription = user.Subscription;
 
         var statusMessage = subscription.HasExpired
-            ? "\ud83d\udd34 отключена"
-            : "\ud83d\udfe2 активна";
+            ? "🔴 отключена"
+            : "🟢 активна";
 
         var renewalMessage = subscription.RenewalDisabled
-            ? "\u23f9 отключено"
-            : "\ud83d\udd04 включено";
+            ? "⏹ отключено"
+            : "🔄 включено";
         
         var renewalDate = subscription.HasExpired || subscription.RenewalDisabled
             ? "-" 
             : user.Subscription.EndDateTime.ToString("HH:mm dd/MM/yyyy", CultureInfo.InvariantCulture);
         
         await replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, 
-            $"<b>Остаток средств:</b> \ud83d\udcb0{user.MoneyInRoubles}{PaymentConstants.CurrencySymbol}\n" +
+            $"<b>Остаток средств:</b> 💰 {user.MoneyInRoubles}{PaymentConstants.CurrencySymbol}\n" +
             $"<b>Состояние подписки:</b> {statusMessage}\n" +
             $"<b>Продление подписки:</b> {renewalMessage}\n" +
-            $"<b>Следующее продление подписки:</b> {renewalDate}");
+            $"<b>Стоимость подписки (за 30 дней):</b> 🔖 {subscription.SubscriptionPlan.CostInRoubles}\n" +
+            $"<b>Следующее продление подписки:</b> 📅 {renewalDate}");
     }
 }
