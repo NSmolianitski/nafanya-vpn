@@ -8,6 +8,7 @@ using NafanyaVPN.Entities.Registration;
 using NafanyaVPN.Entities.SubscriptionPlans;
 using NafanyaVPN.Entities.Subscriptions;
 using NafanyaVPN.Entities.Users;
+using NafanyaVPN.Entities.Withdraws;
 using NafanyaVPN.Telegram;
 using NafanyaVPN.Telegram.Abstractions;
 using NafanyaVPN.Telegram.CommandHandlers;
@@ -59,18 +60,19 @@ public static class AppBuilderExtensions
     {
         appBuilder.Services.AddScoped<IUserRepository, UserRepository>();
         appBuilder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
-        appBuilder.Services.AddScoped<IOutlineKeyRepository, OutlineKeyRepository>();
-        appBuilder.Services.AddScoped<ISubscriptionPlanRepository, SubscriptionPlanRepository>();
-        appBuilder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
         appBuilder.Services.AddScoped<IPaymentMessageRepository, PaymentMessageRepository>();
+        appBuilder.Services.AddScoped<IWithdrawRepository, WithdrawRepository>();
+        appBuilder.Services.AddScoped<IOutlineKeyRepository, OutlineKeyRepository>();
+        appBuilder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
+        appBuilder.Services.AddScoped<ISubscriptionPlanRepository, SubscriptionPlanRepository>();
     }
     
     public static void UseNafanyaVPNServices(this WebApplicationBuilder appBuilder)
     {
         appBuilder.Services.AddScoped<IUserService, UserService>();
-        appBuilder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
-        appBuilder.Services.AddScoped<IOutlineKeyService, OutlineKeyService>();
         appBuilder.Services.AddScoped<IPaymentService, YoomoneyPaymentService>();
+        appBuilder.Services.AddScoped<IOutlineKeyService, OutlineKeyService>();
+        appBuilder.Services.AddScoped<IWithdrawService, WithdrawService>();
         appBuilder.Services.AddScoped<INotificationHandleService, YoomoneyNotificationHandleService>();
         appBuilder.Services.AddScoped<IPaymentMessageService, PaymentMessageService>();
         appBuilder.Services.AddScoped<ISubscriptionService, SubscriptionService>();

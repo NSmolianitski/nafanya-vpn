@@ -2,6 +2,7 @@
 using NafanyaVPN.Entities.Payments;
 using NafanyaVPN.Entities.Subscriptions;
 using NafanyaVPN.Entities.Users;
+using NafanyaVPN.Entities.Withdraws;
 
 namespace NafanyaVPN.Entities.SubscriptionPlans;
 
@@ -9,6 +10,7 @@ public class SubscriptionExtendService(
     IOutlineService outlineService,
     ISubscriptionDateTimeService dateTimeService,
     ISubscriptionService subscriptionService,
+    IWithdrawService withdrawService,
     ILogger<SubscriptionExtendService> logger)
     : ISubscriptionExtendService
 {
@@ -55,6 +57,8 @@ public class SubscriptionExtendService(
         user.MoneyInRoubles -= subscriptionPrice;
         subscription.EndDateTime = dateTimeService.GetNewSubscriptionEndDateTime();
         subscription.HasExpired = false;
+        
+        withdrawService.CreateWithoutSaving(subscription);
         
         if (!user.OutlineKey.Enabled)
             await outlineService.EnableKeyAsync(user.OutlineKey!.Id);
