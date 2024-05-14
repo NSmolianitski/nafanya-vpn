@@ -1,4 +1,5 @@
 ﻿using NafanyaVPN.Entities.Outline;
+using NafanyaVPN.Entities.Payments;
 using NafanyaVPN.Entities.SubscriptionPlans;
 using NafanyaVPN.Entities.Users;
 using NafanyaVPN.Telegram.Abstractions;
@@ -10,7 +11,6 @@ public class SendOutlineKeyCommand(
     IReplyService replyService,
     IOutlineService outlineService,
     ISubscriptionDateTimeService subscriptionDateTimeService,
-    IOutlineKeyService outlineKeyService,
     ISubscriptionExtendService subscriptionExtendService)
     : ICommand<MessageDto>
 {
@@ -30,7 +30,7 @@ public class SendOutlineKeyCommand(
         else
         {
             await replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id,
-                $"Ваш ключ временно отключён из-за недостатка средств. На счёте: {user.MoneyInRoubles} рублей");
+                $"Ваш ключ временно отключён из-за недостатка средств. На счёте: {user.MoneyInRoubles} {PaymentConstants.CurrencySymbol}");
         }
     }
 }
