@@ -20,7 +20,7 @@ public class YoomoneyNotificationHandleService(
         {
             var payment = await paymentService.GetByLabelAsync(notification.Label!);
             if (payment.Status is PaymentStatusType.Canceled or PaymentStatusType.Finished)
-                throw new BadPaymentNotificationException($"Payment is not in Waiting status:\n{payment}");
+                throw new BadPaymentNotificationException($"Статус Payment отличается от Waiting:\n{payment}");
             
             await paymentService.FinishPaymentAsync(payment);
 
