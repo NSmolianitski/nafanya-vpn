@@ -46,6 +46,9 @@ public class SubscriptionExtendService(
 
     private async Task SendRenewalNotificationAsync(Subscription subscription)
     {
+        if (subscription.RenewalNotificationsDisabled)
+            return;
+        
         await replyService.SendTextWithMainKeyboardAsync(subscription.User.TelegramUserId, subscription,
             $"Подписка продлена до {subscription.EndDateTime.ToString(TelegramConstants.DateTimeFormat)}. " +
             $"Списано {subscription.SubscriptionPlan.CostInRoubles}{PaymentConstants.CurrencySymbol}.\n" +
