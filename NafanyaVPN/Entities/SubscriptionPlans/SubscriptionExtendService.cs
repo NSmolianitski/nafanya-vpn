@@ -33,11 +33,16 @@ public class SubscriptionExtendService(
         foreach (var subscription in extendedSubscriptions
                      .Where(subscription => !subscription.RenewalNotificationsDisabled))
         {
-            await replyService.SendTextWithMainKeyboardAsync(subscription.User.TelegramUserId,
-                $"Подписка продлена до {subscription.EndDateTime.ToString(TelegramConstants.DateTimeFormat)}. " +
-                $"Списано {subscription.SubscriptionPlan.CostInRoubles}{PaymentConstants.CurrencySymbol}.\n" +
-                $"Ваш баланс: {subscription.User.MoneyInRoubles}{PaymentConstants.CurrencySymbol}");
+            await SendRenewalNotificationAsync(subscription);
         }
+    }
+
+    private async Task SendRenewalNotificationAsync(Subscription subscription)
+    {
+        await replyService.SendTextWithMainKeyboardAsync(subscription.User.TelegramUserId,
+            $"Подписка продлена до {subscription.EndDateTime.ToString(TelegramConstants.DateTimeFormat)}. " +
+            $"Списано {subscription.SubscriptionPlan.CostInRoubles}{PaymentConstants.CurrencySymbol}.\n" +
+            $"Ваш баланс: {subscription.User.MoneyInRoubles}{PaymentConstants.CurrencySymbol}");
     }
 
     private async Task<bool> TryRenewWithoutDbSavingAsync(Subscription subscription)
@@ -100,7 +105,10 @@ public class SubscriptionExtendService(
         
         var subscriptionExtended = await TryRenewWithoutDbSavingAsync(subscription);
         if (subscriptionExtended)
+        {
             await subscriptionService.UpdateAsync(subscription);
+            await SendRenewalNotificationAsync(subscription);
+        }
     }
 
     private void LogSubscriptionCancellation(User user, decimal subscriptionPrice)

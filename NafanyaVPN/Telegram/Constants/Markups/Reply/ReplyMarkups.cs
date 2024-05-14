@@ -8,14 +8,21 @@ public static class ReplyMarkups
     {
         new KeyboardButton[]
         {
-            MainKeyboardConstants.Donate,
             MainKeyboardConstants.Account,
+        },
+        new KeyboardButton[]
+        {
+            MainKeyboardConstants.Donate,
+            MainKeyboardConstants.GetKey
         },
         new KeyboardButton[]
         {
             MainKeyboardConstants.Instruction,
             MainKeyboardConstants.Settings,
-            MainKeyboardConstants.GetKey
+        },
+        new KeyboardButton[]
+        {
+            MainKeyboardConstants.RenewSubscription,
         }
     })
     {

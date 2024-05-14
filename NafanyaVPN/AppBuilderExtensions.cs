@@ -97,6 +97,7 @@ public static class AppBuilderExtensions
         appBuilder.Services.AddScoped<AccountDataCommand>();
         appBuilder.Services.AddScoped<OutlineKeyCommand>();
         appBuilder.Services.AddScoped<InstructionCommand>();
+        appBuilder.Services.AddScoped<RenewSubscriptionCommand>();
         
         appBuilder.Services.AddScoped<ConfirmPaymentSumCommand>();
         appBuilder.Services.AddScoped<CustomPaymentSumCommand>();

@@ -1,4 +1,5 @@
 ﻿using NafanyaVPN.Telegram.Abstractions;
+using NafanyaVPN.Telegram.Commands.Callbacks;
 using NafanyaVPN.Telegram.Commands.Messages;
 using NafanyaVPN.Telegram.Constants;
 using NafanyaVPN.Telegram.DTOs;
@@ -11,6 +12,7 @@ public class MessageCommandHandlerService(
     OutlineKeyCommand outlineKeyCommand,
     InstructionCommand instructionCommand,
     SettingsCommand settingsCommand,
+    RenewSubscriptionCommand renewSubscriptionCommand,
     HelloCommand helloCommand)
     : ICommandHandlerService<MessageDto>
 {
@@ -21,6 +23,7 @@ public class MessageCommandHandlerService(
         { MainKeyboardConstants.GetKey, outlineKeyCommand },
         { MainKeyboardConstants.Instruction, instructionCommand },
         { MainKeyboardConstants.Settings, settingsCommand },
+        { MainKeyboardConstants.RenewSubscription, renewSubscriptionCommand },
         { MainKeyboardConstants.Hello, helloCommand },
     };
 
