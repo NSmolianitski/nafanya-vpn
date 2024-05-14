@@ -72,6 +72,8 @@ public class UserService(
             .WithSubscriptionPlan(defaultSubscriptionPlan)
             .WithHasExpired(true)
             .WithRenewalDisabled(false)
+            .WithEndNotificationsDisabled(false)
+            .WithRenewalNotificationsDisabled(false)
             .Build();
         
         var user = new UserBuilder()

@@ -10,6 +10,7 @@ public class MessageCommandHandlerService(
     SendPaymentSumChooseCommand sendPaymentSumChooseCommand,
     SendOutlineKeyCommand sendOutlineKeyCommand,
     SendInstructionCommand sendInstructionCommand,
+    SendSettingsCommand sendSettingsCommand,
     SendHelloCommand sendHelloCommand)
     : ICommandHandlerService<MessageDto>
 {
@@ -19,6 +20,7 @@ public class MessageCommandHandlerService(
         { MainKeyboardConstants.Donate, sendPaymentSumChooseCommand },
         { MainKeyboardConstants.GetKey, sendOutlineKeyCommand },
         { MainKeyboardConstants.Instruction, sendInstructionCommand },
+        { MainKeyboardConstants.Settings, sendSettingsCommand },
         { MainKeyboardConstants.Hello, sendHelloCommand },
     };
 

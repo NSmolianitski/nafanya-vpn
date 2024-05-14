@@ -92,14 +92,21 @@ public static class AppBuilderExtensions
 
     public static void UseNafanyaVPNCommands(this WebApplicationBuilder appBuilder)
     {
+        appBuilder.Services.AddScoped<SendHelloCommand>();
+        
         appBuilder.Services.AddScoped<SendAccountDataCommand>();
         appBuilder.Services.AddScoped<SendOutlineKeyCommand>();
         appBuilder.Services.AddScoped<SendInstructionCommand>();
-        appBuilder.Services.AddScoped<SendHelloCommand>();
+        
         appBuilder.Services.AddScoped<ConfirmPaymentSumCommand>();
         appBuilder.Services.AddScoped<CustomPaymentSumCommand>();
         appBuilder.Services.AddScoped<ConfirmCustomPaymentSumCommand>();
         appBuilder.Services.AddScoped<BackToPaymentSumCommand>();
+        
+        appBuilder.Services.AddScoped<SendSettingsCommand>();
+        appBuilder.Services.AddScoped<ToggleRenewalCommand>();
+        appBuilder.Services.AddScoped<ToggleRenewalNotificationsCommand>();
+        appBuilder.Services.AddScoped<ToggleSubEndNotificationsCommand>();
 
         appBuilder.Services.AddScoped<SendPaymentSumChooseCommand>();
 

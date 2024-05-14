@@ -14,6 +14,7 @@ public static class ReplyMarkups
         new KeyboardButton[]
         {
             MainKeyboardConstants.Instruction,
+            MainKeyboardConstants.Settings,
             MainKeyboardConstants.GetKey
         }
     })

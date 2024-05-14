@@ -2,9 +2,10 @@
 
 public static class MainKeyboardConstants
 {
-    public const string Account = "Информация об аккаунте";
-    public const string Donate = "Пополнить счёт";
-    public const string GetKey = "Получить ключ";
-    public const string Instruction = "Инструкция";
+    public const string Account = "ℹ\ufe0f Информация об аккаунте";
+    public const string Donate = "\ud83d\udcb3 Пополнить счёт";
+    public const string GetKey = "\ud83d\udd11 Получить ключ";
+    public const string Instruction = "\ud83d\udcc3 Инструкция";
+    public const string Settings = "\u2699\ufe0f Настройки";
     public const string Hello = "Приветствие";
 }

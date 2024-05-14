@@ -15,6 +15,8 @@ public class SubscriptionBuilder
     private SubscriptionPlan _subscriptionPlan;
     private bool _renewalDisabled;
     private bool _hasExpired;
+    private bool _endNotificationsDisabled;
+    private bool _renewalNotificationsDisabled;
     
     public SubscriptionBuilder WithId(int id)
     {
@@ -90,6 +92,18 @@ public class SubscriptionBuilder
         _hasExpired = hasExpired;
         return this;
     }
+    
+    public SubscriptionBuilder WithEndNotificationsDisabled(bool notificationsDisabled)
+    {
+        _endNotificationsDisabled = notificationsDisabled;
+        return this;
+    }
+    
+    public SubscriptionBuilder WithRenewalNotificationsDisabled(bool notificationsDisabled)
+    {
+        _renewalNotificationsDisabled = notificationsDisabled;
+        return this;
+    }
 
     public Subscription Build() => new Subscription(
         _id,
@@ -100,6 +114,8 @@ public class SubscriptionBuilder
         _subscriptionPlanId,
         _subscriptionPlan,
         _renewalDisabled,
-        _hasExpired
+        _hasExpired,
+        _endNotificationsDisabled,
+        _renewalNotificationsDisabled
     );
 }
