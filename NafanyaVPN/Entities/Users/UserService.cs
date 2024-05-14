@@ -79,7 +79,7 @@ public class UserService(
             .WithTelegramChatId(telegramChatId)
             .WithTelegramUserId(telegramUserId)
             .WithTelegramUserName(telegramUserName)
-            .WithMoneyInRoubles(0m)
+            .WithMoneyInRoubles(0.0m)
             .WithSubscription(subscription)
             .WithTelegramState(string.Empty)
             .Build();
