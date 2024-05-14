@@ -30,7 +30,7 @@ public class SendOutlineKeyCommand(
         else
         {
             await replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id,
-                $"Ваш ключ временно отключён из-за недостатка средств. На счёте: {user.MoneyInRoubles} {PaymentConstants.CurrencySymbol}");
+                $"Ваш ключ временно отключён из-за недостатка средств. На счёте: {user.MoneyInRoubles}{PaymentConstants.CurrencySymbol}");
         }
     }
 }

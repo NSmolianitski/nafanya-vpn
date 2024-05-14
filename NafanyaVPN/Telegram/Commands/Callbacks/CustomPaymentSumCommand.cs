@@ -25,7 +25,7 @@ public class CustomPaymentSumCommand(
 
         var currentSum = GetCurrentSum(user.TelegramState, data.Payload);
 
-        var answerText = $"Выбранная сумма: {currentSum} {PaymentConstants.CurrencySymbol}";
+        var answerText = $"Выбранная сумма: {currentSum}{PaymentConstants.CurrencySymbol}";
         if (answerText.Equals(data.Message.Text)) // На случай, если сумма не изменилась (иначе будет Exception)
             return;
         
@@ -76,7 +76,7 @@ public class CustomPaymentSumCommand(
         {
             answerText = $"Сумма должна быть от {PaymentConstants.MinPayment}{PaymentConstants.CurrencySymbol} " +
                          $"до {PaymentConstants.MaxPayment}{PaymentConstants.CurrencySymbol}. " +
-                         $"Текущая сумма: {currentSum} {PaymentConstants.CurrencySymbol}";
+                         $"Текущая сумма: {currentSum}{PaymentConstants.CurrencySymbol}";
         }
     }
 }

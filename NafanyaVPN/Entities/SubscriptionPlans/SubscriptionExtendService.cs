@@ -3,6 +3,8 @@ using NafanyaVPN.Entities.Payments;
 using NafanyaVPN.Entities.Subscriptions;
 using NafanyaVPN.Entities.Users;
 using NafanyaVPN.Entities.Withdraws;
+using NafanyaVPN.Telegram.Abstractions;
+using NafanyaVPN.Telegram.Constants;
 
 namespace NafanyaVPN.Entities.SubscriptionPlans;
 
@@ -11,6 +13,7 @@ public class SubscriptionExtendService(
     ISubscriptionDateTimeService dateTimeService,
     ISubscriptionService subscriptionService,
     IWithdrawService withdrawService,
+    IReplyService replyService,
     ILogger<SubscriptionExtendService> logger)
     : ISubscriptionExtendService
 {
@@ -26,6 +29,15 @@ public class SubscriptionExtendService(
         }
 
         await subscriptionService.UpdateAllAsync(extendedSubscriptions);
+        
+        foreach (var subscription in extendedSubscriptions
+                     .Where(subscription => !subscription.RenewalNotificationsDisabled))
+        {
+            await replyService.SendTextWithMainKeyboardAsync(subscription.User.TelegramUserId,
+                $"Подписка продлена до {subscription.EndDateTime.ToString(TelegramConstants.DateTimeFormat)}. " +
+                $"Списано {subscription.SubscriptionPlan.CostInRoubles}{PaymentConstants.CurrencySymbol}.\n" +
+                $"Ваш баланс: {subscription.User.MoneyInRoubles}{PaymentConstants.CurrencySymbol}");
+        }
     }
 
     private async Task<bool> TryRenewWithoutDbSavingAsync(Subscription subscription)
@@ -34,7 +46,7 @@ public class SubscriptionExtendService(
         if (!subscriptionHasExpired)
             return false;
         
-        if (CanSubscriptionBeRenewedByOwner(subscription))
+        if (!subscription.RenewalDisabled && CanSubscriptionBeRenewedByOwner(subscription))
             await RenewSubscriptionWithoutDbSaveAsync(subscription);
         else
             await StopSubscriptionWithoutDbSaveAsync(subscription);
