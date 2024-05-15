@@ -26,28 +26,33 @@ public class NafanyaVPNContext(
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // Связь User с OutlineKey
         modelBuilder.Entity<User>()
             .HasOne(u => u.OutlineKey)
             .WithOne(o => o.User)
             .HasForeignKey<OutlineKey>(o => o.UserId);
 
+        // Связь User с PaymentMessage
         modelBuilder.Entity<User>()
             .HasOne(u => u.PaymentMessage)
             .WithOne(p => p.User)
             .IsRequired();
 
+        // Связь Subscription с User
         modelBuilder.Entity<Subscription>()
             .HasOne(s => s.User)
             .WithOne(u => u.Subscription)
             .HasForeignKey<Subscription>(s => s.UserId)
             .IsRequired();
-
-        modelBuilder.Entity<SubscriptionPlan>()
-            .HasOne<Subscription>()
-            .WithOne(s => s.SubscriptionPlan)
-            .HasForeignKey<Subscription>(s => s.SubscriptionPlanId)
+        
+        // Связь Subscription с SubscriptionPlan
+        modelBuilder.Entity<Subscription>()
+            .HasOne(s => s.SubscriptionPlan)
+            .WithMany()
+            .HasForeignKey(s => s.SubscriptionPlanId)
             .IsRequired();
 
+        // Настройка конверсии статуса из БД в Enum
         modelBuilder.Entity<Payment>()
             .Property(p => p.Status)
             .HasColumnName("StatusId")
@@ -83,7 +88,7 @@ public class NafanyaVPNContext(
 
         var config = configuration.GetRequiredSection(SubscriptionConstants.Subscription);
         var costInRoubles = decimal.Parse(config[SubscriptionConstants.CostInRoubles]!);
-        var defaultSubscription = new SubscriptionPlan
+        var defaultSubscriptionPlan = new SubscriptionPlan
         {
             Id = 1,
             CreatedAt = nowDateTime,
@@ -91,6 +96,34 @@ public class NafanyaVPNContext(
             Name = DatabaseConstants.Default,
             CostInRoubles = costInRoubles
         };
-        modelBuilder.Entity<SubscriptionPlan>().HasData(defaultSubscription);
+        modelBuilder.Entity<SubscriptionPlan>().HasData(defaultSubscriptionPlan);
+        
+        # if DEBUG
+        {
+            var subscription = new SubscriptionBuilder()
+                .WithId(1)
+                .WithNowCreatedAtUpdatedAt()
+                .WithSubscriptionPlanId(1)
+                .WithHasExpired(true)
+                .WithRenewalDisabled(false)
+                .WithEndNotificationsDisabled(false)
+                .WithRenewalNotificationsDisabled(false)
+                .WithEndNotificationPerformed(false)
+                .Build();
+            subscription.UserId = 1;
+            modelBuilder.Entity<Subscription>().HasData(subscription);
+        
+            var user = new UserBuilder()
+                .WithId(1)
+                .WithNowCreatedAtUpdatedAt()
+                .WithTelegramChatId(1)
+                .WithTelegramUserId(123)
+                .WithTelegramUserName("test-telegram-user")
+                .WithMoneyInRoubles(0.0m)
+                .WithTelegramState(string.Empty)
+                .Build();
+            modelBuilder.Entity<User>().HasData(user);
+        }
+        # endif
     }
 }

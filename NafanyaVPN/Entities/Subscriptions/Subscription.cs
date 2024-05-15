@@ -1,4 +1,5 @@
-﻿using NafanyaVPN.Entities.SubscriptionPlans;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using NafanyaVPN.Entities.SubscriptionPlans;
 using NafanyaVPN.Entities.Users;
 
 namespace NafanyaVPN.Entities.Subscriptions;
@@ -44,6 +45,8 @@ public class Subscription
     public User User { get; set; }
     public DateTime EndDateTime { get; set; }
     public int SubscriptionPlanId { get; set; }
+    
+    [ForeignKey(nameof(SubscriptionPlanId))]
     public SubscriptionPlan SubscriptionPlan { get; set; }
     public bool RenewalDisabled { get; set; }
     public bool HasExpired { get; set; }
