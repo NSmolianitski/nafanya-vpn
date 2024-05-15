@@ -17,7 +17,7 @@ public class SubscriptionRenewModule(
             {
                 using var scope = scopeFactory.CreateScope();
                 var dateTimeService = scope.ServiceProvider.GetRequiredService<ISubscriptionDateTimeService>();
-                var subscriptionExtendService = scope.ServiceProvider.GetRequiredService<ISubscriptionExtendService>();
+                var subscriptionExtendService = scope.ServiceProvider.GetRequiredService<ISubscriptionRenewService>();
 
                 var nextUpdateDelay = dateTimeService.GetDelayBetweenChecks();
                 logger.LogInformation("Следующее обновление подписки: {Datetime}",

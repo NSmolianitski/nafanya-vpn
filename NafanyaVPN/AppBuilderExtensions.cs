@@ -87,7 +87,7 @@ public static class AppBuilderExtensions
         appBuilder.Services.AddScoped<IUserRegistrationService, UserRegistrationService>();
         appBuilder.Services.AddScoped<ISubscriptionPlanService, SubscriptionPlanService>();
         appBuilder.Services.AddScoped<ISubscriptionDateTimeService, SubscriptionDateTimeService>();
-        appBuilder.Services.AddScoped<ISubscriptionExtendService, SubscriptionExtendService>();
+        appBuilder.Services.AddScoped<ISubscriptionRenewService, SubscriptionRenewService>();
     }
 
     public static void UseNafanyaVPNCommands(this WebApplicationBuilder appBuilder)

@@ -30,8 +30,8 @@ public class AccountDataCommand(IReplyService replyService)
             $"<b>Остаток средств:</b> 💰 {user.MoneyInRoubles}{PaymentConstants.CurrencySymbol}\n" +
             $"<b>Состояние подписки:</b> {statusMessage}\n" +
             $"<b>Автопродление подписки:</b> {renewalMessage}\n" +
-            $"<b>Стоимость подписки (за 30 дней):</b> 🔖 {subscription.SubscriptionPlan.CostInRoubles} " +
+            $"<b>Стоимость подписки (за 30 дней):</b> 🎟️ {subscription.SubscriptionPlan.CostInRoubles}" +
             $"{PaymentConstants.CurrencySymbol}\n" +
-            $"<b>Окончание подписки:</b> 📅 {renewalDate}");
+            $"<b>Окончание подписки:</b> 🗓 {renewalDate}");
     }
 }

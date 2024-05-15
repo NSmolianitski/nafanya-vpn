@@ -8,14 +8,14 @@ using NafanyaVPN.Telegram.Constants;
 
 namespace NafanyaVPN.Entities.SubscriptionPlans;
 
-public class SubscriptionExtendService(
+public class SubscriptionRenewService(
     IOutlineService outlineService,
     ISubscriptionDateTimeService dateTimeService,
     ISubscriptionService subscriptionService,
     IWithdrawService withdrawService,
     IReplyService replyService,
-    ILogger<SubscriptionExtendService> logger)
-    : ISubscriptionExtendService
+    ILogger<SubscriptionRenewService> logger)
+    : ISubscriptionRenewService
 {
     public async Task RenewAllNonExpiredAsync()
     {
@@ -24,15 +24,24 @@ public class SubscriptionExtendService(
         foreach (var subscription in nonExpiredSubscriptions)
         {
             var expiredForReal = dateTimeService.HasSubscriptionExpired(subscription);
-            if (expiredForReal)
-                await StopSubscriptionWithoutDbSaveAsync(subscription);
-            
-            if (!expiredForReal || subscription.RenewalDisabled)
+            if (!expiredForReal)
                 continue;
             
-            var subscriptionWasRenewed = await RenewIfEnoughMoneyWithoutDbSavingAsync(subscription);
-            if (subscriptionWasRenewed)
+            await StopSubscriptionWithoutDbSaveAsync(subscription);
+            
+            if (!subscription.RenewalDisabled && IsEnoughMoneyForRenewal(subscription))
+            {
+                await RenewSubscriptionWithoutDbSaveAsync(subscription);
                 extendedSubscriptions.Add(subscription);
+            }
+            else
+            {
+                var stopMessage = subscription.RenewalDisabled
+                    ? "Подписка истекла. Продлите нажатием на кнопку \"Обновить подписку\""
+                    : "Подписка истекла. Пополните счёт.";
+                await replyService.SendTextWithMainKeyboardAsync(subscription.User.TelegramUserId, 
+                    subscription, stopMessage);
+            }
         }
 
         await subscriptionService.UpdateAllAsync(extendedSubscriptions);
@@ -55,15 +64,6 @@ public class SubscriptionExtendService(
             $"Ваш баланс: {subscription.User.MoneyInRoubles}{PaymentConstants.CurrencySymbol}");
     }
 
-    private async Task<bool> RenewIfEnoughMoneyWithoutDbSavingAsync(Subscription subscription)
-    {
-        if (!IsEnoughMoneyForRenewal(subscription)) 
-            return false;
-        
-        await RenewSubscriptionWithoutDbSaveAsync(subscription);
-        return true;
-    }
-    
     private bool IsEnoughMoneyForRenewal(Subscription subscription)
     {
         var subscriptionPrice = subscription.SubscriptionPlan.CostInRoubles;
@@ -97,20 +97,20 @@ public class SubscriptionExtendService(
         
         if (user.OutlineKey.Enabled)
             await outlineService.DisableKeyAsync(user.OutlineKey!.Id);
-            
+        
         LogSubscriptionCancellation(user, subscriptionPrice);
     }
 
-    public async Task TryRenewForUserAsync(User user)
+    public async Task RenewIfEnoughMoneyAsync(User user)
     {
         if (user.OutlineKey is null)
             await outlineService.CreateOutlineKeyForUser(user);
         
         var subscription = user.Subscription;
         
-        var subscriptionExtended = await RenewIfEnoughMoneyWithoutDbSavingAsync(subscription);
-        if (subscriptionExtended)
+        if (IsEnoughMoneyForRenewal(subscription))
         {
+            await RenewSubscriptionWithoutDbSaveAsync(subscription);
             await subscriptionService.UpdateAsync(subscription);
             await SendRenewalNotificationAsync(subscription);
         }

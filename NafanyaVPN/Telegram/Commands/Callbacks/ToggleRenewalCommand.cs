@@ -10,7 +10,7 @@ namespace NafanyaVPN.Telegram.Commands.Callbacks;
 public class ToggleRenewalCommand(
     IUserService userService, 
     ISubscriptionService subscriptionService, 
-    ISubscriptionExtendService subscriptionExtendService, 
+    ISubscriptionRenewService subscriptionRenewService, 
     IReplyService replyService)
     : ICommand<CallbackQueryDto>
 {
@@ -28,6 +28,6 @@ public class ToggleRenewalCommand(
 
         // Обновление подписки в случае, если пользователь включает автопродление и подписка истекла
         if (subscription is { HasExpired: true, RenewalDisabled: false })
-            await subscriptionExtendService.TryRenewForUserAsync(user);
+            await subscriptionRenewService.RenewIfEnoughMoneyAsync(user);
     }
 }

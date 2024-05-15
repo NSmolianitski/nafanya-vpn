@@ -8,7 +8,7 @@ namespace NafanyaVPN.Telegram.Commands.Callbacks;
 public class RenewSubscriptionCommand(
     IUserService userService, 
     IReplyService replyService, 
-    ISubscriptionExtendService subscriptionExtendService) 
+    ISubscriptionRenewService subscriptionRenewService) 
     : ICommand<MessageDto>
 {
     public async Task Execute(MessageDto data)
@@ -18,7 +18,7 @@ public class RenewSubscriptionCommand(
 
         if (subscription.HasExpired)
         {
-            await subscriptionExtendService.TryRenewForUserAsync(user);
+            await subscriptionRenewService.RenewIfEnoughMoneyAsync(user);
         }
         else
         {

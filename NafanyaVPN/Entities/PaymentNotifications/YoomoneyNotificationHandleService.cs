@@ -10,7 +10,7 @@ public class YoomoneyNotificationHandleService(
     IPaymentService paymentService,
     IUserService userService,
     IReplyService replyService,
-    ISubscriptionExtendService subscriptionExtendService,
+    ISubscriptionRenewService subscriptionRenewService,
     ILogger<YoomoneyNotificationHandleService> logger)
     : INotificationHandleService
 {
@@ -29,7 +29,7 @@ public class YoomoneyNotificationHandleService(
                 $"Счёт успешно пополнен на сумму {payment.Sum}{PaymentConstants.CurrencySymbol}!");
             
             if (!user.Subscription.RenewalDisabled)
-                await subscriptionExtendService.TryRenewForUserAsync(user);
+                await subscriptionRenewService.RenewIfEnoughMoneyAsync(user);
         }
         catch (NoSuchEntityException e)
         {
