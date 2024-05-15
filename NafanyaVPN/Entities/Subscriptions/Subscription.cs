@@ -20,7 +20,8 @@ public class Subscription
         bool renewalDisabled,
         bool hasExpired,
         bool endNotificationsDisabled,
-        bool renewalNotificationsDisabled)
+        bool renewalNotificationsDisabled,
+        bool endNotificationPerformed)
     {
         Id = id;
         CreatedAt = createdAt;
@@ -33,6 +34,7 @@ public class Subscription
         HasExpired = hasExpired;
         EndNotificationsDisabled = endNotificationsDisabled;
         RenewalNotificationsDisabled = renewalNotificationsDisabled;
+        EndNotificationPerformed = endNotificationPerformed;
     }
 
     public int Id { get; set; }
@@ -47,4 +49,5 @@ public class Subscription
     public bool HasExpired { get; set; }
     public bool EndNotificationsDisabled { get; set; }
     public bool RenewalNotificationsDisabled { get; set; }
+    public bool EndNotificationPerformed { get; set; }
 }

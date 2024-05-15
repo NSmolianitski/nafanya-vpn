@@ -8,5 +8,5 @@ public static class TelegramConstants
     public const string WebHookRoute = "WebHookRoute";
     public const string WebHookSecret = "WebHookSecret";
     public const string HttpClientName = "telegram_bot_client";
-    public const string DateTimeFormat = "HH:mm dd/MM/yyyy";
+    public const string DateTimeFormat = "HH:mm:ss dd/MM/yyyy";
 }

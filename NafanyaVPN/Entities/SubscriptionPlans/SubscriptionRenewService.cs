@@ -5,25 +5,50 @@ using NafanyaVPN.Entities.Users;
 using NafanyaVPN.Entities.Withdraws;
 using NafanyaVPN.Telegram.Abstractions;
 using NafanyaVPN.Telegram.Constants;
+using NafanyaVPN.Utils;
 
 namespace NafanyaVPN.Entities.SubscriptionPlans;
 
-public class SubscriptionRenewService(
-    IOutlineService outlineService,
-    ISubscriptionDateTimeService dateTimeService,
-    ISubscriptionService subscriptionService,
-    IWithdrawService withdrawService,
-    IReplyService replyService,
-    ILogger<SubscriptionRenewService> logger)
-    : ISubscriptionRenewService
+public class SubscriptionRenewService : ISubscriptionRenewService
 {
+    private readonly IOutlineService _outlineService; 
+    private readonly ISubscriptionDateTimeService _dateTimeService; 
+    private readonly ISubscriptionService _subscriptionService; 
+    private readonly IWithdrawService _withdrawService; 
+    private readonly IReplyService _replyService; 
+    private readonly ILogger<SubscriptionRenewService> _logger;
+    
+    private readonly TimeSpan _timeUntilEndNotification;
+
+    public SubscriptionRenewService(
+        IConfiguration configuration, 
+        IOutlineService outlineService, 
+        ISubscriptionDateTimeService dateTimeService, 
+        ISubscriptionService subscriptionService, 
+        IWithdrawService withdrawService, 
+        IReplyService replyService, 
+        ILogger<SubscriptionRenewService> logger)
+    {
+        _outlineService = outlineService;
+        _dateTimeService = dateTimeService;
+        _subscriptionService = subscriptionService;
+        _withdrawService = withdrawService;
+        _replyService = replyService;
+        _logger = logger;
+        
+        var subscriptionConfig = configuration.GetRequiredSection(SubscriptionConstants.Subscription);
+        _timeUntilEndNotification = TimeSpan.Parse(subscriptionConfig[SubscriptionConstants.DaysBeforeEndNotification]!);
+    }
+
     public async Task RenewAllNonExpiredAsync()
     {
-        var nonExpiredSubscriptions = await subscriptionService.GetAllNonExpiredAsync();
+        var nonExpiredSubscriptions = await _subscriptionService.GetAllNonExpiredAsync();
         var extendedSubscriptions = new List<Subscription>();
         foreach (var subscription in nonExpiredSubscriptions)
         {
-            var expiredForReal = dateTimeService.HasSubscriptionExpired(subscription);
+            await NotifyAboutEndIfNecessaryWithoutDbSaving(subscription);
+            
+            var expiredForReal = _dateTimeService.HasSubscriptionExpired(subscription);
             if (!expiredForReal)
                 continue;
             
@@ -39,12 +64,12 @@ public class SubscriptionRenewService(
                 var stopMessage = subscription.RenewalDisabled
                     ? "Подписка истекла. Продлите нажатием на кнопку \"Обновить подписку\""
                     : "Подписка истекла. Пополните счёт.";
-                await replyService.SendTextWithMainKeyboardAsync(subscription.User.TelegramUserId, 
+                await _replyService.SendTextWithMainKeyboardAsync(subscription.User.TelegramUserId, 
                     subscription, stopMessage);
             }
         }
 
-        await subscriptionService.UpdateAllAsync(extendedSubscriptions);
+        await _subscriptionService.UpdateAllAsync(extendedSubscriptions);
         
         foreach (var subscription in extendedSubscriptions
                      .Where(subscription => !subscription.RenewalNotificationsDisabled))
@@ -53,13 +78,34 @@ public class SubscriptionRenewService(
         }
     }
 
+    private async Task NotifyAboutEndIfNecessaryWithoutDbSaving(Subscription subscription)
+    {
+        if (subscription.EndNotificationsDisabled || 
+            subscription.EndNotificationPerformed || 
+            !IsItTimeForNotification(subscription.EndDateTime))
+        {
+            return;
+        }
+
+        subscription.EndNotificationPerformed = true;
+        await _replyService.SendTextWithMainKeyboardAsync(subscription.User.TelegramUserId, subscription,
+            $"Подписка скоро закончится. " +
+            $"Дата окончания: {DateTimeUtils.GetSubEndString(subscription)}");
+    }
+
+    private bool IsItTimeForNotification(DateTime subscriptionEndDateTime)
+    {
+        var timeUntilEnd = DateTimeUtils.GetTimeUntilDateTime(subscriptionEndDateTime);
+        return timeUntilEnd <= _timeUntilEndNotification;
+    }
+    
     private async Task SendRenewalNotificationAsync(Subscription subscription)
     {
         if (subscription.RenewalNotificationsDisabled)
             return;
         
-        await replyService.SendTextWithMainKeyboardAsync(subscription.User.TelegramUserId, subscription,
-            $"Подписка продлена до {subscription.EndDateTime.ToString(TelegramConstants.DateTimeFormat)}. " +
+        await _replyService.SendTextWithMainKeyboardAsync(subscription.User.TelegramUserId, subscription,
+            $"Подписка продлена до {DateTimeUtils.GetSubEndString(subscription)}. " +
             $"Списано {subscription.SubscriptionPlan.CostInRoubles}{PaymentConstants.CurrencySymbol}.\n" +
             $"Ваш баланс: {subscription.User.MoneyInRoubles}{PaymentConstants.CurrencySymbol}");
     }
@@ -77,13 +123,14 @@ public class SubscriptionRenewService(
         var user = subscription.User;
 
         user.MoneyInRoubles -= subscriptionPrice;
-        subscription.EndDateTime = dateTimeService.GetNewSubscriptionEndDateTime();
+        subscription.EndDateTime = _dateTimeService.GetNewSubscriptionEndDateTime();
         subscription.HasExpired = false;
+        subscription.EndNotificationPerformed = false;
         
-        withdrawService.CreateWithoutSaving(subscription);
+        _withdrawService.CreateWithoutSaving(subscription);
         
         if (!user.OutlineKey.Enabled)
-            await outlineService.EnableKeyAsync(user.OutlineKey!.Id);
+            await _outlineService.EnableKeyAsync(user.OutlineKey!.Id);
             
         LogSubscriptionExtension(user, subscriptionPrice);
     }
@@ -96,7 +143,7 @@ public class SubscriptionRenewService(
         subscription.HasExpired = true;
         
         if (user.OutlineKey.Enabled)
-            await outlineService.DisableKeyAsync(user.OutlineKey!.Id);
+            await _outlineService.DisableKeyAsync(user.OutlineKey!.Id);
         
         LogSubscriptionCancellation(user, subscriptionPrice);
     }
@@ -104,21 +151,21 @@ public class SubscriptionRenewService(
     public async Task RenewIfEnoughMoneyAsync(User user)
     {
         if (user.OutlineKey is null)
-            await outlineService.CreateOutlineKeyForUser(user);
+            await _outlineService.CreateOutlineKeyForUser(user);
         
         var subscription = user.Subscription;
         
         if (IsEnoughMoneyForRenewal(subscription))
         {
             await RenewSubscriptionWithoutDbSaveAsync(subscription);
-            await subscriptionService.UpdateAsync(subscription);
+            await _subscriptionService.UpdateAsync(subscription);
             await SendRenewalNotificationAsync(subscription);
         }
     }
 
     private void LogSubscriptionCancellation(User user, decimal subscriptionPrice)
     {
-        logger.LogInformation("Ключ отключён. " +
+        _logger.LogInformation("Ключ отключён. " +
                               "На счёте {TelegramUserName}({TelegramUserId}) недостаточно средств. " +
                               "Стоимость подписки: {SubscriptionPrice}. Текущий баланс: {MoneyInRoubles}{CurrencySymbol}", 
             user.TelegramUserName,
@@ -130,7 +177,7 @@ public class SubscriptionRenewService(
 
     private void LogSubscriptionExtension(User user, decimal subscriptionPrice)
     {
-        logger.LogInformation("Со счёта {TelegramUserName}({TelegramUserId}) " +
+        _logger.LogInformation("Со счёта {TelegramUserName}({TelegramUserId}) " +
                               "списано {SubscriptionPrice} рублей. Осталось: {MoneyInRoubles}{CurrencySymbol}", 
             user.TelegramUserName, 
             user.TelegramUserId, 

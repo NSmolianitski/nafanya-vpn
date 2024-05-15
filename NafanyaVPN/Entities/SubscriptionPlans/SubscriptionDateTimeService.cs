@@ -12,9 +12,8 @@ public class SubscriptionDateTimeService : ISubscriptionDateTimeService
         ILogger<SubscriptionDateTimeService> logger)
     {
         var config = configuration.GetRequiredSection(SubscriptionConstants.Subscription);
-        _subscriptionLength = TimeSpan.Parse(config[SubscriptionConstants.SubscriptionLength]!);
-        _delayBetweenChecks = TimeSpan
-            .Parse(config[SubscriptionConstants.SubscriptionCheckInterval]!);
+        _subscriptionLength = TimeSpan.Parse(config[SubscriptionConstants.Length]!);
+        _delayBetweenChecks = TimeSpan.Parse(config[SubscriptionConstants.CheckInterval]!);
     }
 
     public bool HasSubscriptionExpired(Subscription subscription)

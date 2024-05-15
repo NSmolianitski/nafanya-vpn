@@ -3,7 +3,9 @@
 public static class SubscriptionConstants
 {
     public const string Subscription = "Subscription";
-    public const string SubscriptionCostInRoubles = "CostInRoubles";
-    public const string SubscriptionLength = "Length";
-    public const string SubscriptionCheckInterval = "CheckInterval";
+    public const string CostInRoubles = "CostInRoubles";
+    public const string Length = "Length";
+    public const string CheckInterval = "CheckInterval";
+    public const string PreEndNotificationTime = "PreEndNotificationTime";
+    public const string DaysBeforeEndNotification = "DaysBeforeEndNotification";
 }

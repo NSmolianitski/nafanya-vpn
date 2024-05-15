@@ -7,8 +7,7 @@ namespace NafanyaVPN.Entities.Users;
 
 public class UserService(
     IUserRepository userRepository,
-    ISubscriptionPlanService subscriptionPlanService,
-    ISubscriptionService subscriptionService
+    ISubscriptionPlanService subscriptionPlanService
 ) : IUserService
 {
     public async Task<User> AddAsync(long telegramChatId, long telegramUserId, string telegramUserName)
@@ -74,6 +73,7 @@ public class UserService(
             .WithRenewalDisabled(false)
             .WithEndNotificationsDisabled(false)
             .WithRenewalNotificationsDisabled(false)
+            .WithEndNotificationPerformed(false)
             .Build();
         
         var user = new UserBuilder()

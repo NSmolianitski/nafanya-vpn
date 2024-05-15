@@ -3,6 +3,7 @@ using NafanyaVPN.Entities.Payments;
 using NafanyaVPN.Telegram.Abstractions;
 using NafanyaVPN.Telegram.Constants;
 using NafanyaVPN.Telegram.DTOs;
+using NafanyaVPN.Utils;
 
 namespace NafanyaVPN.Telegram.Commands.Messages;
 
@@ -24,7 +25,7 @@ public class AccountDataCommand(IReplyService replyService)
         
         var renewalDate = subscription.HasExpired
             ? "-" 
-            : user.Subscription.EndDateTime.ToString(TelegramConstants.DateTimeFormat, CultureInfo.InvariantCulture);
+            : DateTimeUtils.GetSubEndString(subscription);
         
         await replyService.SendTextWithMainKeyboardAsync(data.Message.Chat.Id, user.Subscription, 
             $"<b>Остаток средств:</b> 💰 {user.MoneyInRoubles}{PaymentConstants.CurrencySymbol}\n" +

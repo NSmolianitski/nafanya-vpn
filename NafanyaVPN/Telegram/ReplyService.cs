@@ -38,7 +38,13 @@ public class ReplyService(ITelegramBotClient botClient) : IReplyService
 
     public async Task SendHelloAsync(long chatId, Subscription subscription)
     {
-        await SendTextWithMainKeyboardAsync(chatId, subscription, "Добро пожаловать!");
+        const string text = "<b>Вас приветствует бот Нафаня!</b>\n" +
+                            "При пополнении счёта подписка активируется автоматически. " +
+                            "Если хотите контроллировать этот процесс самостоятельно, то " +
+                            "можете отключить автоматическое продление в настройках.\n\n" +
+                            "Подписка оформляется на <b>30 дней</b> с момента активации, " +
+                            "стоимость составляет <b>30 рублей</b>.";
+        await SendTextWithMainKeyboardAsync(chatId, subscription, text);
     }
 
     public async Task SendChatActionAsync(ChatId chatId, ChatAction chatAction)

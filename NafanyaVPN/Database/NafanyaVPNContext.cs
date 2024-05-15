@@ -82,7 +82,7 @@ public class NafanyaVPNContext(
             );
 
         var config = configuration.GetRequiredSection(SubscriptionConstants.Subscription);
-        var costInRoubles = decimal.Parse(config[SubscriptionConstants.SubscriptionCostInRoubles]!);
+        var costInRoubles = decimal.Parse(config[SubscriptionConstants.CostInRoubles]!);
         var defaultSubscription = new SubscriptionPlan
         {
             Id = 1,
