@@ -8,13 +8,13 @@ using Telegram.Bot.Types.Enums;
 
 namespace NafanyaVPN.Telegram;
 
-public class TelegramUpdatesHandlerServiceService(
+public class TelegramUpdatesHandlerService(
     ICommandHandlerService<MessageDto> messageCommandHandlerService,
     ICommandHandlerService<CallbackQueryDto> callbackQueryCommandHandlerService,
     ITelegramStateService telegramStateService,
     IReplyService replyService,
     IUserRegistrationService userRegistrationService,
-    ILogger<TelegramUpdatesHandlerServiceService> logger)
+    ILogger<TelegramUpdatesHandlerService> logger)
     : ITelegramUpdatesHandlerService
 {
     public async Task HandleUpdateAsync(Update update, CancellationToken cancellationToken)

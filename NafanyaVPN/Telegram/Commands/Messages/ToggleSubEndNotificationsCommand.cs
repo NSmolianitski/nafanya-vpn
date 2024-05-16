@@ -7,21 +7,19 @@ using NafanyaVPN.Telegram.DTOs;
 namespace NafanyaVPN.Telegram.Commands.Callbacks;
 
 public class ToggleSubEndNotificationsCommand(
-    IUserService userService, 
     ISubscriptionService subscriptionService, 
     IReplyService replyService) 
-    : ICommand<CallbackQueryDto>
+    : ICommand<MessageDto>
 {
-    public async Task Execute(CallbackQueryDto data)
+    public async Task Execute(MessageDto data)
     {
-        var user = await userService.GetByTelegramIdAsync(data.User.Id);
-        var subscription = user.Subscription;
+        var subscription = data.User.Subscription;
         subscription.EndNotificationsDisabled = !subscription.EndNotificationsDisabled;
         
         await subscriptionService.UpdateAsync(subscription);
-        var replyMarkup = InlineMarkups.CreateSettingsMarkup(subscription.RenewalDisabled,
+        var replyMarkup = ReplyMarkups.CreateSettingsMarkup(subscription.RenewalDisabled,
             subscription.RenewalNotificationsDisabled, subscription.EndNotificationsDisabled);
         
-        await replyService.EditMessageWithMarkupAsync(data.Message, MainKeyboardConstants.Settings, replyMarkup);
+        await replyService.SendTextWithMarkupAsync(data.Message.Chat.Id, MainKeyboardConstants.Settings, replyMarkup);
     }
 }

@@ -26,41 +26,4 @@ public static partial class InlineMarkups
             InlineKeyboardButton.WithCallbackData("Другая", CallbackConstants.CustomPaymentSum)
         }
     });
-    
-    public static InlineKeyboardMarkup CreateSettingsMarkup(bool isRenewalDisabled, bool areRenewalNotificationsDisabled, 
-        bool areSubscriptionEndNotificationsDisabled)
-    {
-        var renewalMessage = isRenewalDisabled
-            ? "Включить"
-            : "Отключить";
-        
-        var renewalNotificationsMessage = areRenewalNotificationsDisabled
-            ? "Включить"
-            : "Отключить";
-        
-        var subEndNotificationsMessage = areSubscriptionEndNotificationsDisabled
-            ? "Включить"
-            : "Отключить";
-        
-        var settings = new InlineKeyboardMarkup(new []
-        {
-            new InlineKeyboardButton[] 
-            {
-                InlineKeyboardButton.WithCallbackData($"{renewalMessage} обновление подписки",
-                    "settings_toggle_renewal"),
-            },
-            new InlineKeyboardButton[] 
-            {
-                InlineKeyboardButton.WithCallbackData($"{renewalNotificationsMessage} уведомления о продлении подписки",
-                    "settings_toggle_renewal_notifications"),
-            },
-            new InlineKeyboardButton[] 
-            {
-                InlineKeyboardButton.WithCallbackData($"{subEndNotificationsMessage} уведомления о скором окончании подписки",
-                    "settings_toggle_sub_end_notifications"),
-            },
-        });
-        
-        return settings;
-    }
 }

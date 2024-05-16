@@ -12,7 +12,7 @@ public class PaymentNotificationController(
     [Route("payment-notification")]
     public async Task<IActionResult> NotifyAboutPayment([FromForm] YoomoneyPaymentNotification notification)
     {
-        var modelLog = ModelValidationLogBuilderBuilderUtils.GetModelValidationLog(ModelState);
+        var modelLog = ModelValidationLogBuilderUtils.GetModelValidationLog(ModelState);
         
         if (!ModelState.IsValid)
         {

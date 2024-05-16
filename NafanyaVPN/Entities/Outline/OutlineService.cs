@@ -8,12 +8,8 @@ public class OutlineService(
     ILogger<OutlineService> logger)
     : IOutlineService
 {
-    private readonly string _instructionText = File.ReadAllText(configuration
-    [
-        $"{OutlineConstants.SettingsSectionName}:" +
-        $"{OutlineConstants.PathToInstructionFIle}"
-    ]!);
-    
+    private readonly string _instructionText = Resources.Strings.OutlineInstruction;
+
     private readonly OutlineManager.Outline _outline = new(
         configuration
         [

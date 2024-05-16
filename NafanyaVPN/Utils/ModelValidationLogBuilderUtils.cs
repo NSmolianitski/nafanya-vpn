@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace NafanyaVPN.Utils;
 
-public static class ModelValidationLogBuilderBuilderUtils
+public static class ModelValidationLogBuilderUtils
 {
     public static string GetModelValidationLog(ModelStateDictionary modelState)
     {

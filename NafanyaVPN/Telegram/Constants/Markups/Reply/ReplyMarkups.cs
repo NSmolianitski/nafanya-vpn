@@ -57,4 +57,45 @@ public static class ReplyMarkups
             ? MainKeyboardWithRenewMarkup 
             : MainKeyboardMarkup;
     }
+    
+    public static ReplyKeyboardMarkup CreateSettingsMarkup(bool isRenewalDisabled, bool areRenewalNotificationsDisabled, 
+        bool areSubscriptionEndNotificationsDisabled)
+    {
+        var renewalMessage = isRenewalDisabled
+            ? "Включить"
+            : "Отключить";
+        
+        var renewalNotificationsMessage = areRenewalNotificationsDisabled
+            ? "Включить"
+            : "Отключить";
+        
+        var subEndNotificationsMessage = areSubscriptionEndNotificationsDisabled
+            ? "Включить"
+            : "Отключить";
+        
+        var settings = new ReplyKeyboardMarkup(new []
+        {
+            new KeyboardButton[] 
+            {
+                $"{renewalMessage} автоматическое продление подписки"
+            },
+            new KeyboardButton[] 
+            {
+                $"{renewalNotificationsMessage} уведомления о продлении подписки" 
+            },
+            new KeyboardButton[] 
+            {
+                $"{subEndNotificationsMessage} уведомления о скором окончании подписки"
+            },
+            new KeyboardButton[] 
+            {
+                $"{MainKeyboardConstants.BackToMainMenu}"
+            },
+        })
+        {
+            ResizeKeyboard = true
+        };
+        
+        return settings;
+    }
 }

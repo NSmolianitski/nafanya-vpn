@@ -14,7 +14,7 @@ public class SettingsCommand(
     public async Task Execute(MessageDto data)
     {
         var subscription = data.User.Subscription;
-        var replyMarkup = InlineMarkups.CreateSettingsMarkup(
+        var replyMarkup = ReplyMarkups.CreateSettingsMarkup(
             subscription.RenewalDisabled, 
             subscription.RenewalNotificationsDisabled, 
             subscription.EndNotificationsDisabled);

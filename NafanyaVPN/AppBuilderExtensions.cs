@@ -69,48 +69,51 @@ public static class AppBuilderExtensions
     
     public static void UseNafanyaVPNServices(this WebApplicationBuilder appBuilder)
     {
+        // Основные сервисы
         appBuilder.Services.AddScoped<IUserService, UserService>();
+        appBuilder.Services.AddScoped<IUserRegistrationService, UserRegistrationService>();
         appBuilder.Services.AddScoped<IPaymentService, YoomoneyPaymentService>();
         appBuilder.Services.AddScoped<IOutlineKeyService, OutlineKeyService>();
         appBuilder.Services.AddScoped<IWithdrawService, WithdrawService>();
         appBuilder.Services.AddScoped<INotificationHandleService, YoomoneyNotificationHandleService>();
         appBuilder.Services.AddScoped<IPaymentMessageService, PaymentMessageService>();
         appBuilder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
-
-        appBuilder.Services.AddScoped<ITelegramUpdatesHandlerService, TelegramUpdatesHandlerServiceService>();
-        appBuilder.Services.AddScoped<ICommandHandlerService<MessageDto>, MessageCommandHandlerService>();
-        appBuilder.Services.AddScoped<ICommandHandlerService<CallbackQueryDto>, CallbackCommandHandlerService>();
-
-        appBuilder.Services.AddScoped<IReplyService, ReplyService>();
         appBuilder.Services.AddScoped<IOutlineService, OutlineService>();
+        appBuilder.Services.AddScoped<IReplyService, ReplyService>();
         appBuilder.Services.AddScoped<ITelegramStateService, TelegramStateService>();
-        appBuilder.Services.AddScoped<IUserRegistrationService, UserRegistrationService>();
         appBuilder.Services.AddScoped<ISubscriptionPlanService, SubscriptionPlanService>();
         appBuilder.Services.AddScoped<ISubscriptionDateTimeService, SubscriptionDateTimeService>();
         appBuilder.Services.AddScoped<ISubscriptionRenewService, SubscriptionRenewService>();
+
+        // Обработка команд Telegram
+        appBuilder.Services.AddScoped<ITelegramUpdatesHandlerService, TelegramUpdatesHandlerService>();
+        appBuilder.Services.AddScoped<ICommandHandlerService<MessageDto>, MessageCommandHandlerService>();
+        appBuilder.Services.AddScoped<ICommandHandlerService<CallbackQueryDto>, CallbackCommandHandlerService>();
     }
 
     public static void UseNafanyaVPNCommands(this WebApplicationBuilder appBuilder)
     {
+        // Основное меню
         appBuilder.Services.AddScoped<HelloCommand>();
-        
         appBuilder.Services.AddScoped<AccountDataCommand>();
         appBuilder.Services.AddScoped<OutlineKeyCommand>();
         appBuilder.Services.AddScoped<InstructionCommand>();
+        appBuilder.Services.AddScoped<SettingsCommand>();
         appBuilder.Services.AddScoped<RenewSubscriptionCommand>();
+        // Меню настроек
+        appBuilder.Services.AddScoped<ToggleRenewalCommand>();
+        appBuilder.Services.AddScoped<ToggleRenewalNotificationsCommand>();
+        appBuilder.Services.AddScoped<ToggleSubEndNotificationsCommand>();
+        appBuilder.Services.AddScoped<BackToMainMenuCommand>();
         
+        // Меню оплаты
         appBuilder.Services.AddScoped<ConfirmPaymentSumCommand>();
         appBuilder.Services.AddScoped<CustomPaymentSumCommand>();
         appBuilder.Services.AddScoped<ConfirmCustomPaymentSumCommand>();
         appBuilder.Services.AddScoped<BackToPaymentSumCommand>();
-        
-        appBuilder.Services.AddScoped<SettingsCommand>();
-        appBuilder.Services.AddScoped<ToggleRenewalCommand>();
-        appBuilder.Services.AddScoped<ToggleRenewalNotificationsCommand>();
-        appBuilder.Services.AddScoped<ToggleSubEndNotificationsCommand>();
 
+        // Текстовый ввод суммы (отключён)
         appBuilder.Services.AddScoped<PaymentSumChooseCommand>();
-
         appBuilder.Services.AddScoped<CheckCustomPaymentSumCommand>();
     }
 }

@@ -98,32 +98,30 @@ public class NafanyaVPNContext(
         };
         modelBuilder.Entity<SubscriptionPlan>().HasData(defaultSubscriptionPlan);
         
-        # if DEBUG
-        {
-            var subscription = new SubscriptionBuilder()
-                .WithId(1)
-                .WithNowCreatedAtUpdatedAt()
-                .WithSubscriptionPlanId(1)
-                .WithHasExpired(true)
-                .WithRenewalDisabled(false)
-                .WithEndNotificationsDisabled(false)
-                .WithRenewalNotificationsDisabled(false)
-                .WithEndNotificationPerformed(false)
-                .Build();
-            subscription.UserId = 1;
-            modelBuilder.Entity<Subscription>().HasData(subscription);
-        
-            var user = new UserBuilder()
-                .WithId(1)
-                .WithNowCreatedAtUpdatedAt()
-                .WithTelegramChatId(1)
-                .WithTelegramUserId(123)
-                .WithTelegramUserName("test-telegram-user")
-                .WithMoneyInRoubles(0.0m)
-                .WithTelegramState(string.Empty)
-                .Build();
-            modelBuilder.Entity<User>().HasData(user);
-        }
-        # endif
+#if DEBUG
+        var subscription = new SubscriptionBuilder()
+            .WithId(1)
+            .WithNowCreatedAtUpdatedAt()
+            .WithSubscriptionPlanId(1)
+            .WithHasExpired(true)
+            .WithRenewalDisabled(false)
+            .WithEndNotificationsDisabled(false)
+            .WithRenewalNotificationsDisabled(false)
+            .WithEndNotificationPerformed(false)
+            .Build();
+        subscription.UserId = 1;
+        modelBuilder.Entity<Subscription>().HasData(subscription);
+    
+        var user = new UserBuilder()
+            .WithId(1)
+            .WithNowCreatedAtUpdatedAt()
+            .WithTelegramChatId(1)
+            .WithTelegramUserId(123)
+            .WithTelegramUserName("test-telegram-user")
+            .WithMoneyInRoubles(0.0m)
+            .WithTelegramState(string.Empty)
+            .Build();
+        modelBuilder.Entity<User>().HasData(user);
+# endif
     }
 }

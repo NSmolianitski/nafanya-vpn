@@ -1,6 +1,5 @@
 ﻿using NafanyaVPN.Entities.SubscriptionPlans;
 using NafanyaVPN.Entities.Subscriptions;
-using NafanyaVPN.Entities.Users;
 using NafanyaVPN.Telegram.Abstractions;
 using NafanyaVPN.Telegram.Constants;
 using NafanyaVPN.Telegram.DTOs;
@@ -8,23 +7,22 @@ using NafanyaVPN.Telegram.DTOs;
 namespace NafanyaVPN.Telegram.Commands.Callbacks;
 
 public class ToggleRenewalCommand(
-    IUserService userService, 
     ISubscriptionService subscriptionService, 
     ISubscriptionRenewService subscriptionRenewService, 
     IReplyService replyService)
-    : ICommand<CallbackQueryDto>
+    : ICommand<MessageDto>
 {
-    public async Task Execute(CallbackQueryDto data)
+    public async Task Execute(MessageDto data)
     {
-        var user = await userService.GetByTelegramIdAsync(data.User.Id);
+        var user = data.User;
         var subscription = user.Subscription;
         subscription.RenewalDisabled = !subscription.RenewalDisabled;
         
         await subscriptionService.UpdateAsync(subscription);
-        var replyMarkup = InlineMarkups.CreateSettingsMarkup(subscription.RenewalDisabled,
+        var replyMarkup = ReplyMarkups.CreateSettingsMarkup(subscription.RenewalDisabled,
             subscription.RenewalNotificationsDisabled, subscription.EndNotificationsDisabled);
         
-        await replyService.EditMessageWithMarkupAsync(data.Message, MainKeyboardConstants.Settings, replyMarkup);
+        await replyService.SendTextWithMarkupAsync(data.Message.Chat.Id, MainKeyboardConstants.Settings, replyMarkup);
 
         // Обновление подписки в случае, если пользователь включает автопродление и подписка истекла
         if (subscription is { HasExpired: true, RenewalDisabled: false })

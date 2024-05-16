@@ -10,10 +10,7 @@ public class CallbackCommandHandlerService(
     ConfirmPaymentSumCommand confirmPaymentSumCommand,
     CustomPaymentSumCommand customPaymentSumCommand,
     ConfirmCustomPaymentSumCommand confirmCustomPaymentSumCommand,
-    BackToPaymentSumCommand backToPaymentSumCommand,
-    ToggleRenewalCommand toggleRenewalCommand,
-    ToggleRenewalNotificationsCommand toggleRenewalNotificationsCommand,
-    ToggleSubEndNotificationsCommand toggleSubEndNotificationsCommand)
+    BackToPaymentSumCommand backToPaymentSumCommand)
     : ICommandHandlerService<CallbackQueryDto>
 {
     private readonly Dictionary<string, ICommand<CallbackQueryDto>> _commands = new()
@@ -22,9 +19,6 @@ public class CallbackCommandHandlerService(
         { CallbackConstants.CustomPaymentSum, customPaymentSumCommand },
         { CallbackConstants.ConfirmCustomPaymentSum, confirmCustomPaymentSumCommand },
         { CallbackConstants.BackToPaymentSum, backToPaymentSumCommand },
-        { CallbackConstants.ToggleRenewal, toggleRenewalCommand },
-        { CallbackConstants.ToggleRenewalNotifications, toggleRenewalNotificationsCommand },
-        { CallbackConstants.ToggleSubEndNotifications, toggleSubEndNotificationsCommand }
     };
 
     public async Task HandleCommand(CallbackQueryDto data)
