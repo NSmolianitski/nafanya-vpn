@@ -1,0 +1,29 @@
+name: CI
+
+on: 
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
+
+env:
+  REGISTRY_IMAGE_NAME: ${{ vars.DOCKER_REGISTRY }}/${{ vars.DOCKER_IMAGE_NAME }}:latest
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Login registry
+        run: docker login ${{ vars.DOCKER_REGISTRY }} -u ${{ secrets.DOCKER_REGISTRY_USERNAME }} -p ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
+    
+      - name: Checkout
+        uses: actions/checkout@v4.1.2
+    
+      - name: Build image
+        run: docker build -t $REGISTRY_IMAGE_NAME .
+
+      - name: Push image to registry
+        run: docker push $REGISTRY_IMAGE_NAME
