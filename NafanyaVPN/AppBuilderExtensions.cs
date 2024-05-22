@@ -28,7 +28,7 @@ public static class AppBuilderExtensions
     public static void UseNafanyaVPNConfiguration(this WebApplicationBuilder appBuilder)
     {
         string settingsFilePath;
-        if (appBuilder.Environment.IsProduction())
+        if (appBuilder.Environment.IsDevelopment())
             settingsFilePath = AppSettingsPathConstants.Development;
         else if (appBuilder.Environment.IsStaging())
             settingsFilePath = AppSettingsPathConstants.Staging;
