@@ -19,6 +19,7 @@ using NafanyaVPN.Telegram.Constants;
 using NafanyaVPN.Telegram.DTOs;
 using Serilog;
 using Telegram.Bot;
+using TelegramSink;
 
 namespace NafanyaVPN;
 
@@ -35,8 +36,13 @@ public static class AppBuilderExtensions
     public static void UseNafanyaVPNLogging(this WebApplicationBuilder appBuilder)
     {
         appBuilder.Logging.ClearProviders();
+        var configuration = appBuilder.Configuration;
+        var telegramSection = configuration.GetRequiredSection(TelegramConstants.SettingsSectionName);
         var loggerConfiguration = new LoggerConfiguration()
-            .ReadFrom.Configuration(appBuilder.Configuration)
+            .ReadFrom.Configuration(configuration)
+            .WriteTo.TeleSink(
+                telegramSection[TelegramConstants.LogBotToken], 
+                telegramSection[TelegramConstants.LogBotChatId])
             .WriteTo.SQLite(appBuilder.Environment.ContentRootPath + @"\Logs\logs.db");
         
         appBuilder.Logging.AddSerilog(loggerConfiguration.CreateLogger());
