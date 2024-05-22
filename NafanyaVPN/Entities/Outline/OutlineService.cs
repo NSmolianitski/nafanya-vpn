@@ -20,52 +20,65 @@ public class OutlineService(
 
     public async Task CreateOutlineKeyForUser(User user)
     {
-        var keyAccessUrl = CreateNewKeyInOutlineManager(user.TelegramUserName, user.TelegramUserId);
+        var realOutlineKey = CreateNewKeyInOutlineManager(user.TelegramUserName, user.TelegramUserId);
 
         user.OutlineKey = await outlineKeyService.CreateAsync(
             new OutlineKey
             {
-                User = user, AccessUrl = keyAccessUrl
+                OutlineId = realOutlineKey.Id,
+                User = user, 
+                AccessUrl = realOutlineKey.AccessUrl
             });
     }
 
-    private string CreateNewKeyInOutlineManager(string userName, long userId)
+    private OutlineManager.Types.OutlineKey CreateNewKeyInOutlineManager(string userName, long userId)
     {
         var key = _outline.CreateKey();
 
         if (!_outline.RenameKey(key.Id, $"{userName} ({userId})"))
+        {
             logger.LogError("Ключ Outline не был переименован. " +
                             "Username: {Username} UserId: {UserId}", userName, userId);
+        }
 
-        return key.AccessUrl;
+        return key;
     }
 
     public string GetKeyByIdFromOutlineManager(int keyId)
     {
-        var key = _outline.GetKeyById(keyId);
-        return key.AccessUrl;
+        var realOutlineKey = _outline.GetKeyById(keyId);
+        return realOutlineKey.AccessUrl;
     }
 
-    public async Task EnableKeyAsync(int keyId)
+    public async Task EnableKeyAsync(OutlineKey key)
     {
-        await outlineKeyService.EnableKeyAsync(keyId);
+        await outlineKeyService.EnableKeyAsync(key.Id);
 
-        if (!_outline.DeleteDataLimit(keyId))
-            logger.LogError("Не удалось убрать лимит у ключа: {KeyId}", keyId);
+        if (!_outline.DeleteDataLimit(key.OutlineId))
+        {
+            logger.LogError("Не удалось убрать лимит у ключа " +
+                            "с ID (из БД, не из OutlineManager!): {KeyId}", key.Id);
+        }
     }
 
-    public async Task DisableKeyAsync(int keyId)
+    public async Task DisableKeyAsync(OutlineKey key)
     {
-        await outlineKeyService.DisableKeyAsync(keyId);
-        
-        if (!_outline.AddDataLimit(keyId, 0))
-            logger.LogError("Не удалось добавить лимит ключу: {KeyId}", keyId);
+        await outlineKeyService.DisableKeyAsync(key.Id);
+
+        if (!_outline.AddDataLimit(key.OutlineId, 0))
+        {
+            logger.LogError("Не удалось добавить лимит ключу " +
+                            "c ID (из БД, не из OutlineManager!): {KeyId}", key.Id);
+        }
     }
 
-    public void DeleteKeyFromOutlineManager(int keyId)
+    public void DeleteKeyFromOutlineManager(OutlineKey key)
     {
-        if (!_outline.DeleteKey(keyId))
-            logger.LogError("Не удалось удалить ключ: {KeyId}", keyId);
+        if (!_outline.DeleteKey(key.OutlineId))
+        {
+            logger.LogError("Не удалось удалить ключ " +
+                            "c ID (из БД, не из OutlineManager!): {KeyId}", key.Id);
+        }
     }
 
     public string GetInstruction() => _instructionText;

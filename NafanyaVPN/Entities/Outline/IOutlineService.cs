@@ -6,8 +6,8 @@ public interface IOutlineService
 {
     Task CreateOutlineKeyForUser(User user);
     string GetKeyByIdFromOutlineManager(int keyId);
-    Task EnableKeyAsync(int keyId);
-    Task DisableKeyAsync(int keyId);
-    void DeleteKeyFromOutlineManager(int keyId);
+    Task EnableKeyAsync(OutlineKey key);
+    Task DisableKeyAsync(OutlineKey key);
+    void DeleteKeyFromOutlineManager(OutlineKey key);
     string GetInstruction();
 }

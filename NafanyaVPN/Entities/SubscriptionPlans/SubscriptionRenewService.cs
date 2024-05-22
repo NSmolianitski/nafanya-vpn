@@ -129,8 +129,8 @@ public class SubscriptionRenewService : ISubscriptionRenewService
         
         _withdrawService.CreateWithoutSaving(subscription);
         
-        if (!user.OutlineKey.Enabled)
-            await _outlineService.EnableKeyAsync(user.OutlineKey!.Id);
+        if (!user.OutlineKey!.Enabled)
+            await _outlineService.EnableKeyAsync(user.OutlineKey);
             
         LogSubscriptionExtension(user, subscriptionPrice);
     }
@@ -142,8 +142,8 @@ public class SubscriptionRenewService : ISubscriptionRenewService
 
         subscription.HasExpired = true;
         
-        if (user.OutlineKey.Enabled)
-            await _outlineService.DisableKeyAsync(user.OutlineKey!.Id);
+        if (user.OutlineKey!.Enabled)
+            await _outlineService.DisableKeyAsync(user.OutlineKey);
         
         LogSubscriptionCancellation(user, subscriptionPrice);
     }
