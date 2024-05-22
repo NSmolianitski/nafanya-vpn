@@ -34,7 +34,7 @@ var app = appBuilder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<NafanyaVPNContext>();
-    context.Database.EnsureDeleted();
+    // context.Database.EnsureDeleted();
     context.Database.EnsureCreated();
 }
 

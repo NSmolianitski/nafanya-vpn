@@ -7,8 +7,8 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["NafanyaVPN/NafanyaVPN.csproj", "NafanyaVPN/"]
-RUN dotnet restore "NafanyaVPN/NafanyaVPN.csproj"
+COPY ["NafanyaVPN.csproj", "NafanyaVPN.csproj"]
+RUN dotnet restore "NafanyaVPN.csproj"
 COPY . .
 WORKDIR "/src/NafanyaVPN"
 RUN dotnet build "NafanyaVPN.csproj" -c $BUILD_CONFIGURATION -o /app/build
