@@ -88,9 +88,24 @@ public class SubscriptionRenewService : ISubscriptionRenewService
         }
 
         subscription.EndNotificationPerformed = true;
-        await _replyService.SendTextWithMainKeyboardAsync(subscription.User.TelegramUserId, subscription,
-            $"Подписка скоро закончится. " +
-            $"Дата окончания: {DateTimeUtils.GetSubEndString(subscription)}");
+        
+        var user = subscription.User;
+        var subscriptionPrice = subscription.SubscriptionPlan.CostInRoubles;
+
+        string renewMessage;
+        if (subscription.RenewalDisabled)
+            renewMessage = ". Автоматическое продление отключено в настройках.";
+        else if (subscriptionPrice > user.MoneyInRoubles)
+            renewMessage = ". Для продления необходимо пополнить счёт.";
+        else
+            renewMessage = ", но будет продлена автоматически.";
+
+        await _replyService.SendTextWithMainKeyboardAsync(user.TelegramUserId, subscription,
+            $"Подписка скоро закончится{renewMessage}\n" +
+            $"Дата окончания: {DateTimeUtils.GetSubEndString(subscription)}\n" +
+            $"Стоимость продления: {subscriptionPrice}{PaymentConstants.CurrencySymbol}\n" +
+            $"Баланс: {user.MoneyInRoubles}{PaymentConstants.CurrencySymbol}"
+        );
     }
 
     private bool IsItTimeForNotification(DateTime subscriptionEndDateTime)
