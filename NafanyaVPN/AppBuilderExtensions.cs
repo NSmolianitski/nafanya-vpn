@@ -50,7 +50,7 @@ public static class AppBuilderExtensions
             .WriteTo.TeleSink(
                 telegramSection[TelegramConstants.LogBotToken], 
                 telegramSection[TelegramConstants.LogBotChatId])
-            .WriteTo.SQLite("/app/logs.db");
+            .WriteTo.SQLite("logs.db");
         
         appBuilder.Logging.AddSerilog(loggerConfiguration.CreateLogger());
     }

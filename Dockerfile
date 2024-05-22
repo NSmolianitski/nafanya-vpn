@@ -19,6 +19,5 @@ RUN dotnet publish "NafanyaVPN.csproj" -c $BUILD_CONFIGURATION -o /app/publish /
 
 FROM base AS final
 WORKDIR /app
-RUN mkdir data
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "NafanyaVPN.dll"]
