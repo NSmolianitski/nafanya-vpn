@@ -27,9 +27,16 @@ public static class AppBuilderExtensions
 {
     public static void UseNafanyaVPNConfiguration(this WebApplicationBuilder appBuilder)
     {
-        var settingsFilePath = appBuilder.Environment.IsDevelopment()
-            ? AppSettingsPathConstants.Development
-            : AppSettingsPathConstants.Production;
+        string settingsFilePath;
+        if (appBuilder.Environment.IsProduction())
+            settingsFilePath = AppSettingsPathConstants.Development;
+        else if (appBuilder.Environment.IsStaging())
+            settingsFilePath = AppSettingsPathConstants.Staging;
+        else if (appBuilder.Environment.IsProduction())
+            settingsFilePath = AppSettingsPathConstants.Production;
+        else
+            throw new NotSupportedException("Not supported environment: " + appBuilder.Environment.EnvironmentName);
+        
         appBuilder.Configuration.AddJsonFile(settingsFilePath);
     }
     
