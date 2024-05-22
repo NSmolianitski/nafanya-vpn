@@ -33,6 +33,7 @@ bin/
 obj/
 TestResults/
 Logs/
+data/
 
 ###################
 # Web publish log #
