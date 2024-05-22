@@ -7,7 +7,7 @@ public static class MainKeyboardConstants
     public const string GetKey = "\ud83d\udd11 Получить ключ";
     public const string Instruction = "\ud83d\udcc3 Инструкция";
     public const string Settings = "\u2699\ufe0f Настройки";
-    public const string RenewSubscription = "🔄 Обновить подписку";
+    public const string RenewSubscription = "🔄 Продлить подписку";
     public const string Hello = "Приветствие";
     
     public const string EnableRenewal = "Включить автоматическое продление подписки";

@@ -62,7 +62,7 @@ public class SubscriptionRenewService : ISubscriptionRenewService
             else
             {
                 var stopMessage = subscription.RenewalDisabled
-                    ? "Подписка истекла. Продлите нажатием на кнопку \"Обновить подписку\""
+                    ? "Подписка истекла. Продлите нажатием на кнопку \"Продлить подписку\""
                     : "Подписка истекла. Пополните счёт.";
                 await _replyService.SendTextWithMainKeyboardAsync(subscription.User.TelegramUserId, 
                     subscription, stopMessage);
