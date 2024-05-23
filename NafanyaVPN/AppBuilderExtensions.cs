@@ -45,12 +45,14 @@ public static class AppBuilderExtensions
         appBuilder.Logging.ClearProviders();
         var configuration = appBuilder.Configuration;
         var telegramSection = configuration.GetRequiredSection(TelegramConstants.SettingsSectionName);
+        var dbSection = configuration.GetRequiredSection(DatabaseConstants.SettingsSectionName);
+        
         var loggerConfiguration = new LoggerConfiguration()
             .ReadFrom.Configuration(configuration)
             .WriteTo.TeleSink(
                 telegramSection[TelegramConstants.LogBotToken], 
                 telegramSection[TelegramConstants.LogBotChatId])
-            .WriteTo.SQLite("logs.db");
+            .WriteTo.SQLite(dbSection[DatabaseConstants.LogsPath]);
         
         appBuilder.Logging.AddSerilog(loggerConfiguration.CreateLogger());
     }
@@ -65,7 +67,8 @@ public static class AppBuilderExtensions
 
     public static void UseNafanyaVPNDatabase(this WebApplicationBuilder appBuilder)
     {
-        var connectionString = appBuilder.Configuration.GetConnectionString(DatabaseConstants.Default);
+        var section = appBuilder.Configuration.GetRequiredSection(DatabaseConstants.SettingsSectionName);
+        var connectionString = section[DatabaseConstants.MainDbConnectionString];
         appBuilder.Services.AddDbContext<NafanyaVPNContext>(options => options.UseSqlite(connectionString));
     }
     
