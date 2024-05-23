@@ -47,14 +47,14 @@ public static class AppBuilderExtensions
         var telegramSection = configuration.GetRequiredSection(TelegramConstants.SettingsSectionName);
         var dbSection = configuration.GetRequiredSection(DatabaseConstants.SettingsSectionName);
 
-        Console.WriteLine("[!DEBUG!] PATH TO LOGS: " + dbSection[DatabaseConstants.LogsPath]);
+        Console.WriteLine("[!DEBUG!] PATH TO LOGS: " + appBuilder.Environment.ContentRootPath + dbSection[DatabaseConstants.LogsPath]);
         
         var loggerConfiguration = new LoggerConfiguration()
             .ReadFrom.Configuration(configuration)
             .WriteTo.TeleSink(
                 telegramSection[TelegramConstants.LogBotToken], 
                 telegramSection[TelegramConstants.LogBotChatId])
-            .WriteTo.SQLite(dbSection[DatabaseConstants.LogsPath]);
+            .WriteTo.SQLite(appBuilder.Environment.ContentRootPath + dbSection[DatabaseConstants.LogsPath]);
         
         appBuilder.Logging.AddSerilog(loggerConfiguration.CreateLogger());
     }
