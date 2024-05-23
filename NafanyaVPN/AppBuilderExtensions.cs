@@ -47,8 +47,6 @@ public static class AppBuilderExtensions
         var telegramSection = configuration.GetRequiredSection(TelegramConstants.SettingsSectionName);
         var dbSection = configuration.GetRequiredSection(DatabaseConstants.SettingsSectionName);
 
-        Console.WriteLine("[!DEBUG!] PATH TO LOGS: " + appBuilder.Environment.ContentRootPath + dbSection[DatabaseConstants.LogsPath]);
-        
         var loggerConfiguration = new LoggerConfiguration()
             .ReadFrom.Configuration(configuration)
             .WriteTo.TeleSink(
