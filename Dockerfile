@@ -1,6 +1,9 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER root
+RUN groupadd -g 1000 appgroup && \
+    useradd -r -u 1000 -g appgroup appuser
 WORKDIR /app
+RUN chown -R appuser:appgroup /app/data
+USER appuser
 EXPOSE 8080
 EXPOSE 8081
 
