@@ -2,6 +2,7 @@
 RUN groupadd -g 1000 appgroup && \
     useradd -r -u 1000 -g appgroup appuser
 WORKDIR /app
+RUN mkdir data
 RUN chown -R appuser:appgroup /app/data
 USER appuser
 EXPOSE 8080
