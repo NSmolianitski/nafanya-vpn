@@ -1,7 +1,6 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER root
 WORKDIR /app
-RUN chown -R appuser:appgroup /app
 EXPOSE 8080
 EXPOSE 8081
 
