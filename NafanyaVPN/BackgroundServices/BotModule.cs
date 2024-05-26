@@ -20,7 +20,7 @@ public class BotModule(
         var route = telegramConfig[TelegramConstants.WebHookRoute]!;
         var secret = telegramConfig[TelegramConstants.WebHookSecret]!;
         
-        logger.LogCritical("{BotName} запущен.", "Нафаня VPN");
+        logger.LogInformation("{BotName} запущен.", "Нафаня VPN");
 
         await botClient.SetWebhookAsync(
             url: $"{host}{route}",
@@ -39,7 +39,7 @@ public class BotModule(
         using var scope = scopeFactory.CreateScope();
         var botClient = scope.ServiceProvider.GetRequiredService<ITelegramBotClient>();
         
-        logger.LogCritical("{BotName} остановлен.", "Нафаня VPN");
+        logger.LogInformation("{BotName} остановлен.", "Нафаня VPN");
         await botClient.DeleteWebhookAsync(cancellationToken: cancellationToken);
     }
 }
