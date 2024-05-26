@@ -5,14 +5,14 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "https://localhost:7160;http://localhost:5219"
+      "applicationUrl": "https://localhost:8081;http://localhost:8080"
     },
     "Staging": {
       "commandName": "Project",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Staging"
       },
-      "applicationUrl": "https://localhost:7160;http://localhost:5219"
+      "applicationUrl": "https://localhost:8081;http://localhost:8080"
     },
     "Production": {
       "commandName": "Project",

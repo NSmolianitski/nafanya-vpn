@@ -24,7 +24,7 @@ public static class DebugUtils
             {"label", $"{quickpay.Label}"}
         };
         var content = new FormUrlEncodedContent(notificationValues);
-        var response = await client.PostAsync($"http://localhost:5219/api/v1/payment-notification", content);
+        var response = await client.PostAsync("http://localhost:8080/api/v1/payment-notification", content);
 
         if (response.IsSuccessStatusCode)
         {
