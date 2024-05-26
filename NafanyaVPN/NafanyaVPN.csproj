@@ -47,6 +47,10 @@
       </Compile>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="data\" />
+    </ItemGroup>
+
     <PropertyGroup>
         <ServerGarbageCollection>true</ServerGarbageCollection>
     </PropertyGroup>
