@@ -37,7 +37,8 @@ public static class AppBuilderExtensions
         else
             throw new NotSupportedException("Not supported environment: " + appBuilder.Environment.EnvironmentName);
         
-        appBuilder.Configuration.AddJsonFile(settingsFilePath);
+        appBuilder.Configuration.AddJsonFile(settingsFilePath, false);
+        appBuilder.Configuration.Bind(new LaunchOptions());
     }
     
     public static void UseNafanyaVPNLogging(this WebApplicationBuilder appBuilder)

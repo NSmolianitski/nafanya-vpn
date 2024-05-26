@@ -1,4 +1,5 @@
-﻿using NafanyaVPN.Entities.PaymentMessages;
+﻿using Microsoft.Extensions.Options;
+using NafanyaVPN.Entities.PaymentMessages;
 using NafanyaVPN.Entities.Payments;
 using NafanyaVPN.Entities.Users;
 using NafanyaVPN.Telegram.Abstractions;
@@ -13,6 +14,7 @@ public class ConfirmPaymentSumCommand(
     IPaymentService paymentService,
     IUserService userService,
     IPaymentMessageService paymentMessageService,
+    IOptions<LaunchOptions> launchOptions,
     ILogger<PaymentSumChooseCommand> logger)
     : ICommand<CallbackQueryDto>
 {
@@ -29,8 +31,7 @@ public class ConfirmPaymentSumCommand(
         await replyService.EditMessageAsync(data.Message,
             $"Совершите оплату по ссылке: {quickpay.LinkPayment}");
 
-#if DEBUG
-        await DebugUtils.SendPaymentSuccessNotification(quickpay);
-#endif
+        if (launchOptions.Value.AddMoneyOnPaymentCreation)
+            await DebugUtils.SendPaymentSuccessNotification(quickpay);
     }
 }
