@@ -8,6 +8,13 @@ namespace NafanyaVPN.Telegram;
 [ApiController]
 public class BotController(ITelegramUpdatesHandlerService telegramUpdatesHandlerService) : ControllerBase
 {
+    [HttpGet]
+    [Route("test")]
+    public async Task<string> Test()
+    {
+        return "Ok";
+    }
+    
     [HttpPost]
     public async Task Post(Update update, CancellationToken cancellationToken)
     {
