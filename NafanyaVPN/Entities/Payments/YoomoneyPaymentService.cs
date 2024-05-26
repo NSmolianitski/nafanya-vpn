@@ -1,8 +1,5 @@
-﻿using System.Text;
-using NafanyaVPN.Entities.PaymentNotifications;
-using NafanyaVPN.Entities.Users;
+﻿using NafanyaVPN.Entities.Users;
 using NafanyaVPN.Utils;
-using Newtonsoft.Json;
 using yoomoney_api.notification;
 using yoomoney_api.quickpay;
 

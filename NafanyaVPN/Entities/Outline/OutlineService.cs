@@ -1,4 +1,5 @@
 ﻿using NafanyaVPN.Entities.Users;
+using NafanyaVPN.Resources;
 
 namespace NafanyaVPN.Entities.Outline;
 
@@ -8,7 +9,7 @@ public class OutlineService(
     ILogger<OutlineService> logger)
     : IOutlineService
 {
-    private readonly string _instructionText = Resources.Strings.OutlineInstruction;
+    private readonly string _instructionText = Strings.OutlineInstruction;
 
     private readonly OutlineManager.Outline _outline = new(
         configuration

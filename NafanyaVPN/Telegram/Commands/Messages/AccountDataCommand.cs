@@ -1,7 +1,5 @@
-﻿using System.Globalization;
-using NafanyaVPN.Entities.Payments;
+﻿using NafanyaVPN.Entities.Payments;
 using NafanyaVPN.Telegram.Abstractions;
-using NafanyaVPN.Telegram.Constants;
 using NafanyaVPN.Telegram.DTOs;
 using NafanyaVPN.Utils;
 

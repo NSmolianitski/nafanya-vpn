@@ -4,7 +4,6 @@ using NafanyaVPN.Entities.Subscriptions;
 using NafanyaVPN.Entities.Users;
 using NafanyaVPN.Entities.Withdraws;
 using NafanyaVPN.Telegram.Abstractions;
-using NafanyaVPN.Telegram.Constants;
 using NafanyaVPN.Utils;
 
 namespace NafanyaVPN.Entities.SubscriptionPlans;

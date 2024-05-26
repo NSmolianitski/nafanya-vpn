@@ -1,14 +1,10 @@
-﻿using System.Text;
-using NafanyaVPN.Entities.PaymentMessages;
-using NafanyaVPN.Entities.PaymentNotifications;
+﻿using NafanyaVPN.Entities.PaymentMessages;
 using NafanyaVPN.Entities.Payments;
 using NafanyaVPN.Entities.Users;
 using NafanyaVPN.Telegram.Abstractions;
 using NafanyaVPN.Telegram.Commands.Messages;
 using NafanyaVPN.Telegram.DTOs;
 using NafanyaVPN.Utils;
-using Newtonsoft.Json;
-using yoomoney_api.quickpay;
 
 namespace NafanyaVPN.Telegram.Commands.Callbacks;
 

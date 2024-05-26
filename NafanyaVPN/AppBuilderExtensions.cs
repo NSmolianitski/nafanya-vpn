@@ -18,7 +18,6 @@ using NafanyaVPN.Telegram.Commands.UserInput;
 using NafanyaVPN.Telegram.Constants;
 using NafanyaVPN.Telegram.DTOs;
 using Serilog;
-using Serilog.Events;
 using Telegram.Bot;
 using TelegramSink;
 

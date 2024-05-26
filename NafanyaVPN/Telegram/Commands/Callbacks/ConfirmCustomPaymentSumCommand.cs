@@ -5,7 +5,6 @@ using NafanyaVPN.Telegram.Abstractions;
 using NafanyaVPN.Telegram.Commands.Messages;
 using NafanyaVPN.Telegram.DTOs;
 using NafanyaVPN.Utils;
-using yoomoney_api.quickpay;
 
 namespace NafanyaVPN.Telegram.Commands.Callbacks;
 

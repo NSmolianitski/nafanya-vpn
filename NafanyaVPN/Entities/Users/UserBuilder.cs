@@ -1,6 +1,5 @@
 ﻿using NafanyaVPN.Entities.Outline;
 using NafanyaVPN.Entities.PaymentMessages;
-using NafanyaVPN.Entities.SubscriptionPlans;
 using NafanyaVPN.Entities.Subscriptions;
 using NafanyaVPN.Utils;
 

@@ -1,6 +1,7 @@
 ﻿using NafanyaVPN.Entities.Payments;
 using NafanyaVPN.Entities.SubscriptionPlans;
 using NafanyaVPN.Entities.Subscriptions;
+using NafanyaVPN.Resources;
 using NafanyaVPN.Telegram.Abstractions;
 using NafanyaVPN.Telegram.Constants;
 using Telegram.Bot;
@@ -23,7 +24,7 @@ public class ReplyService : IReplyService
         var subscriptionCost = subscriptionConfig[SubscriptionConstants.CostInRoubles];
         var subscriptionLength = subscriptionConfig[SubscriptionConstants.Length];
 
-        _helloMessage = Resources.Strings.WelcomeMessage;
+        _helloMessage = Strings.WelcomeMessage;
         _helloMessage = _helloMessage
             .Replace("%subscriptionCost%", $"{subscriptionCost}{PaymentConstants.CurrencySymbol}")
             .Replace("%subscriptionLength%", $"{subscriptionLength} дней");
