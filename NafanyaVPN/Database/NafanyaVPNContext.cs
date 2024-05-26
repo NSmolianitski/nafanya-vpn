@@ -93,7 +93,7 @@ public class NafanyaVPNContext(
             Id = 1,
             CreatedAt = nowDateTime,
             UpdatedAt = nowDateTime,
-            Name = DatabaseConstants.MainDbConnectionString,
+            Name = DatabaseConstants.Default,
             CostInRoubles = costInRoubles
         };
         modelBuilder.Entity<SubscriptionPlan>().HasData(defaultSubscriptionPlan);
