@@ -49,8 +49,9 @@ public class TelegramUpdatesHandlerService(
         
         var telegramChatId = message.Chat.Id;
         var telegramUserId = message.From!.Id;
+        var telegramUsername = message.From.Username ?? "Hidden";
         var user = await userRegistrationService.GetIfRegisteredAsync(telegramUserId) 
-                   ?? await userRegistrationService.RegisterUser(telegramChatId, telegramUserId, message.From.Username!);
+                   ?? await userRegistrationService.RegisterUser(telegramChatId, telegramUserId, telegramUsername);
 
         var hasValidTelegramState = telegramStateService.UserHasState(user) 
                                     && telegramStateService.CommandExists(user.TelegramState);
