@@ -13,7 +13,7 @@ public static class DateTimeUtils
 
     public static TimeSpan GetTimeUntilDateTime(DateTime dateTime)
     {
-        return GetMoscowNowTime().Subtract(dateTime);
+        return GetMoscowNowTime().Subtract(dateTime).Duration();
     }
     
     public static string GetSubEndString(Subscription subscription)
