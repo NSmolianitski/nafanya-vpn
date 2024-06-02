@@ -2,7 +2,6 @@
 using NafanyaVPN.Telegram.Abstractions;
 using NafanyaVPN.Telegram.DTOs;
 using NafanyaVPN.Utils;
-using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
@@ -34,13 +33,6 @@ public class TelegramUpdatesHandlerService(
         {
             logger.LogError("{Message}", e);
         }
-    }
-
-    public Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception,
-        CancellationToken cancellationToken)
-    {
-        logger.LogError("{Message}", exception);
-        return Task.CompletedTask;
     }
 
     private async Task OnMessageReceived(Message message, CancellationToken cancellationToken)

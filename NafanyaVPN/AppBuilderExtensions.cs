@@ -18,6 +18,7 @@ using NafanyaVPN.Telegram.Commands.UserInput;
 using NafanyaVPN.Telegram.Constants;
 using NafanyaVPN.Telegram.DTOs;
 using Serilog;
+using Serilog.Events;
 using Telegram.Bot;
 using TelegramSink;
 
@@ -55,7 +56,8 @@ public static class AppBuilderExtensions
             .WriteTo.Console()
             .WriteTo.TeleSink(
                 telegramSection[TelegramConstants.LogBotToken], 
-                telegramSection[TelegramConstants.LogBotChatId])
+                telegramSection[TelegramConstants.LogBotChatId],
+                minimumLevel: LogEventLevel.Warning)
             .WriteTo.SQLite(appBuilder.Environment.ContentRootPath + dbSection[DatabaseConstants.LogsPath]);
         
         appBuilder.Logging.AddSerilog(loggerConfiguration.CreateLogger());
