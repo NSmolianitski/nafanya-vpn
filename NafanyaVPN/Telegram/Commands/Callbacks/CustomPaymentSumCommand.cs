@@ -49,7 +49,8 @@ public class CustomPaymentSumCommand(
         else
         {
             currentSum = StringUtils.GetPaymentSumFromTelegramState(telegramState);
-            currentSum += StringUtils.ParseSum(payload);
+            if (!string.IsNullOrWhiteSpace(payload))
+                currentSum += StringUtils.ParseSum(payload);
         }
 
         return currentSum switch

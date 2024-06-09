@@ -31,7 +31,8 @@ public class TelegramUpdatesHandlerService(
         }
         catch (Exception e)
         {
-            logger.LogError("{Message}", e);
+            logger.LogError("____ [BEGIN] ____\nException:\n{Message}\n=====\n=====" +
+                            "\nUser Input:\n{UserInput}\n____ [END] ____", e, update.Message?.Text);
         }
     }
 

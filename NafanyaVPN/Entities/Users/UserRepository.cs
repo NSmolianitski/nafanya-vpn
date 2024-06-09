@@ -57,6 +57,7 @@ public class UserRepository(NafanyaVPNContext db) : IUserRepository
         var user = await db.Users
             .Include(u => u.OutlineKey)
             .Include(u => u.Subscription).ThenInclude(s => s.SubscriptionPlan)
+            .Include(u => u.PaymentMessage)
             .FirstOrDefaultAsync(u => u.TelegramUserId == telegramId);
         return user;
     }
