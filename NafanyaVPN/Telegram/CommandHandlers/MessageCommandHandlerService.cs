@@ -43,8 +43,8 @@ public class MessageCommandHandlerService(
 
     public async Task HandleCommand(MessageDto data)
     {
-        var text = data.Message.Text!;
-        if (!_commands.TryGetValue(text, out var command))
+        var text = data.Message.Text;
+        if (string.IsNullOrEmpty(text) || !_commands.TryGetValue(text, out var command))
             command = _commands[MainKeyboardConstants.Hello];
 
         await command.Execute(data);
